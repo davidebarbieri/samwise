@@ -1,0 +1,70 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+	  <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <Authors>Davide 'PeevishDave' Barbieri</Authors>
+	  <UseCommonOutputDirectory>true</UseCommonOutputDirectory>
+	  <Copyright>Copyright 2022 Davide 'PeevishDave' Barbieri.</Copyright>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <WasmShellDistPath>../../vscode/out/app</WasmShellDistPath>
+    <WasmShellMode>node</WasmShellMode>
+    <WasmShellWebAppBasePath>" + __dirname + "/../</WasmShellWebAppBasePath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>..\..\bin\Debug</OutputPath>
+	  <IntermediateOutputPath>..\..\obj\Debug</IntermediateOutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <MonoRuntimeDebuggerEnabled>true</MonoRuntimeDebuggerEnabled>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\..\bin\Release</OutputPath>
+	  <IntermediateOutputPath>..\..\obj\Release</IntermediateOutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <MonoRuntimeDebuggerEnabled>false</MonoRuntimeDebuggerEnabled>
+    <WasmShellGenerateCompressedFiles>true</WasmShellGenerateCompressedFiles>
+    <PublishTrimmed>true</PublishTrimmed>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Uno.Foundation.Runtime.WebAssembly" Version="4.3.8" />
+    <PackageReference Include="Uno.Wasm.Bootstrap" Version="3.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Samwise\Samwise.csproj">
+      <Project>{be0c52a1-182e-4fe2-abc5-c724a589613e}</Project>
+      <Name>Samwise</Name>
+    </ProjectReference>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="..\..\samples\*.sam">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+	  <None Include="WasmScripts\**\*.js" />
+	  <None Include="WasmCSS\**\*.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <EmbeddedResource Include="WasmScripts\**\*.js" />
+	  <EmbeddedResource Include="WasmCSS\**\*.css" />
+  </ItemGroup>
+
+<ItemGroup>
+	  <Content Include="..\..\samples\*.sam" UnoDeploy="Root" />
+</ItemGroup>
+
+  <ItemGroup>
+    <LinkerDescriptor Include="LinkerConfig.xml" />
+  </ItemGroup>
+  
+</Project>

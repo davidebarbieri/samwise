@@ -1,0 +1,360 @@
+@font-face { font-family: BadComicRegular; src: url('BadComic-Regular.ttf'); } 
+@font-face { font-family: BadComicItalic; src: url('BadComic-Italic.ttf'); } 
+
+.error {
+        margin: 8px;
+        padding: 16px;
+        background-color: #a00000;
+        color: rgb(255, 238, 0);
+        font-weight: bold;
+        text-align: center;
+        overflow-wrap: break-word;
+}
+
+.missingReference {
+        margin: 8px;
+        padding: 16px;
+        background-color: #6d54f8;
+        color: rgb(255, 255, 255);
+        overflow-wrap: break-word;
+}
+
+.toolbox {
+        margin-right: 9px;
+}
+
+.caption {
+        padding: 12px;
+        border: 3px solid black;
+        background-color: yellow;
+        color: black;
+        font-family: BadComicRegular;
+	text-transform: uppercase;
+        overflow-wrap: break-word;
+}
+
+.balloonName {
+		text-transform: uppercase;
+        margin-bottom: 4px;
+        color: black;
+        font-weight: bold;
+        font-family: BadComicRegular;
+}
+
+.balloonAvatar {
+        max-width: 100%;
+        max-height: 100%;
+}
+
+.balloonAvatarCanvas {
+        background-color: #1e1e1e;
+        border-radius: 4px;
+        width: 32px;
+        height: 32px;
+        text-align: center;
+        display: inline-block;
+        outline: solid;
+        outline-width: 1px;
+        outline-color: black;
+}
+
+.balloon {
+        padding: 10px;
+        background-color: white;
+        color: black;
+        font-family: BadComicRegular;
+        border-radius: 8px;
+        overflow-wrap: break-word;
+        flex: 1;
+}
+
+.balloonFrame {
+        display: flex;
+}
+
+.balloonArrow {
+        margin-top: 12px;
+        width: 0; 
+        height: 0; 
+        border-top: 6px solid transparent;
+        border-bottom: 6px solid transparent;
+        
+        border-right: 8px solid white;
+        margin-left: 4px;
+}
+
+#history {
+        margin-top: 12px;
+}
+
+.historyElement {
+        display: flex;
+        margin-bottom: 4px;
+        padding: 5px;
+        background-color: grey;
+        border-radius: 5px;
+}
+
+.historyCaption {
+        padding: 12px;
+        border: 3px solid black;
+        color: black;
+        font-family: BadComicRegular;
+	text-transform: uppercase;
+        overflow-wrap: break-word;
+        background-color: #d4d43a;
+        margin-bottom: 4px;
+}
+
+.historyBalloon {
+        color: black;
+        font-family: BadComicRegular;
+        border-radius: 8px;
+        overflow-wrap: break-word;
+        flex: 1;
+        margin-left: 5px;
+}
+
+.navigation {
+        padding: 8px;
+        padding-bottom: 4px;
+        text-align: right;
+}
+
+.choicePanel {
+        text-align: center;
+}
+
+.choiceName {
+        font-family: BadComicRegular;
+        margin-left: 4px;
+}
+
+.challengePanel {
+        background-color: rgb(69, 10, 10);
+        border-color: #820000;
+        border-radius: 3px;
+}
+
+
+.challengeName {
+        text-align: center;
+        font-weight: bold;
+        border-radius: 8px;
+        overflow-wrap: break-word;
+        display:inherit;
+        font-size: 20px;
+        color: #d4d43a;
+}
+
+.checkPassed {
+        padding: 12px;
+        background-color: green;
+        color: white;
+        font-family: BadComicRegular;
+	text-transform: uppercase;
+        overflow-wrap: break-word;
+        text-align: center;
+        margin: 8px;
+}
+
+.checkFailed {
+        padding: 12px;
+        background-color: rgb(167, 0, 0);
+        color: white;
+        font-family: BadComicRegular;
+	text-transform: uppercase;
+        overflow-wrap: break-word;
+        text-align: center;
+        margin: 8px;
+}
+
+.choice {
+        max-width: 300px;
+        width: 100%;
+        margin: 4px;
+}
+
+.choiceLine {
+        display: flex;
+}
+
+.iconPre {
+        margin-top: auto;
+        margin-bottom: auto;
+        margin-right: auto;
+        margin-left: auto;
+
+        position: relative;
+        height: 84%;
+        width: 84%;
+        background-color: black;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+}
+
+/* Choice Timer */
+.iconChoiceContainer 
+{
+        position: relative;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        margin-top: auto;
+        margin-bottom: auto;
+        height: 32px;
+        width: 32px;
+}
+
+.speech {
+        font-family: BadComicRegular;
+}
+
+.action {
+        font-family: BadComicItalic;
+        font-weight: bold;
+}
+
+.title {
+        margin: 8px;
+}
+
+.header {
+        display: flex;
+        width: 100%;
+}
+
+#selectionroot {
+        padding: 4px;
+        margin-right: 5px;
+        margin-bottom: 4px;
+        margin-top: 8px;
+        border: 1px solid grey;
+        display: flow-root;
+}
+
+.selectioninfo {
+        margin: 4px;
+}
+
+.selectionText {
+        vertical-align: middle;
+        overflow-wrap: anywhere;
+}
+
+.selectionTextDisabled {
+        vertical-align: middle;
+        color: grey
+}
+
+#selection_options {
+        position: relative;
+        float: right;
+}
+
+#selection_options_fold {
+        float: right;
+}
+
+.folded { 
+        max-height: 0;
+        transition: max-height 0.15s ease-out;
+        overflow: hidden;
+}
+
+.unfolded {
+        max-height: fit-content;
+        transition: max-height 0.25s ease-in;
+}
+
+/* Tooltip */
+
+.icon {
+        position: relative;
+        display: inline-block;
+    }
+    
+.messageIcon .codicon[class*='codicon-'] {
+        position: relative;
+        display: block;
+        font-size: 32px;
+        margin-top: -4px;
+        margin-bottom: 4px;
+    }
+
+.icon .tooltiptext 
+{
+        visibility: hidden;
+        background-color: #555;
+        color: #fff;
+        text-align: center;
+        padding: 5px 0;
+        border-radius: 6px;
+                
+        width: 80px;
+        top: 150%;
+        left: 50%;
+        margin-left: -40px; /* Use half of the width (120/2 = 60), to center the tooltip */
+     
+        /* Position the tooltip text - see examples below! */
+        position: absolute;
+        z-index: 1;
+
+        opacity: 0;
+}
+
+.icon:hover .tooltiptext 
+{
+        transition-delay:0.5s;
+        visibility: visible;
+        opacity: 1;
+}
+
+.icon .button
+{
+        padding: 1px;
+        border: 1px solid grey;
+        border-radius: 5px;
+        width: 1.3em;
+}
+
+
+.threedots 
+{
+        display: flex;
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+}
+.threedots .dot
+{
+        width: 20px;
+        height: 20px;
+        background: #fff;
+        border-radius: 50%;
+        animation: ani 1.2s ease-in-out infinite;
+}
+@keyframes ani 
+{
+        0%, 60%, 100%
+        {
+                transform: scale(0.2);
+        }
+        30%
+        {
+                transform: scale(0.6);
+        }
+}
+.threedots .dot:nth-child(1)
+{
+        animation-delay: -0.6s;
+}
+.threedots .dot:nth-child(2)
+{
+        animation-delay: -0.4s;
+}
+.threedots .dot:nth-child(3)
+{
+        animation-delay: -0.2s;
+}

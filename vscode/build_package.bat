@@ -1,0 +1,2 @@
+call vsce package
+pause

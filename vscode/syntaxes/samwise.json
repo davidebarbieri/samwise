@@ -1,0 +1,230 @@
+{  
+    "scopeName": "source.samwise",
+	"patterns": [
+		{ "include": "#comment" },
+		{ "include": "#title" },
+		{ "include": "#label" },
+		{ "include": "#condition" },
+		{ "include": "#fork" },
+		{ "include": "#says" },
+		{ "include": "#choice" },
+		{ "include": "#goto" },
+		{ "include": "#caption" },
+		{ "include": "#option" },
+		{ "include": "#random" },
+		{ "include": "#sequence" },
+		{ "include": "#ping" },
+		{ "include": "#check" },
+		{ "include": "#interruptible" },
+		{ "include": "#fallback" },
+		{
+			"begin": "^[\t ]*",
+			"end": "\n",
+			"name": "string.label.skip_rainbow_coloring",
+			"patterns": [
+				{ "include": "#external_code" },
+				{ "include": "#code" },
+				{ "include": "#tags" }
+			]
+		}
+	],
+	"repository": {
+		"comment": {
+			"begin": "[\t ]*//",
+			"end": "\n",
+			"name": "comment.line.samwise"
+		},
+		"title": {
+			"begin": "[\t ]*([~¯«»─┬┼│┤├┴┐┘┌└═╦╬║╣╠╩╗╝╔╚░▒▓█▀■▄±‗¶§]+)",
+			"end":   "\n",
+			"beginCaptures": {
+				"1": { "name": "keyword.other.title.samwise" }
+			},
+			"patterns": 
+			[
+				{ "include": "#label" }, 
+				{ "include": "#adornment" },
+				{ "include": "#tags" }
+			],
+			"name": "strong.title.samwise"
+		},
+		"label": {
+			"begin": "[\t ]*\\(",
+			"end": "\\)",
+			"beginCaptures": {
+				"0": { "name": "punctuation.paren.open" }
+			},
+			"endCaptures": {
+				"0": { "name": "punctuation.paren.close" }
+			},
+			"patterns": [{ "include": "#tags" }],
+			"name": "string.label.samwise"
+		},
+		"tags": {
+			"match": "[^#](?:##)*(#[^#])([^\n]+)",
+			"captures": {
+				"1": { "name": "comment.tags.samwise" },
+				"2": { "name": "comment.tags.samwise" }
+			}
+		},
+		"condition": {
+			"match": "[\t ]*(\\[)([^\\]])*(\\])",
+			"captures": {
+				"0": { "name": "keyword.control.conditional" }
+			},
+			"name": "string.label.skip_rainbow_coloring"
+		},
+		
+		"says": {
+			"begin": "[\t ]*([^> \t=-]+)([>])",
+			"end": "(?:(?<!\u21b5\\s*))\n",
+			"beginCaptures": {
+				"1": { "name": "keyword.other.character.samwise" },
+				"2": { "name": "keyword.other.says.samwise" }
+			},
+			"patterns": 
+			[
+				{ "include": "#tags" },
+				{ "include": "#condition" },
+				{ "include": "#symbols" }
+			]
+		},
+		"choice": {
+			"begin": "[\t ]*([^\\[\\(\\]\\)]+)([:])",
+			"end": "\n",
+			"beginCaptures": {
+				"1": { "name": "keyword.other.character.samwise" },
+				"2": { "name": "keyword.other.select.samwise" }
+			},
+			"patterns": 
+			[
+				{ "include": "#tags" },
+				{ "include": "#condition" }
+			]
+		},
+		"caption": {
+			"begin": "[\t ]*\\*",
+			"end": "(?:(?<!\u21b5\\s*))\n",
+			"beginCaptures": {
+				"0": { "name": "support.constant.handlebars.samwise.caption" }
+			},
+			"name": "string.unquoted",
+			"patterns": [
+				{ "include": "#tags" },
+				{ "include": "#symbols" }
+			]
+		},
+		"goto": {
+			"begin": "[\t ]*(->)",
+			"end": "\n",
+			"beginCaptures": {
+				"1": { "name": "support.function.samwise" }
+			},
+			"patterns": 
+			[
+				{ "include": "#tags" },
+				{ "include": "#condition" }
+			],
+			"name": "string.label.samwise"
+		},
+		"random": {
+			"begin": "[\t ]*%",
+			"end": "\n",
+			"beginCaptures": {
+				"0": { "name": "support.function.samwise" }
+			},
+			"patterns": [{ "include": "#tags" }]
+		},
+		"sequence": {
+			"begin": "[\t ]*>>(>)?",
+			"end": "\n",
+			"beginCaptures": {
+				"0": { "name": "support.function.samwise" }
+			},
+			"name": "keyword.control.conditional",
+			"patterns": [{ "include": "#tags" }]
+		},
+		"ping": {
+			"begin": "[\t ]*><",
+			"end": "\n",
+			"beginCaptures": {
+				"0": { "name": "support.function.samwise" }
+			},
+			"name": "keyword.control.conditional",
+			"patterns": [{ "include": "#tags" }]
+		},
+		"check": {
+			"begin": "[\t ]*\\$",
+			"end": "\n",
+			"beginCaptures": {
+				"0": { "name": "support.function.samwise" }
+			},
+			"name": "keyword.control.conditional",
+			"patterns": [{ "include": "#tags" }]
+		},
+		"interruptible": {
+			"begin": "[\t ]*\\!(!)?",
+			"end": "\n",
+			"beginCaptures": {
+				"0": { "name": "support.function.samwise" }
+			},
+			"name": "keyword.control.conditional",
+			"patterns": [{ "include": "#tags" }]
+		},
+		"fallback": {
+			"begin": "[\t ]*\\?",
+			"end": "\n",
+			"beginCaptures": {
+				"0": { "name": "support.function.samwise" }
+			},
+			"patterns": [{ "include": "#tags" }]
+		},
+
+		"fork": {
+			"begin": "[\t ]*([^\\[\\(\\]\\)<]*)((<=>)|(<=)|(=>))",
+			"end": "\n",
+			"beginCaptures": {
+				"1": { "name": "keyword.control.conditional" },
+				"2": { "name": "support.function.samwise" }
+			},
+			"patterns": [
+				{ "include": "#tags" },
+				{ "include": "#condition" },
+				{ "include": "#external_code"}
+			],
+			"name": "string.label.samwise"
+		},
+
+		"external_code": {
+			"begin": "\\{\\{",
+			"end": "\\}\\}",
+			"name": "support.constant.handlebars"
+		},
+		"code": {
+			"begin": "\\{",
+			"end": "\\}",
+			"name": "support.constant.handlebars"
+		},
+		"symbols": {
+			"match": "\u21b5",
+			"name": "keyword.other.carriagereturn"
+		},
+		"adornment": {
+			"match": "[~¯«»─┬┼│┤├┴┐┘┌└═╦╬║╣╠╩╗╝╔╚░▒▓█▀■▄±‗¶§]+",
+			"name" : "keyword.other.adornment.samwise"
+		},
+		"option": {
+			"begin": "[\t ]*^[\t ]*[<]?[-+]+",
+			"end": "\n",
+			"beginCaptures": {
+				"0": { "name": "support.constant.handlebars.samwise.option" }
+			},
+			"name": "string.unquoted",
+			"patterns": 
+			[
+				{ "include": "#tags" },
+				{ "include": "#condition" }
+			]
+		}
+	}
+}

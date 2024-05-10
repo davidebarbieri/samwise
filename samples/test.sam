@@ -1,0 +1,63 @@
+§ Test Dialogue 1
+
+* This is a caption. A really good-looking caption.
+
+peter> I'm telling something.
+mark> Me too, but my dialogue line is tagged # tag1, tag2
+(retry) mark> Do you want me to explain what tags are?
+[once] peter:
+    - Of course... what are tags used for?
+        mark> Well, it's meta-data. The developers could use them for anything they need.
+        peter> For example?
+        mark> Well... to associate informations to the dialogue line #unskippable
+        mark> Like the character animation that must be played along with the line. 
+        peter> Mmmh... am I smiling? #smile
+        mark> Oooh! Yeah, you nailed it!
+    - Ok, sure. Tags. Boring stuff.
+        mark> Come on, try to be more cooperative.
+        -> retry
+    -- [5.0s] Hit Mark
+        mark> Have you gone mad?
+        peter> Sorry, I felt the urge to do it. Like now or never.
+    - [iVariable1 > 5] Please, stop.
+        mark> You take the joy out of every tutorial, Peter.
+mark> Okay, where were we?
+?
+    - [bVariable2]
+        mark> I'll tell this if bVariable2 is true.
+        peter> And I'll reply you with this.
+    - [bVariable3]
+        mark> I'll tell this if bVariable3 is true.
+        peter> And I'll reply you with this.
+    -
+        mark> Otherwise I'll tell this.
+        peter> Thank you for telling me.
+        [bExtraPoliteness] peter> That's pretty interesting, my dear.
+        mark> I'm glad you appreciate
+%
+    - [5x]
+        mark> This is a random branch. There's a high probability I'm saying this.
+        peter> How much probable?
+        mark> Five times than a branch with the 1x attribute (or no attribute).
+    -
+        mark> There is also probability that I will say this!
+        peter> But much less likely!
+
+[iVariable1 > 0] mark> ok, listen to me...
+    mark> ...this is a shortcut node, I'll say this only if the previous condition is met.
+    peter> Oh, it's a more convenient way to write branches than the "?" node
+    [iVariable1 > 0] mark> And it can be nested too of course!
+        peter> That's so cool.
+parallelDialogue => TestDialogue2
+mark> I'm telling this, then I'll wait for Test Dialogue 1 to be completed, before continuing
+parallelDialogue <=
+mark> Yay! We're done!
+
+┌────────────────────┐
+│   Test Dialogue 2  │▒
+└────────────────────┘▒
+ ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+
+mark> Is anyone there?
+loise> Me!
+mark> Anybody else?

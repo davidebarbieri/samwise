@@ -1,0 +1,88 @@
+§ Conference
+host> Thank you Mary, that was a very interesting speech. 
+host> Also, I have to admit that I never imagined there was so much literature on dating simulators among pet food tasters.
+{ wait 2.0s }
+host> Ok, so... without further delay, I invite Mr. Davide Barbieri to present his contribution↵
+    named "Samwise: a game development tool for writing fantastic interactive dialogues."
+
+* clapping crowd
+-> DavesContribution
+
+§ (DavesContribution) Dave's Contribution
+
+dave> Good morning, everyone! I'm excited to be here today at GamesNarraCon to introduce Samwise, my new dialogue writing tool,↵ 
+    an essential resource for game developers engaged in creating engaging narrative games.
+dave> Allow me to give you a basic overview of what this tool can do for you, and I'll be happy to take your questions afterward.
+
+* Two hours later
+
+host> Thank you for the presentation, Davide. It looks like a powerful tool. 
+host> Now let's move on to the questions.
+host> Does anyone in the audience have any questions?
+(nextQuestion) {{ do RaiseHand }}
+>>> @iCounter
+    -
+        host> Give the microphone to that guy.
+    -
+        host> The girl with glasses.
+    -
+        host> Please go ahead.
+    -
+        host> Yes?
+    -
+        host> Another question there.
+    -
+        host> Over there.
+audience:
+    -- [once(bEase)] Ease of use
+        audience> My question is about ease of use. Is it accessible to developers with varying technical skills?
+        dave> That's a great question. Samwise has been designed with usability in mind.↵
+            I've strived to make the syntax as intuitive as possible, so even developers with less experience↵
+            can use it without issues. 
+        dave> We've also included a series of tutorials and detailed documentation to↵
+            help new users make the most of all its features.
+    -- [once(bLanguages)] Supported languages
+        audience> What about supported languages? Can it be used for writing dialogues in languages other than English?
+        dave> Of course, Samwise supports the UTF-8 format, so it is designed to support any language.
+        dave> Anyway, I must stress that it doesn't integrate a localization system.
+        audience> What? Does it mean that my game will be just in a single language?
+        dave> Of course not.
+        dave> Samwise allows you to associate a unique id to each text line and to export all the localizable dialogue lines to↵
+            a CSV or PO file to be localized later by a translator.
+        dave> But, after that, localization must be applied at runtime by your favourite localization system.
+    -- [once(bComplex)] Complex Narrative
+        audience> Some dialogue writing tools struggle with handling complex narrative plots. How does Samwise perform in this context?
+        dave> An excellent question! 
+        dave> Samwise is designed to handle complex narrative plots. It supports branching dialogue trees, parallel dialogues,↵
+            random paths, conditional paths, loops, variable management, and more,↵
+            allowing developers to create complex and branching stories with ease.
+    -- [once(bEngines)] Game Engines Integration
+        audience> Very interesting. What about integration with existing game engines?
+        dave> Samwise is designed to be highly flexible. You can integrate it with most existing game engines, including Unity and Unreal Engine, through dedicated APIs.
+        dave> There's also a javascript library (compiled using WASM) that enable web development.
+        dave> Such library is currently used in the Visual Studio Code extension too.
+        { bVscode = true }
+    -- [once(bVscodeChoice) & bVscode] Visual Studio Code
+        audience> You mentioned there's an extension for Visual Studio Code.
+        dave> Yes.
+        audience> Can you give us additional details? what is it for?
+        dave> Sure.
+        dave> The Visual Studio code extension supports the writer in the creation of Samwise scripts.
+        dave> It provides a toolbox with all the common Samwise commands, Syntax Highlighting, Error checking...
+        dave> ...it also provides a player to quickly test the scripts being written.
+        audience> Cool cool. Thanks.
+    -- [once(bPrices)] Price
+        audience> Is there a cost associated with using Samwise?
+        dave> Nope, Samwise is free to use. The only requirement is to properly credits me or the tool in the game credits or anywhere else in the game.
+{ iNextQuestion = iNextQuestion + 1 }
+[ !bEase | !bLanguages | !bComplex | !bEngines | !bVscodeChoice | !bPrices ] 
+    { wait 2.0s }
+    -> nextQuestion
+audience> Thank you for the answers. It looks like a powerful and promising tool. It will be a great help for us narrative game developers.
+dave> Thank you for your questions and interest. I'm excited to see how developers will use it to create extraordinary narrative gaming experiences.
+dave> I look forward to supporting you in your creative work. Thank you!
+
+* the audience applauds in the small but crowded hall
+
+
+

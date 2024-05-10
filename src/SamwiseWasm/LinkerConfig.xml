@@ -1,0 +1,9 @@
+<linker>
+    <assembly fullname="SamwiseWasm">
+        <type fullname="Peevo.Samwise.Wasm.EntryPoint" preserve="methods" /> 
+        <type fullname="Peevo.Samwise.Wasm.Refactoring" preserve="methods" /> 
+        <type fullname="Peevo.Samwise.Wasm.Utilities" preserve="methods" /> 
+    </assembly>
+
+    <assembly fullname="WebAssembly.Bindings" />
+</linker>

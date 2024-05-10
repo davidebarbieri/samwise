@@ -1,0 +1,436 @@
+{
+  	"name": "samwise",
+  	"displayName": "Samwise Dialogue System",
+  	"description": "Visual Studio Code extension for the Samwise Dialogue System, a language for creating complex branching narrative",
+  	"version": "0.0.11",
+  	"icon": "images/icon-package.png",
+  	"publisher": "PeevishDave",
+  	"repository": "https://github.com/davidebarbieri/samwise",
+  	"engines": {
+  	  	"vscode": "^1.78.0"
+  	},
+  	"categories": [
+  	  	"Other",
+  	  	"Programming Languages"
+  	],
+  	"pricing": "Free",
+  	"sponsor": {
+  	  	"url": "https://github.com/sponsors/davidebarbieri"
+  	},
+  	"activationEvents": [],
+  	"main": "./out/extension.js",
+  	"contributes": {
+  	  	"viewsContainers": {
+  	  	  	"activitybar": [
+  	  	  	  	{
+  	  	  	  	  	"id": "samwisepanel",
+  	  	  	  	  	"title": "Samwise",
+  	  	  	  	  	"icon": "images/icon-transp.png"
+  	  	  	  	}
+  	  	  	]
+  	  	},
+  	  	"languages": [
+  	  	  	{
+  	  	  	  	"id": "samwise",
+  	  	  	  	"aliases": [
+  	  	  	  	  	"Samwise"
+  	  	  	  	],
+  	  	  	  	"extensions": [
+  	  	  	  	  	".sam"
+  	  	  	  	],
+				"configuration": "./language-configuration.json",
+				"icon": {
+					"light": "images/icon-light-transp.png",
+					"dark": "images/icon-transp.png"
+				}
+  	  	  	}
+  	  	],
+  	  	"grammars": [
+  	  	  	{
+  	  	  	  	"language": "samwise",
+  	  	  	  	"scopeName": "source.samwise",
+  	  	  	  	"path": "./syntaxes/samwise.json"
+  	  	  	}
+  	  	],
+		"configuration": {
+			"title": "Samwise",
+			"properties": {
+				"samwise.clearDialoguesOnPlay": {
+					"type": "boolean",
+					"default": true,
+					"description": "Clear all dialogues when the user launch a new dialogue."
+				},
+				"samwise.clearDataOnPlay": {
+					"type": "boolean",
+					"default": true,
+					"description": "Clear data when the user launch a new dialogue."
+				},
+				"samwise.enableCodeLens": {
+					"type": "boolean",
+					"default": true,
+					"description": "Enable Code Lens for dialogue and node labels."
+				}
+			}
+		},
+  	  	"views": {
+  	  	  	"samwisepanel": [
+  	  	  	  	{
+  	  	  	  	  	"when": "samwise.isEditingFile",
+  	  	  	  	  	"type": "webview",
+  	  	  	  	  	"id": "samwise.tool",
+  	  	  	  	  	"name": "Toolbox"
+  	  	  	  	},
+  	  	  	  	{
+  	  	  	  	  	"when": "samwise.isEditingFile",
+  	  	  	  	  	"type": "webview",
+  	  	  	  	  	"id": "samwise.player",
+  	  	  	  	  	"name": "Player"
+  	  	  	  	},
+  	  	  	  	{
+  	  	  	  	  	"when": "samwise.isEditingFile",
+  	  	  	  	  	"id": "samwise.data",
+  	  	  	  	  	"name": "Data"
+  	  	  	  	}
+  	  	  	]
+  	  	},
+  	  	"commands": [
+  	  	  	{
+  	  	  	  	"command": "samwise.runDialogue",
+  	  	  	  	"title": "Run Dialogue",
+  	  	  	  	"category": "Samwise",
+  	  	  	  	"icon": "$(play)"
+  	  	  	},
+  	  	  	{
+  	  	  	  	"command": "samwise.runDialogueFromNode",
+  	  	  	  	"title": "Run Dialogue From Node",
+  	  	  	  	"category": "Samwise",
+  	  	  	  	"icon": "$(run-below)"
+  	  	  	},
+  	  	  	{
+  	  	  	  	"command": "samwise.stopDialogues",
+  	  	  	  	"title": "Stop Dialogues",
+  	  	  	  	"category": "Samwise",
+  	  	  	  	"icon": "$(stop)"
+  	  	  	},
+  	  	  	{
+  	  	  	  	"command": "samwise.stopDialogue",
+  	  	  	  	"title": "Stop Dialogue",
+  	  	  	  	"category": "Samwise",
+  	  	  	  	"icon": "$(stop)"
+  	  	  	},
+  	  	  	{
+  	  	  	  	"command": "samwise.assignIdsToText",
+  	  	  	  	"title": "Assign IDs to text content",
+  	  	  	  	"category": "Samwise"
+  	  	  	},
+  	  	  	{
+  	  	  	  	"command": "samwise.assignIdsToTextDialogue",
+  	  	  	  	"title": "Assign IDs to text content (this dialogue)",
+  	  	  	  	"category": "Samwise"
+  	  	  	},
+  	  	  	{
+  	  	  	  	"command": "samwise.assignIdsToNodes",
+  	  	  	  	"title": "Assign IDs to all nodes",
+  	  	  	  	"category": "Samwise"
+  	  	  	},
+  	  	  	{
+  	  	  	  	"command": "samwise.assignIdsToNodesDialogue",
+  	  	  	  	"title": "Assign IDs to all nodes (this dialogue)",
+  	  	  	  	"category": "Samwise"
+  	  	  	},
+  	  	  	{
+  	  	  	  	"command": "samwise.replaceAnon",
+  	  	  	  	"title": "Fix Anonymous Variables",
+  	  	  	  	"category": "Samwise"
+  	  	  	},
+  	  	  	{
+  	  	  	  	"command": "samwise.replaceAnonToDialogue",
+  	  	  	  	"title": "Fix Anonymous Variables in dialogue",
+  	  	  	  	"category": "Samwise"
+  	  	  	},
+  	  	  	{
+  	  	  	  	"command": "samwise.saveData",
+  	  	  	  	"title": "Save Data",
+  	  	  	  	"category": "Samwise",
+  	  	  	  	"icon": "$(save)"
+  	  	  	},
+  	  	  	{
+  	  	  	  	"command": "samwise.loadData",
+  	  	  	  	"title": "Load Data",
+  	  	  	  	"category": "Samwise",
+  	  	  	  	"icon": "$(folder)"
+  	  	  	},
+  	  	  	{
+  	  	  	  	"command": "samwise.loadDataAdditive",
+  	  	  	  	"title": "Load Data (no clear)",
+  	  	  	  	"category": "Samwise",
+  	  	  	  	"icon": "$(new-folder)"
+  	  	  	},
+  	  	  	{
+  	  	  	  	"command": "samwise.clearData",
+  	  	  	  	"title": "Clear Data",
+  	  	  	  	"category": "Samwise",
+  	  	  	  	"icon": "$(trash)"
+  	  	  	},
+  	  	  	{
+  	  	  	  	"command": "samwise.clearSubData",
+  	  	  	  	"title": "Clear Data",
+  	  	  	  	"category": "Samwise",
+  	  	  	  	"icon": "$(trash)"
+  	  	  	},
+  	  	  	{
+  	  	  	  	"command": "samwise.clearHistory",
+  	  	  	  	"title": "Clear History",
+  	  	  	  	"category": "Samwise"
+  	  	  	},
+  	  	  	{
+  	  	  	  	"command": "samwise.editData",
+  	  	  	  	"title": "Edit Data",
+  	  	  	  	"category": "Samwise",
+  	  	  	  	"icon": "$(edit)"
+  	  	  	},
+  	  	  	{
+  	  	  	  	"command": "samwise.incrementData",
+  	  	  	  	"title": "Increment Data",
+  	  	  	  	"category": "Samwise",
+  	  	  	  	"icon": "$(add)"
+  	  	  	},
+  	  	  	{
+  	  	  	  	"command": "samwise.decrementData",
+  	  	  	  	"title": "Decrement Data",
+  	  	  	  	"category": "Samwise",
+  	  	  	  	"icon": "$(remove)"
+  	  	  	},
+  	  	  	{
+  	  	  	  	"command": "samwise.toggleData",
+  	  	  	  	"title": "Toggle Value",
+  	  	  	  	"category": "Samwise",
+  	  	  	  	"icon": "$(color-mode)"
+  	  	  	},
+  	  	  	{
+  	  	  	  	"command": "samwise.addVariable",
+  	  	  	  	"title": "Add Variable",
+  	  	  	  	"category": "Samwise",
+  	  	  	  	"icon": "$(symbol-array)"
+  	  	  	},
+  	  	  	{
+  	  	  	  	"command": "samwise.addCarriageReturn",
+  	  	  	  	"title": "Add Carriage Return",
+  	  	  	  	"category": "Samwise"
+  	  	  	},
+  	  	  	{
+  	  	  	  	"command": "samwise.exportCSV",
+  	  	  	  	"title": "Export Lines (CSV)",
+  	  	  	  	"category": "Samwise"
+  	  	  	},
+  	  	  	{
+  	  	  	  	"command": "samwise.hideMetaAll",
+  	  	  	  	"title": "Toggle Hide IDs",
+  	  	  	  	"category": "Samwise",
+  	  	  	  	"icon": "$(tag)"
+  	  	  	},
+  	  	  	{
+  	  	  	  	"command": "samwise.hideMetaIDs",
+  	  	  	  	"title": "Toggle Show Meta",
+  	  	  	  	"category": "Samwise",
+  	  	  	  	"icon": "$(eye)"
+  	  	  	},
+  	  	  	{
+  	  	  	  	"command": "samwise.showMeta",
+  	  	  	  	"title": "Toggle Hide Meta",
+  	  	  	  	"category": "Samwise",
+  	  	  	  	"icon": "$(eye-closed)"
+  	  	  	},
+  	  	  	{
+  	  	  	  	"command": "samwise.goToLabel",
+  	  	  	  	"title": "Go to Label",
+  	  	  	  	"category": "Samwise",
+  	  	  	  	"icon": "$(bookmark)"
+  	  	  	}
+  	  	],
+  	  	"keybindings": [
+  	  	  	{
+  	  	  	  	"command": "samwise.addCarriageReturn",
+				"when": "editorLangId == samwise",
+  	  	  	  	"key": "shift+enter"
+  	  	  	}
+  	  	],
+  	  	"menus": {
+			"commandPalette": [
+				{"command": "samwise.clearData", "when": "false"},
+				{"command": "samwise.clearHistory", "when": "false"},
+				{"command": "samwise.hideMetaAll", "when": "false"},
+				{"command": "samwise.hideMetaIDs", "when": "false"},
+				{"command": "samwise.showMeta", "when": "false"},
+				
+				{"command": "samwise.incrementData", "when": "false"},
+				{"command": "samwise.decrementData", "when": "false"},
+				{"command": "samwise.editData", "when": "false"},
+				{"command": "samwise.toggleData", "when": "false"},
+				{"command": "samwise.addVariable", "when": "false"},
+				{"command": "samwise.loadData", "when": "false"},
+				{"command": "samwise.loadDataAdditive", "when": "false"},
+				{"command": "samwise.saveData", "when": "false"},
+				{"command": "samwise.clearSubData", "when": "false"},
+				{"command": "samwise.stopDialogue", "when": "false"},
+				{"command": "samwise.goToLabel", "when": "resourceLangId == samwise && samwise.hasSelectedLabelReference"}
+			],
+  	  	  	"view/title": [
+  	  	  	  	{
+  	  	  	  	  	"command": "samwise.clearData",
+  	  	  	  	  	"when": "view == samwise.data",
+  	  	  	  	  	"group": "navigation@2"
+  	  	  	  	},
+  	  	  	  	{
+  	  	  	  	  	"command": "samwise.clearHistory",
+  	  	  	  	  	"when": "view == samwise.player",
+  	  	  	  	  	"group": "navigation"
+  	  	  	  	}
+  	  	  	],
+  	  	  	"editor/context": [
+  	  	  	  	{
+  	  	  	  	  	"when": "resourceLangId == samwise && samwise.hasSelectedLabelReference",
+  	  	  	  	  	"command": "samwise.goToLabel",
+  	  	  	  	  	"group": "navigation"
+  	  	  	  	},
+				{
+  	  	  	  	  	"when": "resourceLangId == samwise && samwise.hasSelectedDialogue && samwise.isSidepanelOpen",
+  	  	  	  	  	"command": "samwise.runDialogue",
+  	  	  	  	  	"group": "navigation"
+  	  	  	  	},
+  	  	  	  	{
+  	  	  	  	  	"when": "resourceLangId == samwise && samwise.hasSelectedNode && samwise.isSidepanelOpen",
+  	  	  	  	  	"command": "samwise.runDialogueFromNode",
+  	  	  	  	  	"group": "navigation"
+  	  	  	  	},
+  	  	  	  	{
+  	  	  	  	  	"when": "resourceLangId == samwise",
+  	  	  	  	  	"command": "samwise.assignIdsToText",
+  	  	  	  	  	"group": "utilities"
+  	  	  	  	},
+  	  	  	  	{
+  	  	  	  	  	"when": "resourceLangId == samwise",
+  	  	  	  	  	"command": "samwise.assignIdsToNodes",
+  	  	  	  	  	"group": "utilities"
+  	  	  	  	},
+  	  	  	  	{
+  	  	  	  	  	"when": "resourceLangId == samwise && samwise.hasSelectedDialogue",
+  	  	  	  	  	"command": "samwise.assignIdsToTextDialogue",
+  	  	  	  	  	"group": "utilities"
+  	  	  	  	},
+  	  	  	  	{
+  	  	  	  	  	"when": "resourceLangId == samwise && samwise.hasSelectedDialogue",
+  	  	  	  	  	"command": "samwise.assignIdsToNodesDialogue",
+  	  	  	  	  	"group": "utilities"
+  	  	  	  	},
+  	  	  	  	{
+  	  	  	  	  	"when": "resourceLangId == samwise",
+  	  	  	  	  	"command": "samwise.replaceAnon",
+  	  	  	  	  	"group": "utilities"
+  	  	  	  	},
+  	  	  	  	{
+  	  	  	  	  	"when": "resourceLangId == samwise && samwise.hasSelectedDialogue",
+  	  	  	  	  	"command": "samwise.replaceAnonToDialogue",
+  	  	  	  	  	"group": "utilities"
+  	  	  	  	},
+  	  	  	  	{
+  	  	  	  	  	"when": "resourceLangId == samwise",
+  	  	  	  	  	"command": "samwise.exportCSV",
+  	  	  	  	  	"group": "utilities"
+  	  	  	  	}
+
+  	  	  	],
+			"editor/title": [
+				{
+					"command": "samwise.hideMetaAll",
+                    "group": "navigation",
+					"when": "resourceLangId == samwise && (samwise.hideMetaState == 'hideId')"
+			  	},
+			  	{
+					"command": "samwise.hideMetaIDs",
+					"group": "navigation",
+					"when": "resourceLangId == samwise && (samwise.hideMetaState != 'hideAll' && samwise.hideMetaState != 'hideId')"
+				},
+				{
+					"command": "samwise.showMeta",
+					"group": "navigation",
+					"when": "resourceLangId == samwise && (samwise.hideMetaState == 'hideAll')"
+		  		}
+			],
+  	  	  	"view/item/context": [
+				{
+					"command": "samwise.incrementData",
+					"when": "view == samwise.data && (viewItem == variable_int)",
+					"group": "inline"
+				},
+				{
+					"command": "samwise.decrementData",
+					"when": "view == samwise.data && (viewItem == variable_int)",
+					"group": "inline"
+				},
+  	  	  	  	{
+  	  	  	  	  	"command": "samwise.editData",
+  	  	  	  	  	"when": "view == samwise.data && (viewItem == variable_int || viewItem == variable_symbol)",
+  	  	  	  	  	"group": "inline"
+  	  	  	  	},
+  	  	  	  	{
+					"command": "samwise.toggleData",
+					"when": "view == samwise.data && viewItem == variable_bool",
+					"group": "inline"
+			  	},
+				{
+					"command": "samwise.addVariable",
+					"when": "view == samwise.data && (viewItem == container_global || viewItem == container || viewItem == container_context)",
+					"group": "inline@0"
+				},
+				{
+					"command": "samwise.loadData",
+					"when": "view == samwise.data && (viewItem == container_global)",
+					"group": "inline@1"
+				},
+				{
+					"command": "samwise.loadDataAdditive",
+					"when": "view == samwise.data && (viewItem == container_global)",
+					"group": "inline@2"
+				},
+				{
+					"command": "samwise.saveData",
+					"when": "view == samwise.data && (viewItem == container_global || viewItem == container)",
+					"group": "inline@3"
+				},
+				{
+					"command": "samwise.clearSubData",
+					"when": "view == samwise.data",
+					"group": "inline@4"
+				}
+  	  	  	],
+			"editor/lineNumber/context": [
+			{
+				"command": "samwise.stopDialogue",
+				"group": "bookmarks"
+			}
+		]
+  	  	}
+  	},
+  	"scripts": {
+  	  	"vscode:prepublish": "npm run compile",
+  	  	"compile": "tsc -p ./",
+  	  	"watch": "tsc -watch -p ./",
+  	  	"pretest": "npm run compile && npm run lint",
+  	  	"lint": "eslint src --ext ts"
+  	},
+  	"devDependencies": {
+		"@types/node": "^16.18.34",
+  	  	"@types/vscode": "^1.73.0",
+		"@typescript-eslint/eslint-plugin": "^6.7.0",
+		"@typescript-eslint/parser": "^6.7.0",
+  	  	"esbuild": "^0.14.43",
+		"eslint": "^8.26.0",
+  	  	"typescript": "^5.2.2",
+  	  	"@vscode/vsce": "^2.15.0"
+  	},
+  	"dependencies": {
+  	  	"@vscode/codicons": "^0.0.35",
+  	  	"@vscode/webview-ui-toolkit": "^1.0.0"
+  	}
+}

@@ -1,0 +1,22 @@
+/src/obj
+/src/bin
+/Samwise Player/Library
+/Samwise Player/Temp
+/Samwise Player/obj/Debug
+/Samwise Player/Logs
+/Samwise Player/.vs
+/src/Samwise/obj
+/src/SamwiseTest/bin/Debug
+/src/SamwiseTest/obj/Debug
+/src/Samwise/bin/Debug/netstandard2.0
+/bin/Debug
+/obj/Debug
+/src/SamwiseTest/obj
+/vscode/out/app
+/bin/Release
+/obj/Release
+/src/SamwiseWasm/obj/Debug
+/src/SamwiseWasm/obj
+/vscode/out
+/vscode/node_modules
+/src/SamwiseTest/bin/release/net6.0
