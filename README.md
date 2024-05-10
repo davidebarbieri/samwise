@@ -11,7 +11,7 @@ The objective of this tool is to empower any writer or designer to intricately c
 
 ## Documentation
 
-[Here](docs/index.html) you can find the full documentation of this tool.
+[Here](https://davidebarbieri.github.io/samwise/) you can find the full documentation of this tool.
 
 ## How can you help me
 
