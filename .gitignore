@@ -20,3 +20,6 @@
 /vscode/out
 /vscode/node_modules
 /src/SamwiseTest/bin/release/net6.0
+/obj
+/bin
+/src/.vs
