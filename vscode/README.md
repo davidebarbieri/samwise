@@ -23,30 +23,30 @@ This extension provides a set of features useful to write in Samwise language:
 
 ### Syntax Highlighting
 Syntax highlighting makes it easier to read and write dialogues by applying different colors to different parts of the text. This can help you quickly identify narrative content, keywords, variables, and comments, and make it easier to spot syntax errors and other mistakes.
-![Syntax Highlighting](images/ss1.png)
+![Syntax Highlighting](https://github.com//davidebarbieri/samwise/raw/HEAD/vscode/images/ss1.png)
 
 ### Error Diagnostics
 As you are writing your dialogues in Samwise, errors will be automatically highlighted on the text. By hovering your mouse over the highlighted text, a tooltip will show the error message.
-![Error Diagnostics](images/ss2.png)
+![Error Diagnostics](https://github.com//davidebarbieri/samwise/raw/HEAD/vscode/images/ss2.png)
 
 ### Toolbox
 A toolbox with Samwise's most useful nodes.
 If you do not remember the syntax of a specific node type (such as Choice, Random, or Sequence), clicking on the relevant button in the toolbox will insert an example snippet into the text.
 
-![Handy Snippets](images/ss3.png)
+![Handy Snippets](https://github.com//davidebarbieri/samwise/raw/HEAD/vscode/images/ss3.png)
 
 ### Dialogue Preview
 
 This Visual Studio Code extension allows you to "play" dialogs directly within the editor. This allows you to preview and debug any dialog without having to run the whole game.
 The Samwise Player allows you to start the preview from any node, even if it is in the middle of a dialogue.
 
-![Dialogue Preview](images/ss4.png)
+![Dialogue Preview](https://github.com//davidebarbieri/samwise/raw/HEAD/vscode/images/ss4.png)
 
 ### Data Visualizer/Editor
 
 The Samwise dialogue system supports a simplified scripting language through the use of code nodes. Such nodes can read and write variables. The Data panel is a tool for viewing and changing the state of such variables.
 
-![Data Visualizer/Editor](images/ss5.png)
+![Data Visualizer/Editor](https://github.com//davidebarbieri/samwise/raw/HEAD/vscode/images/ss5.png)
 
 ## Requirements
 
@@ -54,4 +54,4 @@ This extension has no specific requirements for writing and previewing interacti
 
 ## Documentation
 
-You'll find the Samwise official documentation [here](https://github.com/davidebarbieri/samwise).
+You'll find the Samwise official documentation [here](https://davidebarbieri.github.io/samwise/).

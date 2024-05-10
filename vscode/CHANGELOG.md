@@ -2,6 +2,10 @@
 
 All notable changes to the Samwise extension will be documented in this file.
 
+## [0.0.12]
+
+- Initial deployment to vscode extensions marketplace
+
 ## [0.0.1]
 
 - Initial release.
