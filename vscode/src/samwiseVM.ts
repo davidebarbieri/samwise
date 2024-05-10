@@ -18,7 +18,6 @@ export let isDialogueNodeFromLine: any;
 export let getDestinationSymbol: any;
 export let isExitingNode: any;
 export let startDialogueFromSrcPosition: any;
-export let getRunningDialogues: any;
 export let stopAll: any;
 
 export let requestChoose: any;
@@ -150,7 +149,6 @@ export function parseFile(filename: string): (SymbolInfo[] | ErrorsInfo) {
 	getDestinationSymbol = dotnet.mono_bind_static_method("[SamwiseWasm] Peevo.Samwise.Wasm.EntryPoint:GetDestinationSymbol");
 	isExitingNode = dotnet.mono_bind_static_method("[SamwiseWasm] Peevo.Samwise.Wasm.EntryPoint:IsExitingNode");
 	startDialogueFromSrcPosition = dotnet.mono_bind_static_method("[SamwiseWasm] Peevo.Samwise.Wasm.EntryPoint:StartDialogueFromSrcPosition");
-	getRunningDialogues = dotnet.mono_bind_static_method("[SamwiseWasm] Peevo.Samwise.Wasm.EntryPoint:GetRunningDialogues");
 
 	requestChoose = dotnet.mono_bind_static_method("[SamwiseWasm] Peevo.Samwise.Wasm.EntryPoint:Choose");
 	requestAdvance = dotnet.mono_bind_static_method("[SamwiseWasm] Peevo.Samwise.Wasm.EntryPoint:Advance");

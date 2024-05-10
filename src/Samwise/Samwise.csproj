@@ -30,8 +30,4 @@
   <ItemGroup>
         <OutputFiles Include="$(OutDir)\Samwise.dll" />
     </ItemGroup>
-
-    <Target Name="CopyFiles" AfterTargets="Build">
-        <Copy SourceFiles="@(OutputFiles)" DestinationFolder="..\..\Samwise Player\Assets\Plugins\" />
-  </Target>	
 </Project>
