@@ -127,27 +127,6 @@ namespace Peevo.Samwise.Wasm
             }
         }
 
-        public static void CompleteSpeechOption(long contextId)
-        {
-            IDialogueContext context;
-            if ((context = dialogueMachine.LookupDialogue(contextId)) == null)
-            {
-                Console.WriteLine("Error: can't find context with id " + contextId);
-                return;
-            }
-
-            try
-            {
-                context.CompleteSpeechOption();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Message: " + e.Message );
-                Console.WriteLine("StackTrace: " + e.StackTrace );
-                OnError(context, e.Message);
-            }
-        }
-
         public static bool TryResolveMissingDialogues(long contextId)
         {
             IDialogueContext context;

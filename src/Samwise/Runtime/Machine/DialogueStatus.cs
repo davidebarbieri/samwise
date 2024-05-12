@@ -7,6 +7,7 @@ namespace Peevo.Samwise
         Stopped,
         Waiting,
         Resolving,
-        Challenging
+        Challenging,
+        ShowingSpeechOption
     }
 }

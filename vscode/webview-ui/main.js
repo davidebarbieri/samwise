@@ -258,7 +258,7 @@ function initialize(layout) {
 
           history.insertBefore(balloonFrame, history.firstChild);
 
-          vscode.postMessage({ command: "completeSpeechOption", id: message.id });
+          vscode.postMessage({ command: "advance", id: message.id });
           break;
         }
 

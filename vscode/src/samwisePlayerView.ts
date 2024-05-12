@@ -233,11 +233,6 @@ export class SamwisePlayerViewProvider implements vscode.WebviewViewProvider {
 							samwiseVM.requestChoose(message.id, message.choice);
 							break;
 						}
-					case 'completeSpeechOption':
-						{
-							samwiseVM.completeSpeechOption(message.id);
-							break;
-						}
 					case 'completeChallenge':
 						{
 							samwiseVM.requestCompleteChallenge(message.id, message.result);

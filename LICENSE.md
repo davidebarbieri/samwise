@@ -1,6 +1,6 @@
 Samwise License v1.0
 
-Copyright (c) 2022, Davide 'PeevishDave' Barbieri. All rights reserved.
+Copyright (c) 2022-2024, Davide 'PeevishDave' Barbieri. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without 
 modification, are permitted to any person obtaining a copy of this 
@@ -21,7 +21,9 @@ name of the Software ("Samwise™ Dialogue System") and the name of the copyrigh
 holder ("Davide 'PeevishDave' Barbieri"). For such products condition 2 
 is to be considered optional.
 
-4. The Software may not be used to create or develop a derivative work that serves as a direct substitute or alternative to the Software, or any similar dialogue system, intended for distribution or use by third parties.
+4. The Software may not be used to create or develop a derivative work that serves 
+as a direct substitute or alternative to the Software, or any similar dialogue system, 
+intended for distribution or use by third parties.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 

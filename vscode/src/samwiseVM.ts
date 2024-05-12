@@ -22,7 +22,6 @@ export let stopAll: any;
 
 export let requestChoose: any;
 export let requestAdvance: any;
-export let completeSpeechOption: any;
 export let requestCompleteChallenge: any;
 export let requestStop: any;
 export let requestResolve: any;
@@ -152,7 +151,6 @@ export function parseFile(filename: string): (SymbolInfo[] | ErrorsInfo) {
 
 	requestChoose = dotnet.mono_bind_static_method("[SamwiseWasm] Peevo.Samwise.Wasm.EntryPoint:Choose");
 	requestAdvance = dotnet.mono_bind_static_method("[SamwiseWasm] Peevo.Samwise.Wasm.EntryPoint:Advance");
-	completeSpeechOption = dotnet.mono_bind_static_method("[SamwiseWasm] Peevo.Samwise.Wasm.EntryPoint:CompleteSpeechOption");
 	requestCompleteChallenge = dotnet.mono_bind_static_method("[SamwiseWasm] Peevo.Samwise.Wasm.EntryPoint:CompleteChallenge");
 	requestStop = dotnet.mono_bind_static_method("[SamwiseWasm] Peevo.Samwise.Wasm.EntryPoint:Stop");
 	stopAll = dotnet.mono_bind_static_method("[SamwiseWasm] Peevo.Samwise.Wasm.EntryPoint:StopAll");

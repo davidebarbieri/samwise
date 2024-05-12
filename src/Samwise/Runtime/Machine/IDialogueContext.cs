@@ -16,7 +16,6 @@ namespace Peevo.Samwise
         bool Evaluate(Option choice);
         bool Choose(Option choice);
         void CompleteChallenge(bool passed);
-        void CompleteSpeechOption();
         void Stop();
         bool TryResolveMissingDialogues();
         

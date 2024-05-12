@@ -315,7 +315,7 @@ character> End!
             dm.onWaitTimeStart += (context, node) => deferredActions.Add(() => { foreach (var c in dm.RunningContexes.ToArray()) c.Advance(); });
             dm.onCaptionStart += (context, node) => { output.Add("[ " + node.Text + " ]"); deferredActions.Add(() => { foreach (var c in dm.RunningContexes.ToArray()) c.Advance(); }); };
             dm.onSpeechStart += (context, node) => { output.Add(node.CharacterId + " said \"" + node.Text + "\""); deferredActions.Add(() => { foreach (var c in dm.RunningContexes.ToArray()) c.Advance(); }); };
-            dm.onSpeechOptionStart += (context, node) => { output.Add(node.Parent.CharacterId + " said \"" + node.Text + "\""); deferredActions.Add(() => { foreach (var c in dm.RunningContexes.ToArray()) c.CompleteSpeechOption(); }); };
+            dm.onSpeechOptionStart += (context, node) => { output.Add(node.Parent.CharacterId + " said \"" + node.Text + "\""); deferredActions.Add(() => { foreach (var c in dm.RunningContexes.ToArray()) c.Advance(); }); };
             dm.onChallengeStart += (context, check, s) => { output.Add("Challenge: " + s); deferredActions.Add(() => { foreach (var c in dm.RunningContexes.ToArray()) c.CompleteChallenge(true); }); };
             dm.onChoiceStart += (context, node) => {
                 output.Add(CHOICE_STRING); 
@@ -375,7 +375,7 @@ character> End!
             dm.onWaitTimeStart += (context, node) => deferredActions.Add(() => { foreach (var c in dm.RunningContexes.ToArray()) c.Advance(); });
             dm.onCaptionStart += (context, node) => { output.Add("[ " + node.Text + " ]"); deferredActions.Add(() => { foreach (var c in dm.RunningContexes.ToArray()) c.Advance(); }); };
             dm.onSpeechStart += (context, node) => { output.Add(node.CharacterId + " said \"" + node.Text + "\""); deferredActions.Add(() => { foreach (var c in dm.RunningContexes.ToArray()) c.Advance(); }); };
-            dm.onSpeechOptionStart += (context, node) => { output.Add(node.Parent.CharacterId + " said \"" + node.Text + "\""); deferredActions.Add(() => { foreach (var c in dm.RunningContexes.ToArray()) c.CompleteSpeechOption(); }); };
+            dm.onSpeechOptionStart += (context, node) => { output.Add(node.Parent.CharacterId + " said \"" + node.Text + "\""); deferredActions.Add(() => { foreach (var c in dm.RunningContexes.ToArray()) c.Advance(); }); };
             dm.onChallengeStart += (context, check, s) => { output.Add("Challenge: " + s); deferredActions.Add(() => { foreach (var c in dm.RunningContexes.ToArray()) c.CompleteChallenge(true); }); };
             dm.onChoiceStart += (context, node) => {
                 output.Add(CHOICE_STRING); 

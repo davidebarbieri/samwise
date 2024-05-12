@@ -59,13 +59,13 @@ onBreakpoint
 
 ## VS-Code Extension improvements
 
-- Panel for workspace statistics
 - Keyboard shortcuts for each node type
 - Time-based auto-play;
 - Panel to configure characters colors/avatars
-- States History (a bar with automatic snapshots)
+- States History (a bar with automatic and custom snapshots)
 - Export Html preview player
 - Export dialogues history;
+- Panel for workspace statistics
 
 ## Runtime
 
@@ -97,12 +97,15 @@ Engine runtime:
 - Defold
 
 ## Runtime Unity
-- Current Data Inspector in example
+
+- Current State/Data Inspector
+- Multiple SamwiseDatabase
 
 ## Documentation
 
 - Add the missing pages
 - Switch to Docusaurus
+- API docs
 
 ## Performance/Memory Optimizations. 
 

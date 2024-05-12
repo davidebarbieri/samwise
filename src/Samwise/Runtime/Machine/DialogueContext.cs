@@ -59,6 +59,13 @@ namespace Peevo.Samwise
                     SwitchNode(((IAdvanceableNode)Current).Advance(Machine.Dialogues));
                     return true;
                 }
+                else if (Status == DialogueStatus.ShowingSpeechOption)
+                {
+                    var option = reenterNode;
+                    reenterNode = null;
+                    Status = DialogueStatus.Running;
+                    SwitchNode(option);
+                }
                 else if (Status == DialogueStatus.Waiting && Current is WaitExpressionNode waitExpressionCurrent) // waiting on expression
                 {
                     if (waitExpressionCurrent.Expression.EvaluateBool(this))
@@ -124,6 +131,7 @@ namespace Peevo.Samwise
                             SwitchNode(((IChoosableNode)Current).Next(option, this));
                         else
                         {
+                            Status = DialogueStatus.ShowingSpeechOption;
                             reenterNode = ((IChoosableNode)Current).Next(option, this);
                             Machine.onSpeechOptionStart?.Invoke(this, option);
                         }
@@ -138,16 +146,6 @@ namespace Peevo.Samwise
                 }
                 
                 return false;
-            }
-
-            public void CompleteSpeechOption()
-            {
-                if (Status == DialogueStatus.Running)
-                {
-                    var option = reenterNode;
-                    reenterNode = null;
-                    SwitchNode(option);
-                }
             }
 
             public void CompleteChallenge(bool passed)
