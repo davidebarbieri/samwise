@@ -140,7 +140,7 @@ character:
 ```
 the Dialogue Machine will raise the *onSpeechOptionStart* event. In that case, the program should show the line to the user, and then call
 ```C#
-context.CompleteSpeechOption();
+context.Advance();
 ```
 
 ### Complete a Challenge
