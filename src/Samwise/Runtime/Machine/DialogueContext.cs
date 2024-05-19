@@ -539,6 +539,9 @@ namespace Peevo.Samwise
                         case JoinNode joinNode:
                             OnJoin(joinNode.BranchName, joinNode.Next(Machine.Dialogues, this));
                             break;
+                        case CancelNode cancelNode:
+                            OnCancel(cancelNode.BranchName, cancelNode.Next(Machine.Dialogues, this));
+                            break;
                         case IAutoNode autoNode:
                             SwitchNode(autoNode.Next(Machine.Dialogues, this));
                             break;
@@ -664,6 +667,26 @@ namespace Peevo.Samwise
                 Status = DialogueStatus.Waiting;
                 waitingForJoin = child;
                 reenterNode = nextNode;
+            }
+
+            void OnCancel(string branchName, IDialogueNode nextNode)
+            {
+                OnJoin(branchName, nextNode);
+                
+                if (string.IsNullOrEmpty(branchName))
+                {
+                    for (int i=children.Count-1; i>=0; --i)
+                    {
+                        children[i].Stop();
+                    }
+                }
+                else
+                {
+                    if (branchesMap.TryGetValue(branchName, out var child))
+                    {
+                        child.Stop();
+                    }
+                }
             }
 
             void OnAwait(IDialogueNode awaitNode, IDialogueNode destinationNode, IDialogueNode nextNode)

@@ -725,6 +725,17 @@ namespace Peevo.Samwise
                             }
                             break;
                         }
+                    case Symbol.Cancel:
+                        {
+                            node = new CancelNode(nodeLine, name);
+
+                            if (!ParseEndNodeLine(text, ref position, ref line, ref tagData))
+                            {
+                                PushError(line, "Expected end line,");
+                                return false;
+                            }
+                            break;
+                        }
                     case Symbol.Choice:
                         {
                             // Choice Node

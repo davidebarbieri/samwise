@@ -15,6 +15,7 @@ namespace Peevo.Samwise
         Fork, // =>
         Join, // <=
         Await, // <=>
+        Cancel, // <!=
         Check, // $
         Interrupt, // !
         ResetAndInterrupt, // !!
@@ -46,6 +47,8 @@ namespace Peevo.Samwise
                     return "=>";
                 case Symbol.Join:
                     return "<=";
+                case Symbol.Cancel:
+                    return "<!=";
                 case Symbol.Await:
                     return "<=>";
                 case Symbol.Check:

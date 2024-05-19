@@ -266,6 +266,29 @@ character> Hey!";
 
             TestDialogueLines(dialogues2,
                 (a) => Assert.Equal("character said \"Hey!\"", a));
+
+string dialogues3 = 
+@"a => Test2
+character> Oh my.
+a <!=
+character> Stop it.
+Loise> Don't you dare
+
+§ Test2
+Loise> Are you crazy?
+Loise> Do you think I don't understand?
+Loise> Skipped
+
+";
+
+            TestDialogueLines(dialogues3,
+                (a) => Assert.Equal("Loise said \"Are you crazy?\"", a),
+                (a) => Assert.Equal("character said \"Oh my.\"", a),
+                (a) => Assert.Equal("Loise said \"Do you think I don't understand?\"", a),
+                (a) => Assert.Equal("character said \"Stop it.\"", a),
+                (a) => Assert.Equal("Loise said \"Don't you dare\"", a)
+                
+                );
         }
 
         [Fact]

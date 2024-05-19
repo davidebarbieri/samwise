@@ -639,16 +639,24 @@ fail:
                 symbol = Symbol.Fork;
                 return true;
             }
-            if (ParseToken(text, ref position, "<=", true))
+            if (ParseToken(text, ref position, "<", true))
             {
-                if (ParseToken(text, ref position, ">", true))
+                if (ParseToken(text, ref position, "=", false))
                 {
-                    symbol = Symbol.Await;
-                    return true;
-                }
+                    if (ParseToken(text, ref position, ">", false))
+                    {
+                        symbol = Symbol.Await;
+                        return true;
+                    }
 
-                symbol = Symbol.Join;
-                return true;
+                    symbol = Symbol.Join;
+                    return true; 
+                }
+                else if (ParseToken(text, ref position, "!=", false))
+                {
+                    symbol = Symbol.Cancel;
+                    return true; 
+                }
             }
             if (ParseToken(text, ref position, "$", true))
             {
