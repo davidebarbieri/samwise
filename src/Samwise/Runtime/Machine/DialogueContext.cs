@@ -284,7 +284,16 @@ namespace Peevo.Samwise
                 }
 
                 Status = DialogueStatus.Running;
-                Machine.externalCodeMachine.Dispatch(this, code); 
+                
+                if (Machine.externalCodeMachine == null)
+                {
+                    Machine.Log("Error: No External Code Machine configured but external code nodes are present in the dialogue");
+                    OnEnd(); // auto-end (skip)
+                }
+                else
+                {
+                    Machine.externalCodeMachine.Dispatch(this, code); 
+                }
             }
 
             internal void InitializeStarted(string branchName, IDialogueNode node, DialogueContext parent, object externalContext = null)
@@ -673,8 +682,7 @@ namespace Peevo.Samwise
 
             void OnAwait(IDialogueNode awaitNode, IAsyncCode code, IDialogueNode nextNode)
             {
-                if (nextNode == null)
-                    throw new System.ArgumentException("Cannot await dialogue using an invalid code node");
+                // nextNode is null when this is the last line in the dialogue
 
                 var newContext = Machine.CreateContext();
 

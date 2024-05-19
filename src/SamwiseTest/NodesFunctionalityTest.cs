@@ -256,6 +256,16 @@ character2> Yaya
                 (a) => Assert.Equal("character2 said \"Yaya\"", a),
                 (a) => Assert.Equal("[ and it continued ]", a)
                 );
+
+string dialogues2 = 
+@"<=> Test2
+<=> {{ Ext Code }}
+
+§ Test2
+character> Hey!";
+
+            TestDialogueLines(dialogues2,
+                (a) => Assert.Equal("character said \"Hey!\"", a));
         }
 
         [Fact]
