@@ -9,4 +9,4 @@
 - Fast and lightweight runtime
 
 [GitHub](https://github.com/davidebarbieri/samwise/)
-[Get Started](Tutorial.md)
+[Get Started](Quick_Start.md)
