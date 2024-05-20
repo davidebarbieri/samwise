@@ -18,6 +18,7 @@ I want to add an additional alternative syntax for symbol-based nodes:
 - "!! bVar" 	&rarr; {recatch bVar}
 - a => b 	    &rarr; {a fork b}
 - a <=   	    &rarr; {a join}
+- a <!=   	    &rarr; {a cancel}
 - <=> b   	    &rarr; {await b}
 
 ## Features
@@ -32,6 +33,8 @@ I want to add an additional alternative syntax for symbol-based nodes:
     - odd(int)
 
 - custom functions ?
+
+- not sure if I want to introduce fixed point numbers
 
 ## Assert
 

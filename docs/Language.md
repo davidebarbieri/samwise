@@ -1,6 +1,6 @@
 # Samwise Scripting Language Specifications
 
-> Current Version: 0.8
+> Current Version: 0.9
 
 This document displays the structure and the full list of features provided by the **Samwise™ Language**.  
 
@@ -284,6 +284,7 @@ or in the format {dialogue name}.{label}, if the node is part of a different dia
 
 ```
 -> labelName
+-> DialogueName
 -> DialogueName.labelName
 ```
 
@@ -298,14 +299,16 @@ The execution model of Samwise allows the possibility to run multiple dialogues 
 
 ```
 => label
-=> Dialogue.label
+=> DialogueName
+=> DialogueName.label
 ```
 
 A fork node can optionally define a name for its fork point. Such name can be used later in Join/Await nodes (further explanation in their related sections).
 
 ```
 name => label 
-name => Dialogue.label 
+name => DialogueName 
+name => DialogueName.label 
 ```
 
 #### 4.8.1 Anonymous Fork node
@@ -334,13 +337,29 @@ If no name is specified, as in
 ```
 then, the dialogue will wait all the previously fork nodes.
 
+#### 4.9.1 Cancel node
+
+The Cancel Node is a node that cancels the execution of one or more parallel dialogues within the current context. It also implicitly acts as a join, as it waits for all child contexts to be properly concluded before proceeding.
+
+```
+name <!=
+```
+
+If no name is specified, as in 
+
+```
+<!=
+```
+then, the dialogue will cancel all the previously fork nodes.
+
 ### 4.10 Await node (Fork + Join)
 
 The Await node is equivalent to a Fork node followed by a Join node. When a dialogue execution reaches this node, it will pause, the target dialogue will be started, and the former dialogue will be restored only once the child dialogue is completed.
 
 ```
 <=> label
-<=> Dialogue.label
+<=> DialogueName
+<=> DialogueName.label
 ```
 
 ### 4.11 Challenge Check node

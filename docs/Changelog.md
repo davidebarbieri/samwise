@@ -1,6 +1,20 @@
 # Changelog
 
-## [0.1.0b] - 2024-06-25
+## [0.0.14b] - 2024-05-20
+
+### Added
+- Added Cancel Node (<!=) to simplify interruptible flows.
+- Updated Documentation
+
+### Fixed
+- Fixed minor bugs
+
+## [0.0.13b] - 2024-05-10
+
+### Changed
+- Simplified IDialogueContext interface
+
+## [0.0.12b] - 2024-05-10
 
 ### Added
 
