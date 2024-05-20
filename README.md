@@ -8,6 +8,24 @@ The objective of this tool is to empower any writer or designer to intricately c
 1. A scripting language for writing interactive dialogues;
 2. A runtime library for parsing such files and supporting the execution of dialogues in a videogame (or any other interactive software);
 3. A Visual Studio Code extension that assists the developer in the task of writing dialogues and testing them quickly.
+   
+## A Basic Dialogue in Samwise
+
+```samwise
+* Bob and Alice are discussing where to go for dinner.
+
+Alice> Where do you want to go for dinner tonight?
+Bob:
+    - I'd like to go to the Japanese restaurant
+        Alice> Do you prefer an all-you-can-eat buffet or a traditional restaurant?
+        Bob:
+            -- All-you-can-eat
+                Bob> I prefer an all-you-can-eat buffet; I'm very hungry and don't want to spend a fortune.
+
+            -- Traditional
+                Bob> I prefer a traditional restaurant; we might pay more, but the quality is usually better.
+        Alice> All right then.
+```
 
 ## Documentation
 
