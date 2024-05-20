@@ -38,6 +38,7 @@ addToolButtonIcon(toolboxDiv, "remote", "Add Ping Pong", "samwise.addPingPong");
 addToolButtonIcon(toolboxDiv, "debug-step-over", "Add Goto", "samwise.addGoto");
 addToolButtonIcon(toolboxDiv, "type-hierarchy-sub", "Fork Dialogue", "samwise.addFork");
 addToolButtonIcon(toolboxDiv, "type-hierarchy-super", "Join Dialogue", "samwise.addJoin");
+addToolButtonIcon(toolboxDiv, "circle-slash", "Cancel Dialogue", "samwise.addCancel");
 addToolButtonIcon(toolboxDiv, "sync", "Await Dialogue", "samwise.addAwait");
 
 addToolButtonIcon(toolboxDiv, "code", "Add Code", "samwise.addCode");

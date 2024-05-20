@@ -197,7 +197,16 @@ export function addJoin() {
 	const editor = vscode.window.activeTextEditor;
 
 	if (editor) {
-		const snippetString = new vscode.SnippetString().appendPlaceholder("forkPointName").appendText(" <= ").appendText("\n");
+		const snippetString = new vscode.SnippetString().appendPlaceholder("forkPointName").appendText(" <=").appendText("\n");
+		editor.insertSnippet(snippetString, getActiveIndentatedPosition(editor));
+	}
+}
+
+export function addCancel() {
+	const editor = vscode.window.activeTextEditor;
+
+	if (editor) {
+		const snippetString = new vscode.SnippetString().appendPlaceholder("forkPointName").appendText(" <!=").appendText("\n");
 		editor.insertSnippet(snippetString, getActiveIndentatedPosition(editor));
 	}
 }

@@ -22,7 +22,7 @@ import * as samwiseVM from './samwiseVM';
 import {
 	addDialogue, addSpeech, addCaption, addFallback, addRandom, addScore, addChoice,
 	addCheck, addSequenceSelection, addLoopSelection, addPingPong, addGoto, addTags, addWait,
-	addLabel, addComment, addCode, addAwait, addJoin, addFork, addCarriageReturn
+	addLabel, addComment, addCode, addAwait, addJoin, addFork, addCancel, addCarriageReturn
 } from './samwiseEditing';
 
 let toolView: SamwiseToolViewProvider;
@@ -431,6 +431,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.commands.registerCommand('samwise.addPingPong', addPingPong));
 	context.subscriptions.push(vscode.commands.registerCommand('samwise.addGoto', addGoto));
 	context.subscriptions.push(vscode.commands.registerCommand('samwise.addFork', addFork));
+	context.subscriptions.push(vscode.commands.registerCommand('samwise.addCancel', addCancel));
 	context.subscriptions.push(vscode.commands.registerCommand('samwise.addJoin', addJoin));
 	context.subscriptions.push(vscode.commands.registerCommand('samwise.addAwait', addAwait));
 	context.subscriptions.push(vscode.commands.registerCommand('samwise.addCode', addCode));
