@@ -8,5 +8,6 @@
 - Concise and readable syntax
 - Fast and lightweight runtime
 
+[Home](Home.md)
+[Quick Start](Quick_Start.md)
 [GitHub](https://github.com/davidebarbieri/samwise/)
-[Get Started](Quick_Start.md)
