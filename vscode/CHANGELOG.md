@@ -2,6 +2,10 @@
 
 All notable changes to the Samwise extension will be documented in this file.
 
+## [0.0.15]
+
+- Update Samwise DLL version, with some bugfixes
+
 ## [0.0.14]
 
 - Cancel Node support + snippet

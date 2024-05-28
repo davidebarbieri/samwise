@@ -2,7 +2,7 @@
   	"name": "samwisevs",
   	"displayName": "Samwise Dialogue System",
   	"description": "Visual Studio Code extension for the Samwise Dialogue System, a language for creating complex branching narrative",
-  	"version": "0.0.14",
+  	"version": "0.0.15",
   	"icon": "images/icon-package.png",
   	"publisher": "PeevishDave",
   	"repository": "https://github.com/davidebarbieri/samwise",
