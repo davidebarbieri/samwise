@@ -193,6 +193,7 @@ namespace Peevo.Samwise
                                 SwitchNode(((IChoosableNode)Current).Next(option, this));
                             else
                             {
+                                Status = DialogueStatus.ShowingSpeechOption;
                                 reenterNode = ((IChoosableNode)Current).Next(option, this);
                                 Machine.onSpeechOptionStart?.Invoke(this, option);
                             }
