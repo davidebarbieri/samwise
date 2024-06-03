@@ -9,6 +9,8 @@ The objective of this tool is to empower writers and designers to craft intricat
 2. A runtime library for parsing such files and supporting the execution of dialogues in a videogame (or any other interactive software);
 3. A Visual Studio Code extension that assists the developer in the task of writing dialogues and testing them quickly.
 
+![image info](./images/screenshot.jpg)
+
 ## Licensing
 
 **Samwise™** is free to be used in commercial and non-commercial products, but it requires you to attribute the work in the manner specified in the [License](LICENSE.md). For example, in order to be used in a video game it's enough to include the ["written in Samwise" logo](logo/samwise-both-large.png) and/or the acknowledgment "Samwise™ Dialogue System by Davide 'PeevishDave' Barbieri" in the credits screen.

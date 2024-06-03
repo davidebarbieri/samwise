@@ -25,12 +25,11 @@
 			"action": { "indent": "indent", "appendText": "- " }
 		  },
 		  {
-			"beforeText": "^.*:\\s*(?:#.*)?$",
+			"beforeText": "^[^>\\*]*:\\s*(?:#.*)?$",
 			"action": { "indent": "indent", "appendText": "- " }
-			
 		  },
 		  {
-			"beforeText": "^.*(?:=>)\\s*(?:#.*)?$",
+			"beforeText": "^[^>\\*]*(?:=>)\\s*(?:#.*)?$",
 			"action": { "indent": "indent"}
 		  },
 		  {
