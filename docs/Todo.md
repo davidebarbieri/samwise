@@ -4,6 +4,49 @@
 
 ## Language
 
+### !! Multi-line comments
+
+I'll add multi-line comments in this form: 
+/*  
+*/
+
+or 
+
+/[
+]/
+
+Multi-line comments, unlike C/C++/C#, will have a hierarchy.
+
+So if you open multi-line comments two times: /* /*, you must also close them */ */
+This will allow you to comment large section of the script possibly containing internal multi-line comments
+(in C, the comment would stop at the first */ occurrence).
+
+### !! Alternative Options
+
+I'll add the ability to add alternative options in choices. That is, if the condition fails,
+the next alternative's condition is tested (no condition means "true"). And only if all the alternatives
+are false the option is skipped.
+This will allow you to modify the text (or even mute) of the option based on any condition.
+
+| is a speech option
+|| is a muted option
+
+guybrush:
+    <- [once] Tell me more about mastering the sword
+        | Tell me again about mastering the sword
+        pirate_A> First, get ye a sword.
+        // ...
+
+    <- [once] Tell me more about mastering the art of thievery
+        | Tell me again about pilfering the idol.
+        // ...
+
+    <- [once] Tell me more about treasure hunting.
+        | Tell me again about the Lost Treasure.
+        // ...
+        
+   - I'll just be running along now.
+
 ### Alternative Syntax
 
 I want to add an additional alternative syntax for symbol-based nodes:
