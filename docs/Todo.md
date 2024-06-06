@@ -7,13 +7,15 @@
 ### !! Multi-line comments
 
 I'll add multi-line comments in this form: 
+```samwise
 /*  
 */
-
+```
 or 
-
+```samwise
 /[
 ]/
+```
 
 Multi-line comments, unlike C/C++/C#, will have a hierarchy.
 
@@ -29,23 +31,26 @@ are false the option is skipped.
 This will allow you to modify the text (or even mute) of the option based on any condition.
 
 | is a speech option
+
 || is a muted option
 
-guybrush:
-    <- [once] Tell me more about mastering the sword
-        | Tell me again about mastering the sword
-        pirate_A> First, get ye a sword.
+```samwise
+galbroom:
+    <- [once] Share more about becoming a sword master
+        | Tell me once more about becoming proficient in swordplay
+        pirate_A> First, thou need a sword.
         // ...
 
-    <- [once] Tell me more about mastering the art of thievery
-        | Tell me again about pilfering the idol.
+    <- [once] Share more about mastering the art of thievery
+        | Tell me once more about stealing the idol.
         // ...
 
-    <- [once] Tell me more about treasure hunting.
-        | Tell me again about the Lost Treasure.
+    <- [once] Share more about the treasure-huntery.
+        | Tell me once more about the Lost Treasure.
         // ...
         
-   - I'll just be running along now.
+   - I'll be on my way now.
+```
 
 ### Alternative Syntax
 
