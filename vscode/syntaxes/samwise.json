@@ -17,26 +17,18 @@
 		{ "include": "#check" },
 		{ "include": "#interruptible" },
 		{ "include": "#fallback" },
-		{
-			"begin": "^[\t ]*",
-			"end": "\n",
-			"name": "string.label.skip_rainbow_coloring",
-			"patterns": [
-				{ "include": "#external_code" },
-				{ "include": "#code" },
-				{ "include": "#tags" }
-			]
-		}
+		{ "include": "#external_code" },
+		{ "include": "#code" }
 	],
 	"repository": {
 		"comment": {
-			"begin": "[\t ]*//",
-			"end": "\n",
+			"begin": "^[\t ]*//",
+			"end": "$",
 			"name": "comment.line.samwise"
 		},
 		"title": {
 			"begin": "[\t ]*([~¯«»─┬┼│┤├┴┐┘┌└═╦╬║╣╠╩╗╝╔╚░▒▓█▀■▄±‗¶§]+)",
-			"end":   "\n",
+			"end":   "$",
 			"beginCaptures": {
 				"1": { "name": "keyword.other.title.samwise" }
 			},
@@ -61,11 +53,9 @@
 			"name": "string.label.samwise"
 		},
 		"tags": {
-			"match": "[^#](?:##)*(#[^#])([^\n]+)",
-			"captures": {
-				"1": { "name": "comment.tags.samwise" },
-				"2": { "name": "comment.tags.samwise" }
-			}
+			"begin": "(?<=[^#])(?<=(?:##)*)(#[^#])",
+			"end": "$",
+			"name" : "comment.tags.samwise"
 		},
 		"condition": {
 			"match": "[\t ]*(\\[)([^\\]])*(\\])",
@@ -76,8 +66,8 @@
 		},
 		
 		"says": {
-			"begin": "[\t ]*([^> \t=-]+)([>])",
-			"end": "(?:(?<!\u21b5\\s*))\n",
+			"begin": "^[\t ]*([^> \t=-]+)([>])",
+			"end": "(?:(?<!\u21b5[ \t]*))$",
 			"beginCaptures": {
 				"1": { "name": "keyword.other.character.samwise" },
 				"2": { "name": "keyword.other.says.samwise" }
@@ -85,12 +75,11 @@
 			"patterns": 
 			[
 				{ "include": "#tags" },
-				{ "include": "#condition" },
 				{ "include": "#symbols" }
 			]
 		},
 		"choice": {
-			"begin": "[\t ]*([^\\[\\(\\]\\)]+)([:])",
+			"begin": "[\t ]*([^\\[\\(\\]\\)\\>\\-]+)([:])",
 			"end": "\n",
 			"beginCaptures": {
 				"1": { "name": "keyword.other.character.samwise" },
@@ -104,7 +93,7 @@
 		},
 		"caption": {
 			"begin": "[\t ]*\\*",
-			"end": "(?:(?<!\u21b5\\s*))\n",
+			"end": "(?:(?<!\u21b5[ \t]*))\n",
 			"beginCaptures": {
 				"0": { "name": "support.constant.handlebars.samwise.caption" }
 			},
@@ -197,13 +186,21 @@
 
 		"external_code": {
 			"begin": "\\{\\{",
-			"end": "\\}\\}",
-			"name": "support.constant.handlebars"
+			"end": "$",
+			"name": "support.constant.handlebars",
+			"patterns": 
+			[
+				{ "include": "#tags" }
+			]
 		},
 		"code": {
 			"begin": "\\{",
-			"end": "\\}",
-			"name": "support.constant.handlebars"
+			"end": "$",
+			"name": "support.constant.handlebars",
+			"patterns": 
+			[
+				{ "include": "#tags" }
+			]
 		},
 		"symbols": {
 			"match": "\u21b5",
@@ -215,7 +212,7 @@
 		},
 		"option": {
 			"begin": "[\t ]*^[\t ]*[<]?[-+]+",
-			"end": "\n",
+			"end": "$",
 			"beginCaptures": {
 				"0": { "name": "support.constant.handlebars.samwise.option" }
 			},
