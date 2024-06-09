@@ -31,6 +31,10 @@ Bob:
 
 [Here](https://davidebarbieri.github.io/samwise/) you can find the full documentation of this tool.
 
+## Unity Plug-in
+
+[Here](https://github.com/davidebarbieri/samwiseUnity) you can find the Unity plug-in repository.
+
 ## How can you help me
 
 Please consider to support my work on [Github Sponsors](https://github.com/sponsors/davidebarbieri)!

@@ -4,6 +4,54 @@
 
 ## Language
 
+### !! Multi-line comments
+
+I'll add multi-line comments in this form: 
+```samwise
+/*  
+*/
+```
+or 
+```samwise
+/[
+]/
+```
+
+Multi-line comments, unlike C/C++/C#, will have a hierarchy.
+
+So if you open multi-line comments two times: /* /*, you must also close them */ */
+This will allow you to comment large section of the script possibly containing internal multi-line comments
+(in C, the comment would stop at the first */ occurrence).
+
+### !! Alternative Options
+
+I'll add the ability to add alternative options in choices. That is, if the condition fails,
+the next alternative's condition is tested (no condition means "true"). And only if all the alternatives
+are false the option is skipped.
+This will allow you to modify the text (or even mute) of the option based on any condition.
+
+| is a speech option
+
+|| is a muted option
+
+```samwise
+galbroom:
+    <- [once] Share more about becoming a sword master
+        | Tell me once more about becoming proficient in swordplay
+        pirate_A> First, thou need a sword.
+        // ...
+
+    <- [once] Share more about mastering the art of thievery
+        | Tell me once more about stealing the idol.
+        // ...
+
+    <- [once] Share more about the treasure-huntery.
+        | Tell me once more about the Lost Treasure.
+        // ...
+        
+   - I'll be on my way now.
+```
+
 ### Alternative Syntax
 
 I want to add an additional alternative syntax for symbol-based nodes:
