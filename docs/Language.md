@@ -30,7 +30,7 @@ The title can be written in a rather personal and creative way. In fact,
 
 An adornment is a text made by one or more characters from this set:
 * § ¶
-* ‗ ~ ¯ « » ±
+* ‗ ¯ « » ±
 * ─ ┬ ┼ │ ┤ ├ ┴ ┐ ┘ ┌ └ 
 * ═ ╦ ╬ ║ ╣ ╠ ╩ ╗ ╝ ╔ ╚ 
 * ░ ▒ ▓ █ ▀ ■ ▄
@@ -48,7 +48,7 @@ The following are all valid examples of a dialogue title:
 ```
 
 ```
-~~~~~~~~~~ Dialogue Title ~~~~~~~~~~
+─────────── Dialogue Title ───────────
 ```
 
 ```

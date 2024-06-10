@@ -4,25 +4,6 @@
 
 ## Language
 
-### !! Multi-line comments
-
-I'll add multi-line comments in this form: 
-```samwise
-/*  
-*/
-```
-or 
-```samwise
-/[
-]/
-```
-
-Multi-line comments, unlike C/C++/C#, will have a hierarchy.
-
-So if you open multi-line comments two times: /* /*, you must also close them */ */
-This will allow you to comment large section of the script possibly containing internal multi-line comments
-(in C, the comment would stop at the first */ occurrence).
-
 ### !! Alternative Options
 
 I'll add the ability to add alternative options in choices. That is, if the condition fails,
@@ -110,6 +91,7 @@ onBreakpoint
 
 ## VS-Code Extension improvements
 
+- Make Icons instead of using codicons
 - Keyboard shortcuts for each node type
 - Time-based auto-play;
 - Panel to configure characters colors/avatars
@@ -117,6 +99,7 @@ onBreakpoint
 - Export Html preview player
 - Export dialogues history;
 - Panel for workspace statistics
+- Improve Shift+Alt+A (toggle lines) feature
 
 ## Runtime
 

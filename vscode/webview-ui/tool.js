@@ -43,12 +43,14 @@ addToolButtonIcon(toolboxDiv, "sync", "Await Dialogue", "samwise.addAwait");
 
 addToolButtonIcon(toolboxDiv, "code", "Add Code", "samwise.addCode");
 
-addToolButtonIcon(toolboxDiv, "info", "Add Comment", "samwise.addComment");
-
 addToolButtonIcon(toolboxDiv, "bookmark", "Add Label", "samwise.addLabel");
 addToolButtonIcon(toolboxDiv, "tag", "Add Tags", "samwise.addTags");
 addToolButtonIcon(toolboxDiv, "game", "Add Challenge", "samwise.addCheck");
 addToolButtonIcon(toolboxDiv, "watch", "Wait Time", "samwise.addWait");
+
+
+addToolButtonIcon(toolboxDiv, "info", "Add Comment", "samwise.addComment");
+addToolButtonIcon(toolboxDiv, "clear-all", "Disable Nodes (Shift+Alt+A)", "editor.action.blockComment");
 
 
 toolboxDiv.appendChild(document.createElement("vscode-divider"));

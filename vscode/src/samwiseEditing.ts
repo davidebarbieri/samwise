@@ -55,6 +55,50 @@ export function addCarriageReturn() {
 	}
 }
 
+export function toggleDisabledLines() {
+	const editor = vscode.window.activeTextEditor;
+
+	if (editor) {
+		var position = editor.selection.active;
+
+		if (editor.selection.start.line === editor.selection.end.line) {
+			let singleDisableStartRegex = /^([\t ]*)(~[ ]*)/;
+
+			let lineString = editor.document.lineAt(editor.selection.start.line).text;
+			let singleStartMatch = lineString.match(singleDisableStartRegex);
+			if (singleStartMatch !== null && singleStartMatch.index !== undefined) {
+				// enable
+
+				let deleteRange = new vscode.Range(
+					new vscode.Position(editor.selection.start.line, singleStartMatch.index + singleStartMatch[1].length), 
+					new vscode.Position(editor.selection.start.line, singleStartMatch.index + singleStartMatch[1].length + singleStartMatch[2].length));
+
+				editor.edit(editBuilder => {
+					editBuilder.delete(deleteRange);
+				});
+			}
+			else
+			{
+				let startRegex = /^([\t ]*)/;
+
+				let lineString = editor.document.lineAt(editor.selection.start.line).text;
+				let startMatch = lineString.match(startRegex);
+				if (startMatch !== null && startMatch.index !== undefined) {
+					// disable
+					editor.insertSnippet(new vscode.SnippetString().appendText("~ "), 
+					new vscode.Position(editor.selection.start.line, startMatch.index + startMatch[0].length));
+				}
+			}
+		} else {
+			editor.edit(editBuilder => {
+				editBuilder.insert(new vscode.Position(editor.selection.start.line, 0), "/~\n");
+				editBuilder.insert(editor.document.lineAt(editor.selection.end.line).range.end, "\n~/");
+			});
+		}
+
+	}
+}
+
 export function addSpeech() {
 	const editor = vscode.window.activeTextEditor;
 

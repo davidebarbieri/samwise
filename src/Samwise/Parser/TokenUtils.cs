@@ -10,7 +10,7 @@ namespace Peevo.Samwise
         public static string ReadTillEndLine(string text, ref int position, ref int line)
         {
             int startPos = position;
-            while(position < text.Length)
+            while (position < text.Length)
             {
                 var prevPos = position;
                 if (ParseEndline(text, ref position, ref line))
@@ -27,7 +27,7 @@ namespace Peevo.Samwise
         public static string ReadBeforeCharacter(string text, ref int position, ref int line, char character)
         {
             int startPos = position;
-            while(position < text.Length)
+            while (position < text.Length)
             {
                 if (text[position] == character)
                 {
@@ -48,58 +48,58 @@ namespace Peevo.Samwise
             SkipWhitespaces(text, ref position);
 
             int startPos = position;
-            while(position < text.Length)
+            while (position < text.Length)
             {
-                switch(text[position])
+                switch (text[position])
                 {
-                case '\u21B5': // ↵
-                {
-                    // Non-breaking carriage return, try to skip end line
-                    sb.Append(text, startPos, position - startPos);
-                    sb.Append('\n');
-                    ++position;
-                    ParseEndline(text, ref position, ref line);
-                    startPos = position;
-                    break;
-                }
-                case '\n':
-                {
-                    // end line
-                    sb.Append(text, startPos, position - startPos);
-                    goto makeString;
-                }
-                case '#':
-                {
-                    if (position == text.Length - 1 || text[position + 1] != '#')
-                    {
-                        sb.Append(text, startPos, position - startPos);
-                        startPos = position;
-                        goto makeString;
-                    }
+                    case '\u21B5': // ↵
+                        {
+                            // Non-breaking carriage return, try to skip end line
+                            sb.Append(text, startPos, position - startPos);
+                            sb.Append('\n');
+                            ++position;
+                            ParseEndline(text, ref position, ref line);
+                            startPos = position;
+                            break;
+                        }
+                    case '\n':
+                        {
+                            // end line
+                            sb.Append(text, startPos, position - startPos);
+                            goto makeString;
+                        }
+                    case '#':
+                        {
+                            if (position == text.Length - 1 || text[position + 1] != '#')
+                            {
+                                sb.Append(text, startPos, position - startPos);
+                                startPos = position;
+                                goto makeString;
+                            }
 
-                    // double ##
-                    position += 2;
-                    break;
-                }
-                case '\r':
-                {
-                    // Skip
-                    sb.Append(text, startPos, position - startPos);
+                            // double ##
+                            position += 2;
+                            break;
+                        }
+                    case '\r':
+                        {
+                            // Skip
+                            sb.Append(text, startPos, position - startPos);
 
-                    ++position;
-                    startPos = position;
-                    break;
-                }
-                default:
-                    ++position;
-                    break;
+                            ++position;
+                            startPos = position;
+                            break;
+                        }
+                    default:
+                        ++position;
+                        break;
                 }
             }
 
-        if (position > startPos)
-            sb.Append(text, startPos, position - startPos);
+            if (position > startPos)
+                sb.Append(text, startPos, position - startPos);
 
-        makeString:
+            makeString:
             return sb.ToString().TrimEnd();
         }
 
@@ -120,7 +120,7 @@ namespace Peevo.Samwise
 
             var sb = stringBuilder.Value;
             sb.Clear();
-            while(position < text.Length)
+            while (position < text.Length)
             {
                 var prevPos = position;
                 if (text[position] == '\n')
@@ -143,23 +143,23 @@ namespace Peevo.Samwise
                     {
                         case '\"':
                         case '\\':
-                        sb.Append(text[position + 1]);
-                        position += 2;
-                        break;
-                        
+                            sb.Append(text[position + 1]);
+                            position += 2;
+                            break;
+
                         case 't':
-                        sb.Append('\t');
-                        position += 2;
-                        break;
+                            sb.Append('\t');
+                            position += 2;
+                            break;
 
                         case 'n':
-                        sb.Append('\n');
-                        position += 2;
-                        break;
+                            sb.Append('\n');
+                            position += 2;
+                            break;
 
                         default:
-                        error = "Unrecognized escape character \\" + text[position + 1];
-                        return false;
+                            error = "Unrecognized escape character \\" + text[position + 1];
+                            return false;
                     }
                 }
                 else
@@ -177,7 +177,7 @@ namespace Peevo.Samwise
         {
             output = "";
             int startPos = position;
-            while(position < text.Length)
+            while (position < text.Length)
             {
                 var currChar = text[position];
                 if (PeekEndline(text, position) || testFunction(currChar))
@@ -201,7 +201,7 @@ namespace Peevo.Samwise
             int newPos = position;
             int newLine = line;
 
-            while(position < text.Length)
+            while (position < text.Length)
             {
                 if (ParseEndline(text, ref newPos, ref newLine))
                 {
@@ -226,7 +226,7 @@ namespace Peevo.Samwise
         }
         public static ErrorCode ParseLineStart(string text, ref int position, ref int line, out int newDepth, ref string indentation)
         {
-            retry:
+        retry:
             newDepth = 0;
 
             if (indentation == null)
@@ -241,7 +241,7 @@ namespace Peevo.Samwise
                 {
                     // Use spaces
                     int whitespaces = 1;
-                    
+
                     while (ParseCharacter(text, ref position, ' '))
                         ++whitespaces;
 
@@ -325,7 +325,7 @@ namespace Peevo.Samwise
             int startPos = position;
 
             if (position < text.Length)
-            {    
+            {
                 if (!IsLowerCaseChar(text[position]))
                 {
                     name = "";
@@ -403,31 +403,31 @@ namespace Peevo.Samwise
 
             if (string.IsNullOrEmpty(varContext))
                 return "";
-                
+
             if (hasShortcutName)
                 varContext = varContext.Replace("@", dialogueSymbol + ".");
-   
+
             if (varContext.Length == 1)
             {
                 if (varContext[0] == '.')
                     return "."; // acceptable
                 return varContext + ".";
             }
-                
+
             // trim initial and final "."
             var firstDot = varContext[0] == '.';
             var lastDot = varContext[varContext.Length - 1] == '.';
 
             if (firstDot)
                 varContext = varContext.Substring(1);
-                
+
             if (lastDot)
                 return varContext;
 
             return varContext + ".";
         }
 
-        public static bool ParseVariableName(string text, ref int position, int line, out string name, out string context, out bool hasShortcutName, List<ParseError> errors) 
+        public static bool ParseVariableName(string text, ref int position, int line, out string name, out string context, out bool hasShortcutName, List<ParseError> errors)
         {
             SkipWhitespaces(text, ref position);
 
@@ -438,7 +438,7 @@ namespace Peevo.Samwise
             while (position < text.Length)
             {
                 var nextCharacter = text[position];
-                
+
                 if (nextCharacter == '.')
                 {
                     if (contextLastPos == position - 1)
@@ -447,11 +447,11 @@ namespace Peevo.Samwise
                         position = startPos;
                         name = "";
                         context = "";
-                        errors.Add(new ParseError { Error = "Subsequent dots found in context name", Line = line});
+                        errors.Add(new ParseError { Error = "Subsequent dots found in context name", Line = line });
                         return false;
                     }
                     else
-                    {    
+                    {
                         contextLastPos = position;
                     }
                 }
@@ -467,7 +467,7 @@ namespace Peevo.Samwise
             }
 
             if (contextLastPos == -2)
-                contextLastPos = startPos - 1;   
+                contextLastPos = startPos - 1;
 
             // context without variable
             if (position <= contextLastPos + 1)
@@ -583,11 +583,11 @@ namespace Peevo.Samwise
 
             startPos = position;
 
-            if (ParseName(text, ref position, out name ))
-                return true;  
+            if (ParseName(text, ref position, out name))
+                return true;
 
             throw new ArgumentException("Invalid name");
-fail:
+        fail:
             position = startPos;
             name = null;
             return false;
@@ -604,7 +604,7 @@ fail:
             {
                 if (ParseCharacter(text, ref position, '>'))
                 {
-                    if (ParseCharacter(text, ref position,'>'))
+                    if (ParseCharacter(text, ref position, '>'))
                     {
                         symbol = Symbol.Clamp;
                         return true;
@@ -650,12 +650,12 @@ fail:
                     }
 
                     symbol = Symbol.Join;
-                    return true; 
+                    return true;
                 }
                 else if (ParseToken(text, ref position, "!=", false))
                 {
                     symbol = Symbol.Cancel;
-                    return true; 
+                    return true;
                 }
             }
             if (ParseToken(text, ref position, "$", true))
@@ -741,34 +741,79 @@ fail:
 
         public static void SkipWhitespaces(string text, ref int position)
         {
-            while(ParseCharacter(text, ref position, ' '));
+            while (ParseCharacter(text, ref position, ' ')) ;
         }
 
-        public static void SkipWhitespacesAndTabs(string text, ref int position)
+        public static int SkipWhitespacesAndTabs(string text, ref int position)
         {
-            while(ParseCharacter(text, ref position, ' ') || ParseCharacter(text, ref position, '\t'));
-        }  
-
-        public static bool SkipComment(string text, ref int position, ref int line)
-        {
-            if(ParseToken(text, ref position, "//"))
-            {
-                SkipLine(text, ref position, ref line);
-                return true;
-            }
-
-            return false;
-        }         
+            int initPos = position;
+            while (ParseCharacter(text, ref position, ' ') || ParseCharacter(text, ref position, '\t')) ;
+            return position - initPos;
+        }
 
         public static void SkipWhiteLines(string text, ref int position, ref int line)
         {
             int cPos = position;
             int cLine = line;
 
-retry:
-            SkipWhitespacesAndTabs(text, ref cPos);
+            int disabledTextOpened = 0;
+
+            int indentSize = -1;
+        retry:
+            int newIndentSize = SkipWhitespacesAndTabs(text, ref cPos);
+            if (indentSize < 0) indentSize = newIndentSize;
+
+            if (cPos == text.Length)
+            {
+                position = cPos;
+                return;
+            }
+
+            // Skip disabled lines
+            if (ParseToken(text, ref cPos, "/~", true) && ParseEndline(text, ref cPos, ref cLine))
+            {
+                ++disabledTextOpened;
+                position = cPos;
+                line = cLine;
+                goto retry;
+            }
+
+            if (ParseToken(text, ref cPos, "~/", true) && ParseEndline(text, ref cPos, ref cLine))
+            {
+                --disabledTextOpened;
+                position = cPos;
+                line = cLine;
+                goto retry;
+            }
+
+            if (disabledTextOpened > 0)
+            {
+                // Disabled line
+                SkipLine(text, ref cPos, ref cLine);
+                position = cPos;
+                line = cLine;
+                goto retry;
+            }
+
+            if (ParseToken(text, ref cPos, "//"))
+            {
+                SkipMultiline(text, ref cPos, ref cLine);
+                position = cPos;
+                line = cLine;
+                goto retry;
+            }
             
-            if (SkipComment(text, ref cPos, ref cLine) || ParseEndline(text, ref cPos, ref cLine))
+            
+            if (ParseToken(text, ref cPos, "~"))
+            {
+                SkipSublines(indentSize, text, ref cPos, ref cLine);
+                position = cPos;
+                line = cLine;
+                goto retry;
+            }
+
+            // Empty line
+            if (ParseEndline(text, ref cPos, ref cLine))
             {
                 position = cPos;
                 line = cLine;
@@ -779,7 +824,7 @@ retry:
         public static void SkipLine(string text, ref int position, ref int line)
         {
             int startPos = position;
-            while(position < text.Length)
+            while (position < text.Length)
             {
                 var prevPos = position;
                 if (ParseEndline(text, ref position, ref line))
@@ -788,6 +833,44 @@ retry:
                 }
                 else
                     ++position;
+            }
+        }
+
+        public static void SkipMultiline(string text, ref int position, ref int line)
+        {
+            while (position < text.Length)
+            {
+                var prevPos = position;
+
+                if (!ParseToken(text, ref position, "\u21B5", true) && ParseEndline(text, ref position, ref line))
+                {
+                    return;
+                }
+                else
+                    ++position;
+            }
+        }
+
+        public static void SkipSublines(int baseIndent, string text, ref int position, ref int line)
+        {
+            SkipMultiline(text, ref position, ref line);
+
+            while (position < text.Length)
+            {
+                int cPos = position;
+                var newIndent = SkipWhitespacesAndTabs(text, ref cPos);
+
+                // Empty line
+                if (ParseEndline(text, ref cPos, ref line))
+                {
+                    position = cPos;
+                }
+                else if (newIndent > baseIndent)
+                {
+                    SkipSublines(newIndent, text, ref position, ref line);
+                }
+                else
+                    return;
             }
         }
 
@@ -828,7 +911,7 @@ retry:
                 ++line;
                 return true;
             }
-            else if (ParseCharacter(text, ref position, '\n') 
+            else if (ParseCharacter(text, ref position, '\n')
                 || ParseToken(text, ref position, "\r\n")
                 || ParseToken(text, ref position, "\r")
                 )
@@ -846,7 +929,7 @@ retry:
         {
             return (character >= 'A' && character <= 'Z') ||
                 IsNumberChar(character) ||
-                character == '.'||
+                character == '.' ||
                 character == '_';
         }
 
@@ -855,15 +938,15 @@ retry:
             return (character >= 'a' && character <= 'z') ||
                 (character >= 'A' && character <= 'Z') ||
                 IsNumberChar(character) ||
-                character == '.'||
+                character == '.' ||
                 character == '_';
         }
-        
+
         public static bool IsLowerCaseChar(char character)
         {
             return (character >= 'a' && character <= 'z');
         }
-        
+
         public static bool IsUpperCaseChar(char character)
         {
             return (character >= 'A' && character <= 'Z');
@@ -883,7 +966,6 @@ retry:
         {
             switch (character)
             {
-                case '~': // 126
                 case '¯': // 238
                 case '«': // 174
                 case '»': // 175
@@ -899,7 +981,7 @@ retry:
                 case '┘': // 217
                 case '┌': // 218
                 case '└': // 192
-                
+
                 case '═': // 205
                 case '╦': // 203
                 case '╬': // 205
@@ -911,7 +993,7 @@ retry:
                 case '╝': // 188
                 case '╔': // 201
                 case '╚': // 200
-                
+
                 case '░': // 176
                 case '▒': // 177
                 case '▓': // 178
@@ -920,20 +1002,20 @@ retry:
                 case '▀': // 223
                 case '■': // 254
                 case '▄': // 220
-                 
+
                 case '±': // 241
                 case '‗': // 242
-                
+
                 case '¶': // 244
                 case '§': // 245
-              
+
                     return true;
                 default:
                     return false;
             }
         }
 
-        static System.Threading.ThreadLocal<System.Text.StringBuilder> stringBuilder = 
+        static System.Threading.ThreadLocal<System.Text.StringBuilder> stringBuilder =
             new System.Threading.ThreadLocal<System.Text.StringBuilder>(() => new System.Text.StringBuilder());
     }
 }

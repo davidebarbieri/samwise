@@ -500,6 +500,8 @@ namespace Peevo.Samwise
                                 return false;
                             }
 
+                            TokenUtils.SkipWhiteLines(text, ref position, ref line);
+
                             SelectionNode selectionNode = null;
 
                             if (symbol == Symbol.Fallback)
@@ -559,6 +561,13 @@ namespace Peevo.Samwise
                                 if (!CheckErrors(newLine, TokenUtils.ParseLineStart(text, ref newPos, ref newLine, out newDepth, ref inferredIndentation)))
                                     return false;
                             }
+
+                            if (selectionNode.CasesCount == 0)
+                            {
+                                PushError(selectionNode.SourceLineStart, "No cases found in selection node");
+                                return false;
+                            }
+                            
                             break;
                         }
                     case Symbol.Score:
@@ -568,6 +577,8 @@ namespace Peevo.Samwise
                                 PushError(line, "Expected end line");
                                 return false;
                             }
+                            
+                            TokenUtils.SkipWhiteLines(text, ref position, ref line);
 
                             var randomNode = new ScoreNode(nodeLine);
                             node = randomNode;
@@ -744,6 +755,8 @@ namespace Peevo.Samwise
                                 PushError(line, "Expected end line");
                                 return false;
                             }
+                            
+                            TokenUtils.SkipWhiteLines(text, ref position, ref line);
 
                             var choiceNode = new ChoiceNode(nodeLine, name);
                             choiceNode.Time = time;
@@ -850,6 +863,8 @@ namespace Peevo.Samwise
                             PushError(line, "Expected end line");
                             return false;
                         }
+                        
+                        TokenUtils.SkipWhiteLines(text, ref position, ref line);
 
                         var interruptNode = new InterruptibleNode(symbol == Symbol.ResetAndInterrupt, interruptibleSections.Count > 0 ? interruptibleSections.Peek() : null, nodeLine, signalVarContext, signalVarName);
                         
@@ -875,7 +890,9 @@ namespace Peevo.Samwise
                                 PushError(line, "Expected end line");
                                 return false;
                             }
-
+    
+                            TokenUtils.SkipWhiteLines(text, ref position, ref line);
+                           
                             var checkNode = new CheckNode(nodeLine, checkName);
                             node = checkNode;
 

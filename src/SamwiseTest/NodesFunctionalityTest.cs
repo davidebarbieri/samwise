@@ -28,6 +28,7 @@ other> Yeah, I know!
 @"character> Start here
 (repeat) [iVar > 0] other> Again...
 character> YO-HOO!
+~ character> Skipped line
 {iVar += 1}
 [iVar < 5] -> repeat
 * it was the end
@@ -132,6 +133,12 @@ character> YO-HOO!
         character> A
     -
         character> B
+    ~ -
+        character> Skipped
+/~
+    -
+        character> Skipped
+~/
     -
         character> C
     -

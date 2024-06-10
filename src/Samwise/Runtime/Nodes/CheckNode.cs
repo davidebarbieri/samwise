@@ -9,8 +9,8 @@ namespace Peevo.Samwise
         public CheckResultBlock PassBlock;
         public CheckResultBlock FailBlock;
 
-        public int ChildrenCount => 2;
-        public IDialogueBlock GetChild(int i) => i == 0 ? PassBlock : FailBlock;
+        public int ChildrenCount => (PassBlock != null ? 1 : 0) + (FailBlock != null ? 1 : 0);
+        public IDialogueBlock GetChild(int i) => i == 0 && PassBlock != null ? PassBlock : FailBlock;
 
         public CheckNode(int sourceLine, string name) : base(sourceLine, sourceLine)
         {

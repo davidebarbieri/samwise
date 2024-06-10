@@ -199,7 +199,7 @@ Bob:
 
 As you can see, the option "Enough with business" doesn't use the '<' character, so choosing that option results in the completion of the subtree, and therefore a return to the list of topics. the same goes for "Bye" which ends the dialogue
 
-## Line Comments
+## Comments
 
 It is possible to add comments between nodes using the following syntax:
 ```samwise
@@ -209,3 +209,50 @@ The parser will skip such lines for good.
 This type of comment is only useful for the person writing the Samwise file to annotate something that they will need to remember. 
 
 !> There will be no trace of these comments either in-game or in the documents sent to translators.
+
+### Multi-line Comments
+
+Multi-line comments can be written using the special character ↵.
+To produce this character, press *Shift+Enter*.
+
+in this way:
+```samwise
+// This is a comment↵
+that spans over multiple lines
+```
+
+## Disabled lines
+
+In Samwise, commenting and disabling lines are two separate features and they are highlighted with a different color in the editor.
+
+It's possible to disable single nodes in the following way:
+```samwise
+~ character> this line is disabled
+```
+
+!> When you disable a node, you'll disable its whole subtree.
+
+
+It's possible to disable sections of a script in the following way:
+```samwise
+/~
+character> this line is disabled
+character> this too!
+~/
+character> this is still enabled!
+```
+
+Even if the syntax is similar to the syntax used in C to write multi-line comments (/* */), I must stress that in Samwise you should not use this syntax to produce multi-line comments (see the previous section for multi-line comments).
+
+Unlike C multi-line comments, disabled sections can be nested in the following way:
+```samwise
+/~
+/~
+character> this line is disabled
+character> this too!
+~/
+character> now this is disabled!
+~/
+```
+
+You can the shortcut Shift+Ctrl+A to quickly disable/reenable lines and nodes.

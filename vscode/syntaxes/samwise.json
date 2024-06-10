@@ -23,11 +23,15 @@
 	"repository": {
 		"comment": {
 			"begin": "^[\t ]*//",
-			"end": "$",
-			"name": "comment.line.samwise"
+			"end": "(?:(?<!\u21b5[ \t]*))$",
+			"name": "comment.line.samwise",
+			"patterns": 
+			[
+				{ "include": "#symbols" }
+			]
 		},
 		"title": {
-			"begin": "[\t ]*([~¯«»─┬┼│┤├┴┐┘┌└═╦╬║╣╠╩╗╝╔╚░▒▓█▀■▄±‗¶§]+)",
+			"begin": "[\t ]*([¯«»─┬┼│┤├┴┐┘┌└═╦╬║╣╠╩╗╝╔╚░▒▓█▀■▄±‗¶§]+)",
 			"end":   "$",
 			"beginCaptures": {
 				"1": { "name": "keyword.other.title.samwise" }
@@ -207,7 +211,7 @@
 			"name": "keyword.other.carriagereturn"
 		},
 		"adornment": {
-			"match": "[~¯«»─┬┼│┤├┴┐┘┌└═╦╬║╣╠╩╗╝╔╚░▒▓█▀■▄±‗¶§]+",
+			"match": "[¯«»─┬┼│┤├┴┐┘┌└═╦╬║╣╠╩╗╝╔╚░▒▓█▀■▄±‗¶§]+",
 			"name" : "keyword.other.adornment.samwise"
 		},
 		"option": {
