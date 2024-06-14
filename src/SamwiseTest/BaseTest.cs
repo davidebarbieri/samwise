@@ -90,6 +90,8 @@ namespace Peevo.Samwise.Test
                 deferredActions[0]();
                 deferredActions.RemoveAt(0);
             }
+
+            Assert.True(dm.RunningContexesCount == 0);
         }
     }
 }

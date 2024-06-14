@@ -842,7 +842,10 @@ namespace Peevo.Samwise
             {
                 var prevPos = position;
 
-                if (!ParseToken(text, ref position, "\u21B5", true) && ParseEndline(text, ref position, ref line))
+                bool isNewLineCharacter = ParseToken(text, ref position, "↵", true);
+                bool isEndLine = ParseEndline(text, ref position, ref line);
+
+                if (!isNewLineCharacter && isEndLine)
                 {
                     return;
                 }

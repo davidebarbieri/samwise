@@ -373,6 +373,23 @@ $ test
                 (a) => Assert.Equal("sam said \"Success\"", a)
                 
                 );
+
+                string dialogues2 = 
+@"
+<=> {{ nothing }}
+char:
+    - [check test] Try this
+        [bPass]
+            sam> Success
+        [bFail]
+            sam> Fail
+";
+            TestDialogueLines(dialogues2,
+                (a) => Assert.Equal("Challenge: test", a),
+                (a) => Assert.Equal("char said \"Try this\"", a),
+                (a) => Assert.Equal("sam said \"Success\"", a)
+                
+                );
         }
 
         [Fact]

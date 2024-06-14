@@ -598,15 +598,19 @@ namespace Peevo.Samwise
                 if (waitingForJoin == child)
                 {
                     waitingForJoin = null;
+                    var node = reenterNode;
+                    reenterNode = null;
                     Status = DialogueStatus.Running;
-                    SwitchNode(reenterNode);
+                    SwitchNode(node);
                 }
                 else if (waitingForJoin == this && children.Count == 0)
                 {
                     // all children ended
                     waitingForJoin = null;
+                    var node = reenterNode;
+                    reenterNode = null;
                     Status = DialogueStatus.Running;
-                    SwitchNode(reenterNode);
+                    SwitchNode(node);
                 }
 
                 if (currentWasNull && children.Count == 0)

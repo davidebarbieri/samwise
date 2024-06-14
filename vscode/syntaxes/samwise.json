@@ -23,7 +23,7 @@
 	"repository": {
 		"comment": {
 			"begin": "^[\t ]*//",
-			"end": "(?:(?<!\u21b5[ \t]*))$",
+			"end": "(?:(?<!\u21b5[ \t]*))\n",
 			"name": "comment.line.samwise",
 			"patterns": 
 			[
@@ -71,7 +71,7 @@
 		
 		"says": {
 			"begin": "^[\t ]*([^> \t=-]+)([>])",
-			"end": "(?:(?<!\u21b5[ \t]*))$",
+			"end": "(?:(?<!\u21b5[ \t]*))\n",
 			"beginCaptures": {
 				"1": { "name": "keyword.other.character.samwise" },
 				"2": { "name": "keyword.other.says.samwise" }

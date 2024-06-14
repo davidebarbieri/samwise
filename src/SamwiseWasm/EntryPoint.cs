@@ -722,8 +722,6 @@ namespace Peevo.Samwise.Wasm
 
         static void OnDialogueContextStart(IDialogueContext context) 
         {
-            var id = ++uid;
-
             string title;
            
             if (context.Current.GetDialogue() == null)
@@ -737,7 +735,7 @@ namespace Peevo.Samwise.Wasm
             }
 
             title = ProcessTextForSerialization(title);
-            Uno.Foundation.WebAssemblyRuntime.InvokeJS("onDialogueContextStart(" + id + ", \"" + title + "\");");
+            Uno.Foundation.WebAssemblyRuntime.InvokeJS("onDialogueContextStart(" + context.Uid + ", \"" + title + "\");");
         }
 
         static void OnDialogueContextStop(IDialogueContext context) 
@@ -916,7 +914,5 @@ namespace Peevo.Samwise.Wasm
         static CodebaseDatabase codebaseDB = new CodebaseDatabase();
         static DialogueMachine dialogueMachine;
         static DataRoot sandboxDataRoot = new DataRoot();
-
-        static long uid;
     }
 }
