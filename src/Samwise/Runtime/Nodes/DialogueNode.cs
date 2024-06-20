@@ -31,6 +31,9 @@ namespace Peevo.Samwise
 
         public string GetPreambleString(string prefix, bool skipsTrailingSpace = false) 
         {
+            if (Block is ConditionNode conditionNode && conditionNode.Inline && BlockId == 0 )
+                return conditionNode.GetPreambleString(prefix, skipsTrailingSpace); // inherits from parent inline condition node
+
             if (skipsTrailingSpace)
             {
                 if (!string.IsNullOrEmpty(Label)) 

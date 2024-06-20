@@ -82,8 +82,8 @@ namespace Peevo.Samwise
             }
             else // if (Inline && ChildrenCount > 0)
             {
-                o = GetPreambleString(indentationPrefix);
-                o += GetChild(0).PrintSubtree("", indentationUnit) + (ChildrenCount == 1 && ElseCondition == null ? "" : "\n");
+                //o = GetPreambleString(indentationPrefix); // Preamble is inherited by child
+                o = GetChild(0).PrintSubtree(indentationPrefix, indentationUnit) + (ChildrenCount == 1 && ElseCondition == null ? "" : "\n");
             }
 
             var subTabsPrefix = indentationUnit + indentationPrefix;
