@@ -1,8 +1,6 @@
 
 // (c) Copyright 2022 Davide 'PeevishDave' Barbieri
 
-using System.Collections.Generic;
-
 namespace Peevo.Samwise
 {
     public abstract class DialogueNode : IDialogueNode

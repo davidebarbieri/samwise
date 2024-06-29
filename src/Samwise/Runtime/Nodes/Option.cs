@@ -1,7 +1,5 @@
 // (c) Copyright 2022 Davide 'PeevishDave' Barbieri
 
-using System;
-
 namespace Peevo.Samwise
 {
     public class Option : SequenceBlock, ITextContent, ICase

@@ -1,7 +1,5 @@
 // (c) Copyright 2023 Davide 'PeevishDave' Barbieri
 
-using System.Collections.Generic;
-
 namespace Peevo.Samwise
 {
     public class InterruptibleNode : DialogueNode, IAutoNode, IBlockContainerNode

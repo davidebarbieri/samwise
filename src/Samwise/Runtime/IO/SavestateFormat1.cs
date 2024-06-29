@@ -1,6 +1,5 @@
 // (c) Copyright 2024 Davide 'PeevishDave' Barbieri
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 
