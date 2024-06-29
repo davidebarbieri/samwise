@@ -2,7 +2,7 @@
 
 namespace Peevo.Samwise
 {
-    public interface IDialogueNode: IContent
+    public interface IDialogueNode: IContent, ICheckable
     {
         string Label { get; set; }
         string PreCheck { get; set; }

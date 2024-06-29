@@ -3,7 +3,7 @@
 namespace Peevo.Samwise
 {
     // A taggable and checkable part of a node
-    public interface IContent: ISource, ICheckable, ITaggable
+    public interface IContent: ISource, ITaggable
     {
         string PrintLine(string indentationUnit);
         string GenerateUidPreamble(Dialogue dialogue);
