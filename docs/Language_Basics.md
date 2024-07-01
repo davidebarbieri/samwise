@@ -199,6 +199,47 @@ Bob:
 
 As you can see, the option "Enough with business" doesn't use the '<' character, so choosing that option results in the completion of the subtree, and therefore a return to the list of topics. the same goes for "Bye" which ends the dialogue
 
+### Alternative Options
+
+It is possible to provide multiple alternative texts for the same option. This is because it can feel more natural for the text to slightly change when the player, for example, asks a character the same question they had asked before upon returning to a choice node.
+
+It is possible to add alternatives to an option in the following way:
+```samwise
+galbroom:
+    <- [once] Share more about becoming a sword master
+        | Tell me once more about becoming proficient in swordplay
+        pirate_A> First, thou need a sword.
+        // ...
+
+    <- [once] Share more about mastering the art of thievery
+        | Tell me once more about stealing the idol.
+        // ...
+
+    <- [once] Share more about the treasure-huntery.
+        | Tell me once more about the Lost Treasure.
+        // ...
+        
+   - I'll be on my way now.
+```
+
+If the condition of the option is false, all the conditions of the alternatives will be tested, and the first one to evaluate as true will be selected.
+
+```samwise
+bob:
+    <- [once, TheQuest.bDone] I completed the Quest.
+        | [once, TheQuest.bDone] Did I tell you I completed the Quest?
+        | [once, TheQuest.bDone] No, really. I completed the Quest.
+        | [once, TheQuest.bDone] Hey, I finished that Quest.
+        | [once, TheQuest.bDone] Just to remind you, the Quest is done.
+        alice> I don't care.
+```
+
+
+!> No condition is equal to a condition that's always true.
+The option is skipped only if all the alternatives conditions are false.
+
+!> Only the main option condition can have check or time attributes.
+
 ## Comments
 
 It is possible to add comments between nodes using the following syntax:

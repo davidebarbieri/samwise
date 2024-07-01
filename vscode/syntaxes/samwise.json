@@ -19,7 +19,8 @@
 		{ "include": "#interruptible" },
 		{ "include": "#fallback" },
 		{ "include": "#external_code" },
-		{ "include": "#code" }
+		{ "include": "#code" },
+		{ "include": "#tags" }
 	],
 	"repository": {
 		"comment": {

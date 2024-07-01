@@ -26,8 +26,29 @@ namespace Peevo.Samwise.Wasm
             }
         }
         
-        public static IEnumerable<IContent> AssignUniqueIDsSteppedNodes(this Dialogue dialogue, HashSet<string> uniqueIDs)
+        public static IEnumerable<IContent> AssignUniqueIDsSteppedContent(this Dialogue dialogue, HashSet<string> uniqueIDs)
         {
+            // Add to all content
+            foreach (var content in dialogue.FindContent())
+            {
+                var id = content.GetID();
+
+                if (id == null)
+                {
+                    var preamble = content.GenerateUidPreamble(dialogue);
+                    
+                    int tries = 1;
+                    do 
+                    {
+                        id = preamble + tries++.ToString("000");
+                    } while (!uniqueIDs.Add(id));
+
+                    content.SetID(id);
+                    yield return content;
+                }
+            }
+
+            // Other nodes
             foreach (var content in dialogue.Traverse())
             {
                 var id = content.GetID();

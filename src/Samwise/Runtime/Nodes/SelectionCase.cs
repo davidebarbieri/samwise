@@ -2,7 +2,7 @@
 
 namespace Peevo.Samwise
 {
-    public class SelectionCase : SequenceBlock, ICase
+    public class SelectionCase : SequenceBlock, ICase, IContent
     {
         public IBoolValue Condition { get; set; }
         public TagData TagData { get; set; }
@@ -14,6 +14,9 @@ namespace Peevo.Samwise
         public new SelectionNode Parent => (SelectionNode)base.Parent;
         IMultiCaseNode ICase.Parent => (SelectionNode)base.Parent;
         public Dialogue GetDialogue() => Parent.GetDialogue();
+
+        public int ContentCount => 1;
+        public IContent GetContent(int index) => this;
 
         public SelectionCase(int sourceLine, SelectionNode parent, IBoolValue condition, TagData tagData) : base(parent)
         {

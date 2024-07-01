@@ -2,7 +2,7 @@
   	"name": "samwisevs",
   	"displayName": "Samwise Dialogue System",
   	"description": "Visual Studio Code extension for the Samwise Dialogue System, a language for creating complex branching narrative",
-  	"version": "0.0.18",
+  	"version": "0.0.19",
   	"icon": "images/icon-package.png",
   	"publisher": "PeevishDave",
   	"repository": "https://github.com/davidebarbieri/samwise",
@@ -130,12 +130,12 @@
   	  	  	},
   	  	  	{
   	  	  	  	"command": "samwise.assignIdsToNodes",
-  	  	  	  	"title": "Assign IDs to all nodes",
+  	  	  	  	"title": "Assign IDs to all content",
   	  	  	  	"category": "Samwise"
   	  	  	},
   	  	  	{
   	  	  	  	"command": "samwise.assignIdsToNodesDialogue",
-  	  	  	  	"title": "Assign IDs to all nodes (this dialogue)",
+  	  	  	  	"title": "Assign IDs to all content (this dialogue)",
   	  	  	  	"category": "Samwise"
   	  	  	},
   	  	  	{

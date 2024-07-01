@@ -28,6 +28,8 @@ namespace Peevo.Samwise
         public new ChoiceNode Parent => (ChoiceNode)base.Parent;
         IMultiCaseNode ICase.Parent => (ChoiceNode)base.Parent;
 
+        public int ContentCount => 1 + (alternatives == null ? 0 : alternatives.Count);
+
         public Option(int sourceLineStart, int sourceLineEnd, int optionId, ChoiceNode parent, string text, bool muteOption, bool returnOption, IBoolValue condition, TagData tagData, double? time, string check, bool isPreCheck) : base(parent)
         {
             Id = optionId;
@@ -223,6 +225,13 @@ namespace Peevo.Samwise
             }
 
             return null;
+        }
+
+        public IContent GetContent(int index)
+        {
+            if (index == 0)
+                return this;
+            return alternatives[index - 1];
         }
 
         List<OptionAlternative> alternatives;

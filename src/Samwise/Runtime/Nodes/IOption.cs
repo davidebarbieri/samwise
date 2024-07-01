@@ -4,10 +4,10 @@ using System.Collections.Generic;
 
 namespace Peevo.Samwise
 {
-    public interface IOption: ITaggable, ICheckable, ISource
+    public interface IOption: ICase, ITaggable, ICheckable, ISource
     {
         int Id { get; }
-        ChoiceNode Parent { get; }
+        new ChoiceNode Parent { get; }
         bool MuteOption { get; }
         bool ReturnOption { get; }
 

@@ -2,6 +2,12 @@
 
 All notable changes to the Samwise extension will be documented in this file.
 
+## [0.0.19]
+
+- Alternative Options feature support
+- Changed "Assign IDs to all nodes" into "Assign IDs to all content", in order to include options too
+- Fixed some syntax Highlight bugs
+
 ## [0.0.15]
 
 - Update Samwise DLL version, with some bugfixes

@@ -57,8 +57,9 @@ namespace Peevo.Samwise.Wasm
                     for (int ii = 0, icount = multiNode.CasesCount; ii < icount; ++ii)
                     {
                         var option = multiNode.GetCase(ii);
-                        yield return option;
 
+                        for (int iii=0; iii<option.ContentCount; ++iii)
+                            yield return option.GetContent(iii);
                     }
                 }
 
@@ -117,24 +118,30 @@ namespace Peevo.Samwise.Wasm
                     {
                         var option = multiNode.GetCase(ii);
 
-                        if (option.Condition != null)
+                        for (int iii=0; iii<option.ContentCount; ++iii)
                         {
-                            elements = null;
+                            var content = option.GetContent(iii);
+                            var condition = content.Condition;
 
-                            // Check if case condition has anonymous content
-                            option.Condition.Traverse((a) =>
+                            if (condition != null)
                             {
-                                if (a is IStatefulElement statefulValue && statefulValue.UsesAnonymousVariable)
+                                elements = null;
+
+                                // Check if case condition has anonymous content
+                                condition.Traverse((a) =>
                                 {
-                                    if (elements == null)
-                                        elements = new List<IStatefulElement>();
+                                    if (a is IStatefulElement statefulValue && statefulValue.UsesAnonymousVariable)
+                                    {
+                                        if (elements == null)
+                                            elements = new List<IStatefulElement>();
 
-                                    elements.Add(statefulValue);
-                                }
-                            });
+                                        elements.Add(statefulValue);
+                                    }
+                                });
 
-                            if (elements != null)
-                                yield return (option, elements);
+                                if (elements != null)
+                                    yield return (content, elements);
+                            } 
                         }
                     }
                 }
@@ -193,16 +200,22 @@ namespace Peevo.Samwise.Wasm
                     {
                         var option = multiNode.GetCase(ii);
 
-                        if (option.Condition != null)
+                        for (int iii=0; iii<option.ContentCount; ++iii)
                         {
-                            // Check if case condition has anonymous content
-                            option.Condition.Traverse((a) =>
+                            var content = option.GetContent(iii);
+                            var condition = content.Condition;
+
+                            if (condition != null)
                             {
-                                if (a is IStatefulElement statefulValue && statefulValue.UsesAnonymousVariable)
+                                // Check if case condition has anonymous content
+                                condition.Traverse((a) =>
                                 {
-                                    uniqueVariables.Add(statefulValue.StateVariableContext + statefulValue.StateVariableName);
-                                }
-                            });
+                                    if (a is IStatefulElement statefulValue && statefulValue.UsesAnonymousVariable)
+                                    {
+                                        uniqueVariables.Add(statefulValue.StateVariableContext + statefulValue.StateVariableName);
+                                    }
+                                });
+                            }
                         }
                     }
                 }

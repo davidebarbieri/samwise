@@ -90,7 +90,7 @@ namespace Peevo.Samwise.Wasm
                 if (line < 0)
                 {
                     foreach (var dialogue in dialogues)
-                        foreach (var content in (toText ? dialogue.AssignUniqueIDsSteppedText(uniqueIDs) : dialogue.AssignUniqueIDsSteppedNodes(uniqueIDs)))
+                        foreach (var content in (toText ? dialogue.AssignUniqueIDsSteppedText(uniqueIDs) : dialogue.AssignUniqueIDsSteppedContent(uniqueIDs)))
                         {
                             ReplaceLinesInRange(lines, content.SourceLineStart - 1, content.SourceLineEnd - 1, content.PrintLine(dialogue.IndentationUnit));
                         }
@@ -99,7 +99,7 @@ namespace Peevo.Samwise.Wasm
                 {
                     Dialogue dialogue = EntryPoint.GetDialogueFromLine(filename, line);
 
-                    foreach (var content in (toText ? dialogue.AssignUniqueIDsSteppedText(uniqueIDs) : dialogue.AssignUniqueIDsSteppedNodes(uniqueIDs)))
+                    foreach (var content in (toText ? dialogue.AssignUniqueIDsSteppedText(uniqueIDs) : dialogue.AssignUniqueIDsSteppedContent(uniqueIDs)))
                          {
                         ReplaceLinesInRange(lines, content.SourceLineStart - 1, content.SourceLineEnd - 1, content.PrintLine(dialogue.IndentationUnit));
                     }

@@ -2,8 +2,12 @@
 
 namespace Peevo.Samwise
 {
-    public interface ICase: IContent
+    public interface ICase
     {
         IMultiCaseNode Parent { get; }
+
+        int ContentCount { get; }
+        IContent GetContent(int index);
+
     }
 }

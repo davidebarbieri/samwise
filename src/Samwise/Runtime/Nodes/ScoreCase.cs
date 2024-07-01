@@ -2,7 +2,7 @@
 
 namespace Peevo.Samwise
 {
-    public class ScoreCase : SequenceBlock, ICase
+    public class ScoreCase : SequenceBlock, ICase, IContent
     {
         public IBoolValue Condition { get; set; }
         public IIntegerValue Score { get; set; }
@@ -15,6 +15,10 @@ namespace Peevo.Samwise
 
         public new ScoreNode Parent => (ScoreNode)base.Parent;
         IMultiCaseNode ICase.Parent => (ScoreNode)base.Parent;
+
+        public int ContentCount => 1;
+        public IContent GetContent(int index) => this;
+
         public Dialogue GetDialogue() => Parent.GetDialogue();
 
         public ScoreCase(int sourceLine, ScoreNode parent, IBoolValue condition, IIntegerValue score, int probabilityFactor, TagData tagData) : base(parent)
