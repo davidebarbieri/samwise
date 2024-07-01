@@ -4,35 +4,6 @@
 
 ## Language
 
-### !! Alternative Options
-
-I'll add the ability to add alternative options in choices. That is, if the condition fails,
-the next alternative's condition is tested (no condition means "true"). And only if all the alternatives
-are false the option is skipped.
-This will allow you to modify the text (or even mute) of the option based on any condition.
-
-| is a speech option
-
-|| is a muted option
-
-```samwise
-galbroom:
-    <- [once] Share more about becoming a sword master
-        | Tell me once more about becoming proficient in swordplay
-        pirate_A> First, thou need a sword.
-        // ...
-
-    <- [once] Share more about mastering the art of thievery
-        | Tell me once more about stealing the idol.
-        // ...
-
-    <- [once] Share more about the treasure-huntery.
-        | Tell me once more about the Lost Treasure.
-        // ...
-        
-   - I'll be on my way now.
-```
-
 ### Alternative Syntax
 
 I want to add an additional alternative syntax for symbol-based nodes:
@@ -63,7 +34,7 @@ I want to add an additional alternative syntax for symbol-based nodes:
 
 - custom functions ?
 
-- not sure if I want to introduce fixed point numbers
+- not sure if I want to introduce fixed/floating point numbers
 
 ## Assert
 
@@ -73,13 +44,13 @@ Skipped in release mode
 onAssertFailed
 
 ## Breakpoint (?)
-Not sure if that's actually useful.
-
 Skipped in release mode
 
 In code:
 {break}
 {break <boolean expression>}
+
+Stops the dialogue at that point (you need to click on "Advance" to continue)
 
 In runtime:
 SetBreakpoint(Node, boolean func?, callback)

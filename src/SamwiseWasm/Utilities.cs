@@ -90,7 +90,11 @@ namespace Peevo.Samwise.Wasm
                     for (int i = 0, count = choosableNode.OptionsCount; i < count; ++i)
                     {
                         var option = choosableNode.GetOption(i);
-                        wordCount += CountWords(option.Text);
+                        wordCount += CountWords(option.DefaultContent.Text);
+
+                        if (option.AlternativeContents != null)
+                            foreach (var content in option.AlternativeContents)
+                                wordCount += CountWords(content.Text);
                     }
                 }
             }

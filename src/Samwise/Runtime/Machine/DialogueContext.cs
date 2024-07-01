@@ -59,10 +59,14 @@ namespace Peevo.Samwise
                 }
                 else if (Status == DialogueStatus.ShowingSpeechOption)
                 {
-                    var option = reenterNode;
+                    var option = waitingOption;
+                    waitingOption = null;
+                    ((Option)option).OnVisited(this);
+
+                    var nextNode = reenterNode;
                     reenterNode = null;
                     Status = DialogueStatus.Running;
-                    SwitchNode(option);
+                    SwitchNode(nextNode);
                 }
                 else if (Status == DialogueStatus.Waiting && Current is WaitExpressionNode waitExpressionCurrent) // waiting on expression
                 {
@@ -102,43 +106,40 @@ namespace Peevo.Samwise
                 return true;
             }
 
-            public bool Evaluate(Option option)
+            public bool Choose(IOption option)
             {
-                if (option.Condition == null)
-                    return true;
-
-                return option.Condition.EvaluateBool(this);
-            }
-
-            public bool Choose(Option option)
-            {
+                var optionImpl = (Option)option;
                 if (Status == DialogueStatus.Running)
                 {
-                    if (option != null && Current == option.Parent)
+                    if (optionImpl != null && Current == optionImpl.Parent)
                     {
                         // Check if option needs challenge
-                        if (option.Check != null)
+                        if (optionImpl.HasCheck(out _, out var checkName))
                         {
-                            challengedOption = option;
+                            waitingOption = optionImpl;
                             Status = DialogueStatus.Challenging;
-                            Machine.onChallengeStart(this, option, option.Check);
+                            Machine.onChallengeStart(this, optionImpl, checkName);
                             return true;
                         }
 
-                        if (option.MuteOption)
-                            SwitchNode(((IChoosableNode)Current).Next(option, this));
+                        if (optionImpl.MuteOption)
+                        {
+                            optionImpl.OnVisited(this);
+                            SwitchNode(((ChoiceNode)Current).Next(optionImpl, this));
+                        }
                         else
                         {
+                            waitingOption = optionImpl;
                             Status = DialogueStatus.ShowingSpeechOption;
-                            reenterNode = ((IChoosableNode)Current).Next(option, this);
-                            Machine.onSpeechOptionStart?.Invoke(this, option);
+                            reenterNode = ((ChoiceNode)Current).Next(optionImpl, this);
+                            Machine.onSpeechOptionStart?.Invoke(this, optionImpl);
                         }
                         return true;
                     }
-                    else if (option == null && Current is IChoosableNode)
+                    else if (optionImpl == null && Current is IChoosableNode)
                     {
                         // Skip option
-                        SwitchNode(((IChoosableNode)Current).Next(null, this));
+                        SwitchNode(((ChoiceNode)Current).Next(null, this));
                         return true;
                     }
                 }
@@ -175,11 +176,11 @@ namespace Peevo.Samwise
                             SwitchNode(node.FindNextSibling(), true);
                         }
                     }
-                    else if (challengedOption != null)
+                    else if (waitingOption != null)
                     {
-                        var option = challengedOption;
+                        var option = (Option)waitingOption;
                         var isPreChallenge = option.IsPreCheck;
-                        challengedOption = null;
+                        waitingOption = null;
 
                         if (isPreChallenge && !passed)
                         {
@@ -188,11 +189,15 @@ namespace Peevo.Samwise
                         else
                         {
                             if (option.MuteOption)
-                                SwitchNode(((IChoosableNode)Current).Next(option, this));
+                            {
+                                option.OnVisited(this);
+                                SwitchNode(((ChoiceNode)Current).Next(option, this));
+                            }
                             else
                             {
+                                waitingOption = option;
                                 Status = DialogueStatus.ShowingSpeechOption;
-                                reenterNode = ((IChoosableNode)Current).Next(option, this);
+                                reenterNode = ((ChoiceNode)Current).Next(option, this);
                                 Machine.onSpeechOptionStart?.Invoke(this, option);
                             }
                         }
@@ -327,22 +332,22 @@ namespace Peevo.Samwise
             }
 
             // Serialization/Deserialization
-            internal void GetInternalState(out DialogueStatus status, out IDialogueNode reenterNode, out IDialogueNode forkedFromNode, out Option challengedOption, out DialogueContext waitingForJoin)
+            internal void GetInternalState(out DialogueStatus status, out IDialogueNode reenterNode, out IDialogueNode forkedFromNode, out IOption waitingOption, out DialogueContext waitingForJoin)
             {
                 status = this.Status;
                 reenterNode = this.reenterNode;
                 waitingForJoin = this.waitingForJoin;
                 forkedFromNode = this.forkedFromNode;
-                challengedOption = this.challengedOption;
+                waitingOption = this.waitingOption;
             }
 
-            internal void SetInternalState(DialogueStatus status, IDialogueNode reenterNode, IDialogueNode forkedFromNode, Option challengedOption, DialogueContext waitingForJoin)
+            internal void SetInternalState(DialogueStatus status, IDialogueNode reenterNode, IDialogueNode forkedFromNode, Option waitingOption, DialogueContext waitingForJoin)
             {
                 this.Status = status;
                 this.reenterNode = reenterNode;
                 this.waitingForJoin = waitingForJoin;
                 this.forkedFromNode = forkedFromNode;
-                this.challengedOption = challengedOption;
+                this.waitingOption = waitingOption;
             }
 
             void SwitchNode(IDialogueNode node, bool isSkippingPreviousNode = false)
@@ -737,9 +742,7 @@ namespace Peevo.Samwise
             IDialogueNode reenterNode; // next node after join/awake, choice spoken line (normal or challenge), unresolved and challenged nodes
             DialogueContext waitingForJoin;
             IDialogueNode forkedFromNode;  // which fork/await node created this context
-
-            /// Challenge state
-            Option challengedOption;
+            IOption waitingOption; // waiting on this option (e.g. for a challenge or because it's showing a speech option)
 
             //// No need to serialize
             DialogueContext parent;

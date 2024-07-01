@@ -13,8 +13,7 @@ namespace Peevo.Samwise
         bool IsEnded { get; }
 
         bool Advance();
-        bool Evaluate(Option choice);
-        bool Choose(Option choice);
+        bool Choose(IOption choice);
         void CompleteChallenge(bool passed);
         void Stop();
         bool TryResolveMissingDialogues();

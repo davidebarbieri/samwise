@@ -7,10 +7,11 @@
 		{ "include": "#condition" },
 		{ "include": "#fork" },
 		{ "include": "#says" },
+		{ "include": "#caption" },
 		{ "include": "#choice" },
 		{ "include": "#goto" },
-		{ "include": "#caption" },
 		{ "include": "#option" },
+		{ "include": "#option_alternative"},
 		{ "include": "#random" },
 		{ "include": "#sequence" },
 		{ "include": "#ping" },
@@ -70,7 +71,7 @@
 		},
 		
 		"says": {
-			"begin": "^[\t ]*([^> \t=-]+)([>])",
+			"begin": "[\t ]*([^> \t=-]+)([>])",
 			"end": "(?:(?<!\u21b5[ \t]*))\n",
 			"beginCaptures": {
 				"1": { "name": "keyword.other.character.samwise" },
@@ -78,6 +79,18 @@
 			},
 			"patterns": 
 			[
+				{ "include": "#tags" },
+				{ "include": "#symbols" }
+			]
+		},
+		"caption": {
+			"begin": "[\t ]*\\*",
+			"end": "(?:(?<!\u21b5[ \t]*))\n",
+			"beginCaptures": {
+				"0": { "name": "support.constant.handlebars.samwise.caption" }
+			},
+			"name": "string.unquoted",
+			"patterns": [
 				{ "include": "#tags" },
 				{ "include": "#symbols" }
 			]
@@ -93,18 +106,6 @@
 			[
 				{ "include": "#tags" },
 				{ "include": "#condition" }
-			]
-		},
-		"caption": {
-			"begin": "[\t ]*\\*",
-			"end": "(?:(?<!\u21b5[ \t]*))\n",
-			"beginCaptures": {
-				"0": { "name": "support.constant.handlebars.samwise.caption" }
-			},
-			"name": "string.unquoted",
-			"patterns": [
-				{ "include": "#tags" },
-				{ "include": "#symbols" }
 			]
 		},
 		"goto": {
@@ -216,7 +217,20 @@
 		},
 		"option": {
 			"begin": "[\t ]*^[\t ]*[<]?[-+]+",
-			"end": "$",
+			"end": "(?:(?<!\u21b5[ \t]*))\n",
+			"beginCaptures": {
+				"0": { "name": "support.constant.handlebars.samwise.option" }
+			},
+			"name": "string.unquoted",
+			"patterns": 
+			[
+				{ "include": "#tags" },
+				{ "include": "#condition" }
+			]
+		},
+		"option_alternative": {
+			"begin": "[\t ]*[|]",
+			"end": "(?:(?<!\u21b5[ \t]*))\n",
 			"beginCaptures": {
 				"0": { "name": "support.constant.handlebars.samwise.option" }
 			},

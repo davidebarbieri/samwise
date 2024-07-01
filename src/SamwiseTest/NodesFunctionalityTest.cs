@@ -330,9 +330,21 @@ string dialogues =
 @"
 sam:
     - A
+(retry) { iTest += 1 }
+sam:
+    - [iTest == 1] B
+        | [iTest == 2] C
+        | [iTest == 3] D
+        | [iTest == 5] F
+        | [iTest == 4] E
+[iTest < 4] -> retry
 ";
             TestDialogueLines(dialogues,
-                (a) => Assert.Equal("sam said \"A\"", a)
+                (a) => Assert.Equal("sam said \"A\"", a),
+                (a) => Assert.Equal("sam said \"B\"", a),
+                (a) => Assert.Equal("sam said \"C\"", a),
+                (a) => Assert.Equal("sam said \"D\"", a),
+                (a) => Assert.Equal("sam said \"E\"", a)
                 
                 );
         }

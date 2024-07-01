@@ -2,8 +2,8 @@
 
 namespace Peevo.Samwise
 {
-    public interface ICase: IContent
+    public interface IConditional
     {
-        IMultiCaseNode Parent { get; }
+        IBoolValue Condition { get; set; }
     }
 }

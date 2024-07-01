@@ -22,7 +22,13 @@ namespace Peevo.Samwise.Wasm
                     {
                         var option = choosableNode.GetOption(ii);
                         if (includeMuteContent || !option.MuteOption)
-                            yield return choosableNode.GetOption(ii);
+                        {
+                            yield return option.DefaultContent;
+
+                            if (option.AlternativeContents != null)
+                                foreach (var content in option.AlternativeContents)
+                                    yield return content;
+                        }
                     }
                 }
 

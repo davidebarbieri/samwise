@@ -111,7 +111,7 @@ int availableOptions = 0;
 for (int i=0; i<choiceNode.OptionsCount; ++i)
 {
     var option = choiceNode.GetOption(id);
-    if (context.Evaluate(option))
+    if (option.IsAvailable(context))
     {
         // Add a button to UI (and associate 'option' to such button)
         ++availableOptions;

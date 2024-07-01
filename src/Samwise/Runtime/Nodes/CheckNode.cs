@@ -2,7 +2,7 @@
 
 namespace Peevo.Samwise
 {
-    public class CheckNode : DialogueNode, IBlockContainerNode
+    public class CheckNode : DialogueNode, IBlockContainerNode, ICheckable
     {
         public string Name;
 
