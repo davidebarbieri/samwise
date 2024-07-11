@@ -2,14 +2,14 @@
 
 namespace Peevo.Samwise
 {
-    public class Option : SequenceBlock, ITextContent, ICase, ICheckableContent
+    public class Option : SequenceBlock, IOption
     {
         public int Id { get; set; }
         public string Text { get; set; }
         public IBoolValue Condition { get; set; }
         public TagData TagData { get; set; }
-        public bool MuteOption;
-        public bool ReturnOption;
+        public bool MuteOption  { get; set; }
+        public bool ReturnOption  { get; set; }
         public double? Time => OverriddenTime.HasValue ? OverriddenTime : Parent.Time; // this time or parent's time
         public double? OverriddenTime;
         public string Check;
@@ -19,8 +19,9 @@ namespace Peevo.Samwise
         public int SourceLineStart {get; internal set;}
         public int SourceLineEnd {get; internal set;}
 
+        public IDialogueBlock Block => this;
         public override NextBlockPolicy NextBlockPolicy => ReturnOption ? NextBlockPolicy.ReturnToParent : NextBlockPolicy.ParentNext;
-        public new ChoiceNode Parent => (ChoiceNode)base.Parent;
+        public new IChoosableNode Parent => (IChoosableNode)base.Parent;
         IMultiCaseNode ICase.Parent => (ChoiceNode)base.Parent;
 
         public Option(int sourceLineStart, int sourceLineEnd, int optionId, ChoiceNode parent, string text, bool muteOption, bool returnOption, IBoolValue condition, TagData tagData, double? time, string check, bool isPreCheck) : base(parent)
@@ -51,6 +52,18 @@ namespace Peevo.Samwise
             isPreCheck = IsPreCheck;
             checkName = Check;
             return Check != null;
+        }
+
+        public bool HasTime(out double time)
+        {
+            if (Time.HasValue)
+            {
+                time = Time.Value;
+                return true;
+            }
+
+            time = 0;
+            return false;
         }
 
         public void OnVisited(IDialogueContext context)

@@ -776,13 +776,13 @@ namespace Peevo.Samwise.Wasm
             {
                 var option = node.GetOption(i);
 
-                if (context.Evaluate(option))
+                if (option.IsAvailable(context))
                 {
                     invokeString += (otherOptionsAvailable ? "," : "") + "{"
                         + "id: " + i + ","
                         + "text: \"" + ProcessTextForSerialization(option.Text) + "\","
                         + "mute: " + (option.MuteOption ? "true" : "false") + ","
-                        + "time:" + (option.Time.HasValue ? option.Time.Value : -1).ToString(System.Globalization.CultureInfo.InvariantCulture)
+                        + "time:" + (option.HasTime(out var time) ? time : -1).ToString(System.Globalization.CultureInfo.InvariantCulture)
                         + "}";
 
                     otherOptionsAvailable = true;
@@ -814,7 +814,7 @@ namespace Peevo.Samwise.Wasm
             Uno.Foundation.WebAssemblyRuntime.InvokeJS("onWaitTimeEnd(" + context.Uid + ")");
         }
 
-        static void OnSpeechOptionStart(IDialogueContext context, Option option)
+        static void OnSpeechOptionStart(IDialogueContext context, IOption option)
         {
             Uno.Foundation.WebAssemblyRuntime.InvokeJS("onSpeechOptionStart(" + context.Uid + ", \"" + option.Parent.CharacterId + "\", \"" + ProcessTextForSerialization(option.Text) + "\"," + Serialize(new LocationInfo(codebaseDB.GetFilename(option.Parent.GetDialogue()), option.SourceLineStart, option.SourceLineEnd)) + ");");
         } 

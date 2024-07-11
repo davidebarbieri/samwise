@@ -18,7 +18,7 @@ namespace Peevo.Samwise
         public event System.Action<IDialogueContext, IChoosableNode> onChoiceEnd;
         public event System.Action<IDialogueContext, WaitTimeNode> onWaitTimeStart;
         public event System.Action<IDialogueContext, WaitTimeNode> onWaitTimeEnd;
-        public event System.Action<IDialogueContext, Option> onSpeechOptionStart;
+        public event System.Action<IDialogueContext, IOption> onSpeechOptionStart;
         public event System.Action<IDialogueContext, IContent, string> onChallengeStart;
         public event System.Action<IDialogueContext> onDialogueContextStart;
         public event System.Action<IDialogueContext> onDialogueContextStop;

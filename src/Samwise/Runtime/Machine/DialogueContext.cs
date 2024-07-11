@@ -106,7 +106,7 @@ namespace Peevo.Samwise
                 return true;
             }
 
-            public bool Choose(Option option)
+            public bool Choose(IOption option)
             {
                 if (Status == DialogueStatus.Running)
                 {
@@ -123,7 +123,7 @@ namespace Peevo.Samwise
 
                         if (option.MuteOption)
                         {
-                            option.OnVisited(this);
+                            ((Option)option).OnVisited(this);
                             SwitchNode(((ChoiceNode)Current).Next(option, this));
                         }
                         else
@@ -331,7 +331,7 @@ namespace Peevo.Samwise
             }
 
             // Serialization/Deserialization
-            internal void GetInternalState(out DialogueStatus status, out IDialogueNode reenterNode, out IDialogueNode forkedFromNode, out Option waitingOption, out DialogueContext waitingForJoin)
+            internal void GetInternalState(out DialogueStatus status, out IDialogueNode reenterNode, out IDialogueNode forkedFromNode, out IOption waitingOption, out DialogueContext waitingForJoin)
             {
                 status = this.Status;
                 reenterNode = this.reenterNode;
@@ -340,7 +340,7 @@ namespace Peevo.Samwise
                 waitingOption = this.waitingOption;
             }
 
-            internal void SetInternalState(DialogueStatus status, IDialogueNode reenterNode, IDialogueNode forkedFromNode, Option waitingOption, DialogueContext waitingForJoin)
+            internal void SetInternalState(DialogueStatus status, IDialogueNode reenterNode, IDialogueNode forkedFromNode, IOption waitingOption, DialogueContext waitingForJoin)
             {
                 this.Status = status;
                 this.reenterNode = reenterNode;
@@ -741,7 +741,7 @@ namespace Peevo.Samwise
             IDialogueNode reenterNode; // next node after join/awake, choice spoken line (normal or challenge), unresolved and challenged nodes
             DialogueContext waitingForJoin;
             IDialogueNode forkedFromNode;  // which fork/await node created this context
-            Option waitingOption; // waiting on this option (e.g. for a challenge or because it's showing a speech option)
+            IOption waitingOption; // waiting on this option (e.g. for a challenge or because it's showing a speech option)
 
             //// No need to serialize
             DialogueContext parent;

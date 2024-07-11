@@ -9,7 +9,7 @@ namespace Peevo.Samwise
         public string CharacterId { get; private set; }
 
         public int OptionsCount => options.Count;
-        public Option GetOption(int i) => options[i];
+        public IOption GetOption(int i) => options[i];
         public int CasesCount => options.Count;
         public ICase GetCase(int i) => options[i];
         public double? Time { get; set; }
@@ -27,16 +27,15 @@ namespace Peevo.Samwise
             CharacterId = characterId;
         }
 
-        public IDialogueNode Next(Option option, IDialogueContext context)
+        public IDialogueNode Next(IOption option, IDialogueContext context)
         {
             // Skip option
             if (option == null)
                 return this.FindNextSibling();
 
-            option.Condition?.OnVisited(context);
-
-            if (option.ChildrenCount > 0)
-                return option.GetChild(0);
+            var block = option.Block;
+            if (block.ChildrenCount > 0)
+                return block.GetChild(0);
             return this.FindNextSibling();
         }
 
