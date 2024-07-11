@@ -201,7 +201,7 @@ As you can see, the option "Enough with business" doesn't use the '<' character,
 
 ### Alternative Options
 
-It is possible to provide multiple alternative texts for the same option. This is because it can feel more natural for the text to slightly change when the player, for example, asks a character the same question they had asked before upon returning to a choice node.
+It is possible to provide multiple alternatives for the same option. This is because it can feel more natural for the text to slightly change when the player, for example, asks a character the same question they had asked before upon returning to a choice node.
 
 It is possible to add alternatives to an option in the following way:
 ```samwise
@@ -222,7 +222,7 @@ galbroom:
    - I'll be on my way now.
 ```
 
-If the condition of the option is false, all the conditions of the alternatives will be tested, and the first one to evaluate as true will be selected.
+If the option is not available (that is, its condition is false), all the conditions of the alternatives will be tested, and the first one to evaluate as true will be selected.
 
 ```samwise
 bob:
@@ -234,11 +234,27 @@ bob:
         alice> I don't care.
 ```
 
-
 !> No condition is equal to a condition that's always true.
 The option is skipped only if all the alternatives conditions are false.
 
-!> Only the main option condition can have check or time attributes.
+When written in the following way, the alternative will inherit the "Muted Option" and "Return To Parent" properties from the main option:
+```samwise
+    <- [once] Share more about becoming a sword master
+        | Tell me once more about becoming proficient in swordplay
+```
+
+if you want to override them, you can rewrite the option symbol in the following way:
+```samwise
+        | <-- Tell me once more about becoming proficient in swordplay
+```
+```samwise
+        | -- Tell me once more about becoming proficient in swordplay
+```
+```samwise
+        | - Tell me once more about becoming proficient in swordplay
+```
+
+!> Alternative options won't inherit conditions, time or check attributes. They must be re-added into each alternative attribute list if that is the intented behaviour.
 
 ## Comments
 
