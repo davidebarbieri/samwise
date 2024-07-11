@@ -3,7 +3,6 @@
 !> !! means *High Priority*
 
 ## Language
-
 ### Alternative Syntax
 
 I want to add an additional alternative syntax for symbol-based nodes:
@@ -44,6 +43,7 @@ Skipped in release mode
 onAssertFailed
 
 ## Breakpoint (?)
+
 Skipped in release mode
 
 In code:

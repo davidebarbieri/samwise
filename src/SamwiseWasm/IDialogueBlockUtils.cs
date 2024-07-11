@@ -22,13 +22,7 @@ namespace Peevo.Samwise.Wasm
                     {
                         var option = choosableNode.GetOption(ii);
                         if (includeMuteContent || !option.MuteOption)
-                        {
-                            yield return option.DefaultContent;
-
-                            if (option.AlternativeContents != null)
-                                foreach (var content in option.AlternativeContents)
-                                    yield return content;
-                        }
+                            yield return choosableNode.GetOption(ii);
                     }
                 }
 
@@ -57,9 +51,8 @@ namespace Peevo.Samwise.Wasm
                     for (int ii = 0, icount = multiNode.CasesCount; ii < icount; ++ii)
                     {
                         var option = multiNode.GetCase(ii);
+                        yield return option;
 
-                        for (int iii=0; iii<option.ContentCount; ++iii)
-                            yield return option.GetContent(iii);
                     }
                 }
 
@@ -118,30 +111,24 @@ namespace Peevo.Samwise.Wasm
                     {
                         var option = multiNode.GetCase(ii);
 
-                        for (int iii=0; iii<option.ContentCount; ++iii)
+                        if (option.Condition != null)
                         {
-                            var content = option.GetContent(iii);
-                            var condition = content.Condition;
+                            elements = null;
 
-                            if (condition != null)
+                            // Check if case condition has anonymous content
+                            option.Condition.Traverse((a) =>
                             {
-                                elements = null;
-
-                                // Check if case condition has anonymous content
-                                condition.Traverse((a) =>
+                                if (a is IStatefulElement statefulValue && statefulValue.UsesAnonymousVariable)
                                 {
-                                    if (a is IStatefulElement statefulValue && statefulValue.UsesAnonymousVariable)
-                                    {
-                                        if (elements == null)
-                                            elements = new List<IStatefulElement>();
+                                    if (elements == null)
+                                        elements = new List<IStatefulElement>();
 
-                                        elements.Add(statefulValue);
-                                    }
-                                });
+                                    elements.Add(statefulValue);
+                                }
+                            });
 
-                                if (elements != null)
-                                    yield return (content, elements);
-                            } 
+                            if (elements != null)
+                                yield return (option, elements);
                         }
                     }
                 }
@@ -200,22 +187,16 @@ namespace Peevo.Samwise.Wasm
                     {
                         var option = multiNode.GetCase(ii);
 
-                        for (int iii=0; iii<option.ContentCount; ++iii)
+                        if (option.Condition != null)
                         {
-                            var content = option.GetContent(iii);
-                            var condition = content.Condition;
-
-                            if (condition != null)
+                            // Check if case condition has anonymous content
+                            option.Condition.Traverse((a) =>
                             {
-                                // Check if case condition has anonymous content
-                                condition.Traverse((a) =>
+                                if (a is IStatefulElement statefulValue && statefulValue.UsesAnonymousVariable)
                                 {
-                                    if (a is IStatefulElement statefulValue && statefulValue.UsesAnonymousVariable)
-                                    {
-                                        uniqueVariables.Add(statefulValue.StateVariableContext + statefulValue.StateVariableName);
-                                    }
-                                });
-                            }
+                                    uniqueVariables.Add(statefulValue.StateVariableContext + statefulValue.StateVariableName);
+                                }
+                            });
                         }
                     }
                 }

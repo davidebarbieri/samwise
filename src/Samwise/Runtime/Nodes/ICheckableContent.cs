@@ -2,8 +2,7 @@
 
 namespace Peevo.Samwise
 {
-    public interface IConditional
+    public interface ICheckableContent: IContent, ICheckable
     {
-        IBoolValue Condition { get; set; }
     }
 }

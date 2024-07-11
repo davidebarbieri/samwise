@@ -27,6 +27,13 @@ namespace Peevo.Samwise
             return block as Dialogue;
         }
 
+        public bool HasCheck(out bool isPreCheck, out string checkName)
+        {
+            isPreCheck = true;
+            checkName = PreCheck;
+            return PreCheck != null;
+        }
+
         public string GetPreambleString(string prefix, bool skipsTrailingSpace = false) 
         {
             if (Block is ConditionNode conditionNode && conditionNode.Inline && BlockId == 0 )

@@ -78,7 +78,7 @@ namespace Peevo.Samwise
             return null;
         }
 
-        public IOption FindOptionFromId(string id)
+        public Option FindOptionFromId(string id)
         {
             foreach (var node in this.Traverse<IChoosableNode>())
             {
@@ -93,7 +93,7 @@ namespace Peevo.Samwise
             return null;
         }
 
-        public IOption FindOptionFromLine(int lineId)
+        public Option FindOptionFromLine(int lineId)
         {
             foreach (var node in this.Traverse<IChoosableNode>())
             {

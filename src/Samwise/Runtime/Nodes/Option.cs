@@ -1,34 +1,27 @@
 // (c) Copyright 2022 Davide 'PeevishDave' Barbieri
 
-using System.Collections.Generic;
-
 namespace Peevo.Samwise
 {
-    public class Option : SequenceBlock, ITextContent, ICase, IOption
+    public class Option : SequenceBlock, ITextContent, ICase, ICheckableContent
     {
         public int Id { get; set; }
         public string Text { get; set; }
         public IBoolValue Condition { get; set; }
         public TagData TagData { get; set; }
-        public bool MuteOption { get; set; }
-        public bool ReturnOption { get; set; }
+        public bool MuteOption;
+        public bool ReturnOption;
         public double? Time => OverriddenTime.HasValue ? OverriddenTime : Parent.Time; // this time or parent's time
         public double? OverriddenTime;
         public string Check;
         public bool IsPreCheck;
 
-        public ITextContent DefaultContent => this;
-        public IReadOnlyList<ITextContent> AlternativeContents => alternatives;
-
         public Dialogue GetDialogue() => Parent.GetDialogue();
-        public int SourceLineStart { get; internal set; }
-        public int SourceLineEnd { get; internal set; }
+        public int SourceLineStart {get; internal set;}
+        public int SourceLineEnd {get; internal set;}
 
         public override NextBlockPolicy NextBlockPolicy => ReturnOption ? NextBlockPolicy.ReturnToParent : NextBlockPolicy.ParentNext;
         public new ChoiceNode Parent => (ChoiceNode)base.Parent;
         IMultiCaseNode ICase.Parent => (ChoiceNode)base.Parent;
-
-        public int ContentCount => 1 + (alternatives == null ? 0 : alternatives.Count);
 
         public Option(int sourceLineStart, int sourceLineEnd, int optionId, ChoiceNode parent, string text, bool muteOption, bool returnOption, IBoolValue condition, TagData tagData, double? time, string check, bool isPreCheck) : base(parent)
         {
@@ -45,57 +38,19 @@ namespace Peevo.Samwise
             IsPreCheck = isPreCheck;
         }
 
-        public bool IsAvailable(IDialogueContext context, out ITextContent textContent)
-        {
-            textContent = this;
-
-            if (Condition == null)
-                return true;
-
-            if (Condition.EvaluateBool(context))
-                return true;
-
-            textContent = GetAvailableAlternative(context);
-            if (textContent != null)
-                return true;
-
-            return false;
-        }
-
-        public ITextContent GetTextContent(IDialogueContext context)
+        public bool IsAvailable(IDialogueContext context)
         {
             if (Condition == null)
-                return this;
+                return true;
 
-            if (Condition.EvaluateBool(context))
-                return this;
-
-            return GetAvailableAlternative(context);
+            return Condition.EvaluateBool(context);
         }
 
         public bool HasCheck(out bool isPreCheck, out string checkName)
         {
             isPreCheck = IsPreCheck;
-            if (Check == null)
-            {
-                checkName = null;
-                return false;
-            }
-
             checkName = Check;
-            return true;
-        }
-
-        public bool HasTime(out double time)
-        {
-            if (Time.HasValue)
-            {
-                time = Time.Value;
-                return true;
-            }
-
-            time = 0;   
-            return false;
+            return Check != null;
         }
 
         public void OnVisited(IDialogueContext context)
@@ -108,36 +63,10 @@ namespace Peevo.Samwise
                 Condition.OnVisited(context);
                 return;
             }
-            
-            var availableAlternative = GetAvailableAlternative(context);
-            availableAlternative?.Condition?.OnVisited(context);
         }
-
-        public void AddAlternative(OptionAlternative alternative)
-        {
-            if (alternatives == null)
-                alternatives = new List<OptionAlternative>();
-                
-            alternatives.Add(alternative);
-        }
-
-        public void RemoveAlternative(OptionAlternative alternative)
-        {
-            alternatives?.Remove(alternative);
-        }
-
         public override string PrintSubtree(string indentationPrefix, string indentationUnit)
         {
             var s = indentationPrefix + PrintPayload() + DialogueNode.GetTagsString(TagData);
-
-            if (alternatives != null)
-            {
-                for (int i=0, count = alternatives.Count; i<count; ++i)
-                {
-                    var alternative = alternatives[i];
-                    s += "\n" + indentationPrefix + indentationUnit + alternative.PrintPayload() + DialogueNode.GetTagsString(alternative.TagData);
-                }
-            }
             
             if (base.ChildrenCount > 0)
                 s += "\n" + base.PrintSubtree(indentationUnit + indentationPrefix, indentationUnit);
@@ -159,24 +88,9 @@ namespace Peevo.Samwise
             if (!string.IsNullOrEmpty(attributes))
                 s += "[" + GetAttributesString() + "] ";
 
-            s += Text.Replace("\n", "↵\n");
+            s += Text.Replace("\n", "↵\n");;
 
             return s;
-        }
-
-        public string GenerateUidPreamble(Dialogue dialogue)
-        {
-            return dialogue.Label + "_" + Parent.CharacterId + "_";
-        }
-
-        public string PrintLine(string indentationUnit) 
-        { 
-            return Parent.LookUpTabsPrefix(indentationUnit) + indentationUnit + PrintPayload() + DialogueNode.GetTagsString(TagData);
-        }
-
-        public override string ToString()
-        {
-            return PrintLine("\t");
         }
 
         string GetAttributesString()
@@ -209,31 +123,19 @@ namespace Peevo.Samwise
             return attributes;
         }
 
-        ITextContent GetAvailableAlternative(IDialogueContext context)
+        public string GenerateUidPreamble(Dialogue dialogue)
         {
-            if (alternatives == null)
-                return null;
-            
-            for (int i=0, count = alternatives.Count; i<count; ++i)
-            {
-                var alternative = alternatives[i];
-
-                if (alternative.Condition == null || alternative.Condition.EvaluateBool(context))
-                {
-                    return alternative;
-                }
-            }
-
-            return null;
+            return dialogue.Label + "_" + Parent.CharacterId + "_";
         }
 
-        public IContent GetContent(int index)
-        {
-            if (index == 0)
-                return this;
-            return alternatives[index - 1];
+        public string PrintLine(string indentationUnit) 
+        { 
+            return Parent.LookUpTabsPrefix(indentationUnit) + indentationUnit + PrintPayload() + DialogueNode.GetTagsString(TagData);
         }
 
-        List<OptionAlternative> alternatives;
+        public override string ToString()
+        {
+            return PrintLine("\t");
+        }
     }
 }

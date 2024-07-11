@@ -65,7 +65,7 @@ namespace Peevo.Samwise.Test
 
             dm.onCaptionStart += (context, node) => { output.Add("[ " + node.Text + " ]"); deferredActions.Add(() => context.Advance()); };
             dm.onSpeechStart += (context, node) => { output.Add(node.CharacterId + " said \"" + node.Text + "\""); deferredActions.Add(() => context.Advance()); };
-            dm.onSpeechOptionStart += (context, option) => { output.Add(option.Parent.CharacterId + " said \"" + option.GetTextContent(context).Text + "\""); deferredActions.Add(() => context.Advance()); };
+            dm.onSpeechOptionStart += (context, node) => { output.Add(node.Parent.CharacterId + " said \"" + node.Text + "\""); deferredActions.Add(() => context.Advance()); };
             dm.onChallengeStart += (context, check, s) => { output.Add("Challenge: " + s); deferredActions.Add(() => context.CompleteChallenge(true)); };
             dm.onChoiceStart += (context, node) => {
                 var rnd = rand.Next();
@@ -74,7 +74,7 @@ namespace Peevo.Samwise.Test
                 {
                     int id = (rnd + i) % node.OptionsCount;
                     var option = node.GetOption(id);
-                    if (option.IsAvailable(context, out _))
+                    if (option.IsAvailable(context))
                     {
                         context.Choose(option);
                         return;

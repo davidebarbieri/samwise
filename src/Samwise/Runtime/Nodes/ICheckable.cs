@@ -2,8 +2,8 @@
 
 namespace Peevo.Samwise
 {
-    public interface ICheckable : ISource
+    public interface ICheckable
     {
-
+        bool HasCheck(out bool isPreCheck, out string checkName);
     }
 }

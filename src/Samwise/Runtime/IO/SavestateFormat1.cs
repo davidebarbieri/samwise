@@ -2,7 +2,6 @@
 
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices.ComTypes;
 
 namespace Peevo.Samwise
 {
@@ -68,7 +67,7 @@ namespace Peevo.Samwise
                 writer.Write((string)(externalContextResolver == null || context.ExternalContext != null ? "" : externalContextResolver.GetUIDFromObject(context.ExternalContext)));
                 
                 context.GetInternalState(out DialogueStatus status, out IDialogueNode reenterNode, out IDialogueNode forkedFromNode, 
-                    out IOption challengedOption, out DialogueContext waitingForJoin);
+                    out Option challengedOption, out DialogueContext waitingForJoin);
 
                 // we save forked node before any other node, as if that is not resolved, then all the other nodes must be taken from the
                 // embedded dialogue
@@ -90,7 +89,7 @@ namespace Peevo.Samwise
                 writer.Write((byte)status);
                 writer.Write((long)(waitingForJoin == null ? -1 : waitingForJoin.Uid));
                 SaveNodeReference(writer, reenterNode, machine, alreadySerializedNonIndexed);
-                SaveOptionReference(writer, challengedOption, machine, alreadySerializedNonIndexed);
+                SaveChallengeOptionReference(writer, challengedOption, machine, alreadySerializedNonIndexed);
 
                 return true;
             }
@@ -132,9 +131,9 @@ namespace Peevo.Samwise
                 long joiningUid = reader.ReadInt64();
                 DialogueContext waitingForJoin = joiningUid >= 0 ? machine.uidToDialogue[joiningUid] : null;
                 (IDialogueNode reenterNode, bool wasReenterEmbedded) = LoadNodeReference(reader, machine, onUnresolvedDialogue, nonIndexedDialogues);
-                (IOption challengedOption, bool wasChallengeEmbedded) = LoadOptionReference(reader, machine, onUnresolvedDialogue, nonIndexedDialogues); 
+                (Option challengedOption, bool wasChallengeEmbedded) = LoadChallengeOptionReference(reader, machine, onUnresolvedDialogue, nonIndexedDialogues); 
 
-                loadedContext.SetInternalState(status, reenterNode, forkedFromNode, (Option)challengedOption, waitingForJoin);
+                loadedContext.SetInternalState(status, reenterNode, forkedFromNode, challengedOption, waitingForJoin);
 
                 return res;
             }
@@ -323,7 +322,7 @@ namespace Peevo.Samwise
                 }
             }
 
-            static void SaveOptionReference(BinaryWriter writer, IOption option, DialogueMachine machine, HashSet<Dialogue> alreadySerializedNonIndexed)
+            static void SaveChallengeOptionReference(BinaryWriter writer, Option option, DialogueMachine machine, HashSet<Dialogue> alreadySerializedNonIndexed)
             {
                 if (option == null)
                 {
@@ -331,7 +330,7 @@ namespace Peevo.Samwise
                     return;
                 }
 
-                var dialogue = option.Parent.GetDialogue();
+                var dialogue = option.GetDialogue();
                 writer.Write((string)dialogue.Label);
 
                 var id = option.GetID();
@@ -355,7 +354,7 @@ namespace Peevo.Samwise
 
             }
             
-            (IOption, bool) LoadOptionReference(BinaryReader reader, DialogueMachine machine, System.Func<string, Dialogue> onUnresolvedDialogue, Dictionary<string, Dialogue> nonIndexedDialogues)
+            (Option, bool) LoadChallengeOptionReference(BinaryReader reader, DialogueMachine machine, System.Func<string, Dialogue> onUnresolvedDialogue, Dictionary<string, Dialogue> nonIndexedDialogues)
             {
                 string dialogueLabel = reader.ReadString();
             
@@ -416,8 +415,8 @@ namespace Peevo.Samwise
 
                     if (mostProbableFallback == dialogueNode && 
                         embeddedOption.Id == dialogueOption.Id &&
-                        HasAnySameTextAlternative(embeddedOption, dialogueOption) &&
-                        HasSameCheck(embeddedOption, dialogueOption)) // Same id, text and check
+                        embeddedOption.Text == dialogueOption.Text &&
+                        embeddedOption.Check == dialogueOption.Check) // Same id, text and check
                         return (dialogueOption, false);
 
                     if (mostProbableFallback != null)
@@ -428,22 +427,22 @@ namespace Peevo.Samwise
                     }
 
                     // Can't find fallback option, stay on embedded dialogue
-                    machine.Log("Warning: unable to find the saved option, the dialogue is continuing on saved dialogue version");
+                    machine.Log("Warning: unable to find the saved challenged option, the dialogue is continuing on saved dialogue version");
                     return (embeddedOption, true);
                 }
             }
 
-            private IOption FindMostProbableFallbackOption(IOption embeddedOption, IChoosableNode embeddedNode, IChoosableNode mostProbableFallback)
+            private Option FindMostProbableFallbackOption(Option embeddedOption, IChoosableNode embeddedNode, IChoosableNode mostProbableFallback)
             {
-                IOption sameIdOption = null;
-                IOption sameCheckNumberOption = null;
+                Option sameIdOption = null;
+                Option sameCheckNumberOption = null;
 
                 int embeddedCheckOrder = 0;
                 for (int i=0, count=embeddedOption.Id; i<count; i++)
                 {
                     var option = embeddedNode.GetOption(i);
 
-                    if (option.HasCheck(out _, out _))
+                    if (option.Check != null)
                         ++embeddedCheckOrder;
                 }
 
@@ -452,14 +451,14 @@ namespace Peevo.Samwise
                 {
                     var option = mostProbableFallback.GetOption(i);
 
-                    if (HasAnySameTextAlternative(embeddedOption, option) &&
-                        HasSameCheck(embeddedOption, option))
+                    if (embeddedOption.Text == option.Text &&
+                        embeddedOption.Check == option.Check)
                         return option;
                     
                     if (i == embeddedOption.Id)
                         sameIdOption = option;
 
-                    if (option.HasCheck(out _, out _))
+                    if (!string.IsNullOrEmpty(option.Check))
                     {
                         if (checkOrder++ == embeddedCheckOrder)
                             sameCheckNumberOption = option;
@@ -468,25 +467,25 @@ namespace Peevo.Samwise
 
                 // if there was a check
                 // to be noted that we cannot fallback on an option without a check (even if it has the same text), as it would break the machine
-                if (embeddedOption.HasCheck(out _, out _))
+                if (!string.IsNullOrEmpty(embeddedOption.Check))
                 {
                     // same text, but different check (but still present)
                     for (int i=0, count=mostProbableFallback.OptionsCount; i<count; i++)
                     {
                         var option = mostProbableFallback.GetOption(i);
 
-                        if (HasAnySameTextAlternative(embeddedOption, option) && option.HasCheck(out _, out _))
+                        if (embeddedOption.Text == option.Text && !string.IsNullOrEmpty(option.Check))
                             return option;
                     }
 
                     // TODO: same previous text, same current check
 
                     // same id and check
-                    if (sameIdOption != null && HasSameCheck(sameIdOption, embeddedOption)) // Same Id and Check
+                    if (sameIdOption != null && sameIdOption.Check == embeddedOption.Check) // Same Id and Check
                         return sameIdOption;
 
                     // same id (in options with same check) and check
-                    if (sameCheckNumberOption != null && HasSameCheck(sameCheckNumberOption, embeddedOption))
+                    if (sameCheckNumberOption != null && sameCheckNumberOption.Check == embeddedOption.Check)
                         return sameCheckNumberOption;
 
                     // same check
@@ -494,57 +493,15 @@ namespace Peevo.Samwise
                     {
                         var option = mostProbableFallback.GetOption(i);
 
-                        if (HasSameCheck(embeddedOption, option))
+                        if (embeddedOption.Check == option.Check)
                             return option;
                     }
                 }
 
-                if (sameIdOption != null && 
-                    HasSameCheck(sameIdOption, embeddedOption)) // Same Id and Check
+                if (sameIdOption != null && sameIdOption.Check == embeddedOption.Check) // Same Id and Check
                     return sameIdOption;
 
                 return null;
-            }
-
-            static bool HasSameCheck(IOption a, IOption b)
-            {
-                return a.HasCheck(out _, out var aCheck) == b.HasCheck(out _, out var bCheck) &&
-                    aCheck == bCheck;
-            }
-
-            static bool HasAnySameTextAlternative(IOption a, IOption b)
-            {
-                if (a.DefaultContent.Text == b.DefaultContent.Text)
-                    return true;
-
-                if (a.AlternativeContents != null)
-                {
-                    foreach (var acontent in a.AlternativeContents)
-                    {
-                        if (acontent.Text == b.DefaultContent.Text)
-                            return true;
-                            
-                        if (b.AlternativeContents != null)
-                        {
-                            foreach (var bcontent in b.AlternativeContents)
-                            {
-                                if (acontent.Text == bcontent.Text)
-                                    return true;
-                            }
-                        }
-                    }
-                }
-                
-                if (b.AlternativeContents != null)
-                {
-                    foreach (var content in b.AlternativeContents)
-                    {
-                        if (content.Text == a.DefaultContent.Text)
-                            return true;
-                    }
-                }
-
-                return false;
             }
 
             // Fallbacks should not be a reliable method for a release build, apply UIDs to every node instead
