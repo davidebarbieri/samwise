@@ -2,14 +2,16 @@
 
 namespace Peevo.Samwise
 {
-    public class Option : SequenceBlock, IOption
+    public class Option : IOption
     {
-        public int Id { get; set; }
+        public int Id {get; private set; }
+        public int IdWithinGroup {get; private set; }
+
         public string Text { get; set; }
         public IBoolValue Condition { get; set; }
         public TagData TagData { get; set; }
-        public bool MuteOption  { get; set; }
-        public bool ReturnOption  { get; set; }
+        public bool MuteOption => OptionGroup.MuteOption;
+        public bool ReturnOption => OptionGroup.ReturnOption;
         public double? Time => OverriddenTime.HasValue ? OverriddenTime : Parent.Time; // this time or parent's time
         public double? OverriddenTime;
         public string Check;
@@ -19,17 +21,19 @@ namespace Peevo.Samwise
         public int SourceLineStart {get; internal set;}
         public int SourceLineEnd {get; internal set;}
 
-        public IDialogueBlock Block => this;
-        public override NextBlockPolicy NextBlockPolicy => ReturnOption ? NextBlockPolicy.ReturnToParent : NextBlockPolicy.ParentNext;
-        public new IChoosableNode Parent => (IChoosableNode)base.Parent;
-        IMultiCaseNode ICase.Parent => (ChoiceNode)base.Parent;
+        public OptionGroup OptionGroup {get; private set; }
+        
+        public IDialogueBlock Block => OptionGroup;
+        public IChoosableNode Parent { get; private set; }
+        IMultiCaseNode ICase.Parent => (ChoiceNode)Parent;
 
-        public Option(int sourceLineStart, int sourceLineEnd, int optionId, ChoiceNode parent, string text, bool muteOption, bool returnOption, IBoolValue condition, TagData tagData, double? time, string check, bool isPreCheck) : base(parent)
+        public Option(OptionGroup group, int id, int idWithinGroup, int sourceLineStart, int sourceLineEnd, ChoiceNode parent, string text, IBoolValue condition, TagData tagData, double? time, string check, bool isPreCheck)
         {
-            Id = optionId;
+            Id = id;
+            OptionGroup = group;
+            IdWithinGroup = idWithinGroup;
+            Parent = parent;
             Text = text;
-            MuteOption = muteOption;
-            ReturnOption = returnOption;
             Condition = condition;
             TagData = tagData;
             OverriddenTime = time;
@@ -41,10 +45,7 @@ namespace Peevo.Samwise
 
         public bool IsAvailable(IDialogueContext context)
         {
-            if (Condition == null)
-                return true;
-
-            return Condition.EvaluateBool(context);
+            return OptionGroup.GetAvailableOption(context) == this;
         }
 
         public bool HasCheck(out bool isPreCheck, out string checkName)
@@ -77,24 +78,24 @@ namespace Peevo.Samwise
                 return;
             }
         }
-        public override string PrintSubtree(string indentationPrefix, string indentationUnit)
-        {
-            var s = indentationPrefix + PrintPayload() + DialogueNode.GetTagsString(TagData);
-            
-            if (base.ChildrenCount > 0)
-                s += "\n" + base.PrintSubtree(indentationUnit + indentationPrefix, indentationUnit);
-
-            return s;
-        }
 
         public string PrintPayload()
         {
-            var s = "";
+            string s;
             
-            if (ReturnOption)
-                s += MuteOption ? "<-- " : "<- "; 
+            bool isFirstOptionInGroup = OptionGroup.IsFirstOption(this);
+
+            if (isFirstOptionInGroup)
+            {
+                if (ReturnOption)
+                    s = MuteOption ? "<-- " : "<- "; 
+                else
+                    s = MuteOption ? "-- " : "- "; 
+            }
             else
-                s += MuteOption ? "-- " : "- "; 
+            {
+                s = "| ";
+            }
 
             var attributes = GetAttributesString();
 
@@ -142,8 +143,17 @@ namespace Peevo.Samwise
         }
 
         public string PrintLine(string indentationUnit) 
-        { 
-            return Parent.LookUpTabsPrefix(indentationUnit) + indentationUnit + PrintPayload() + DialogueNode.GetTagsString(TagData);
+        {
+            bool isFirstOptionInGroup = OptionGroup.IsFirstOption(this);
+
+            var line = Parent.LookUpTabsPrefix(indentationUnit) + indentationUnit;
+            
+            if (!isFirstOptionInGroup)
+                line += indentationUnit;
+
+            line += PrintPayload() + DialogueNode.GetTagsString(TagData);
+
+            return line;
         }
 
         public override string ToString()

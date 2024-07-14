@@ -1,5 +1,6 @@
 // (c) Copyright 2024 Davide 'PeevishDave' Barbieri
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -89,7 +90,7 @@ namespace Peevo.Samwise
                 writer.Write((byte)status);
                 writer.Write((long)(waitingForJoin == null ? -1 : waitingForJoin.Uid));
                 SaveNodeReference(writer, reenterNode, machine, alreadySerializedNonIndexed);
-                SaveChallengeOptionReference(writer, challengedOption, machine, alreadySerializedNonIndexed);
+                SaveOptionReference(writer, challengedOption, machine, alreadySerializedNonIndexed);
 
                 return true;
             }
@@ -131,9 +132,9 @@ namespace Peevo.Samwise
                 long joiningUid = reader.ReadInt64();
                 DialogueContext waitingForJoin = joiningUid >= 0 ? machine.uidToDialogue[joiningUid] : null;
                 (IDialogueNode reenterNode, bool wasReenterEmbedded) = LoadNodeReference(reader, machine, onUnresolvedDialogue, nonIndexedDialogues);
-                (IOption challengedOption, bool wasChallengeEmbedded) = LoadChallengeOptionReference(reader, machine, onUnresolvedDialogue, nonIndexedDialogues); 
+                (IOption waitingOption, bool wasChallengeEmbedded) = LoadOptionReference(reader, machine, onUnresolvedDialogue, nonIndexedDialogues); 
 
-                loadedContext.SetInternalState(status, reenterNode, forkedFromNode, challengedOption, waitingForJoin);
+                loadedContext.SetInternalState(status, reenterNode, forkedFromNode, waitingOption, waitingForJoin);
 
                 return res;
             }
@@ -322,7 +323,7 @@ namespace Peevo.Samwise
                 }
             }
 
-            static void SaveChallengeOptionReference(BinaryWriter writer, IOption option, DialogueMachine machine, HashSet<Dialogue> alreadySerializedNonIndexed)
+            static void SaveOptionReference(BinaryWriter writer, IOption option, DialogueMachine machine, HashSet<Dialogue> alreadySerializedNonIndexed)
             {
                 if (option == null)
                 {
@@ -354,7 +355,7 @@ namespace Peevo.Samwise
 
             }
             
-            (IOption, bool) LoadChallengeOptionReference(BinaryReader reader, DialogueMachine machine, System.Func<string, Dialogue> onUnresolvedDialogue, Dictionary<string, Dialogue> nonIndexedDialogues)
+            (IOption, bool) LoadOptionReference(BinaryReader reader, DialogueMachine machine, System.Func<string, Dialogue> onUnresolvedDialogue, Dictionary<string, Dialogue> nonIndexedDialogues)
             {
                 string dialogueLabel = reader.ReadString();
             
@@ -400,8 +401,22 @@ namespace Peevo.Samwise
 
                     var lineId = reader.ReadInt32();
                     // get the option in the embedded dialogue
-                    var embeddedOption = embeddedDialogue.FindOptionFromLine(lineId);
-                    var dialogueOption = dialogue.FindOptionFromLine(lineId);
+                    var embeddedOption = (Option)embeddedDialogue.FindOptionFromLine(lineId);
+                    var dialogueOption = (Option)dialogue.FindOptionFromLine(lineId);
+
+                    var embeddedNode = (ChoiceNode)embeddedOption.Parent;
+
+                    if (embeddedOption.OptionGroup.GroupId == dialogueOption.OptionGroup.GroupId &&
+                        embeddedOption.Text == dialogueOption.Text &&
+                        CheckSameCheck(embeddedOption, dialogueOption)) // Same group id, text and check
+                        return (dialogueOption, false);
+
+                    // if same group id, search same text and check within it
+                    if (embeddedOption.OptionGroup.GroupId == dialogueOption.OptionGroup.GroupId &&
+                        FindOptionWithSameTextAndCheck(embeddedOption, dialogueOption.OptionGroup, out var sameTextOption))
+                    {
+                        return (sameTextOption, false);
+                    }
 
                     IDialogueNode dialogueNode;
                     if (dialogueOption != null)
@@ -409,15 +424,7 @@ namespace Peevo.Samwise
                     else
                         dialogueNode = dialogue.FindNodeFromLine(lineId);
 
-                    var embeddedNode = embeddedOption.Parent;
-
-                    var mostProbableFallback = FindMostProbableFallbackNode(embeddedNode, embeddedDialogue, dialogueNode, dialogue) as IChoosableNode;
-
-                    if (mostProbableFallback == dialogueNode && 
-                        embeddedOption.Id == dialogueOption.Id &&
-                        embeddedOption.Text == dialogueOption.Text &&
-                        CheckSameCheck(embeddedOption, dialogueOption)) // Same id, text and check
-                        return (dialogueOption, false);
+                    var mostProbableFallback = FindMostProbableFallbackNode(embeddedNode, embeddedDialogue, dialogueNode, dialogue) as ChoiceNode;
 
                     if (mostProbableFallback != null)
                     {
@@ -432,76 +439,107 @@ namespace Peevo.Samwise
                 }
             }
 
-            private IOption FindMostProbableFallbackOption(IOption embeddedOption, IChoosableNode embeddedNode, IChoosableNode mostProbableFallback)
+            private bool FindOptionWithSameTextAndCheck(Option embeddedOption, OptionGroup optionGroup, out Option sameTextOption)
             {
-                IOption sameIdOption = null;
-                IOption sameCheckNumberOption = null;
-
-                int embeddedCheckOrder = 0;
-                for (int i=0, count=embeddedOption.Id; i<count; i++)
+                for (int i=0; i<optionGroup.OptionsCount; ++i)
                 {
-                    var option = embeddedNode.GetOption(i);
+                    var option = optionGroup.GetOption(i);
 
-                    if (option.HasCheck(out var _, out var _))
-                        ++embeddedCheckOrder;
+                    if (CheckSameCheck(embeddedOption, option) &&
+                        embeddedOption.Text == option.Text)
+                        {
+                            sameTextOption = option;
+                            return true;
+                        }
                 }
 
-                int checkOrder = 0;
-                for (int i=0, count=mostProbableFallback.OptionsCount; i<count; i++)
-                {
-                    var option = mostProbableFallback.GetOption(i);
+                sameTextOption = null;
+                return false;
+            }
 
-                    if (embeddedOption.Text == option.Text &&
-                        CheckSameCheck(embeddedOption, option))
-                        return option;
-                    
-                    if (i == embeddedOption.Id)
-                        sameIdOption = option;
-
-                    if (option.HasCheck(out var _, out var _))
-                    {
-                        if (checkOrder++ == embeddedCheckOrder)
-                            sameCheckNumberOption = option;
-                    }
-                }
-
-                // if there was a check
+            private Option FindMostProbableFallbackOption(Option embeddedOption, ChoiceNode embeddedNode, ChoiceNode mostProbableFallback)
+            {
                 // to be noted that we cannot fallback on an option without a check (even if it has the same text), as it would break the machine
-                if (embeddedOption.HasCheck(out var _, out var _))
+                
+                var embeddedGroup = embeddedOption.OptionGroup;
+                int embeddedGroupId = embeddedGroup.GroupId;
+
+                var optionGroupSameId = mostProbableFallback.GetOptionGroup(embeddedGroupId);
+
+                // search same id, text and check
+                if (optionGroupSameId != null && FindOptionWithSameTextAndCheck(embeddedOption, optionGroupSameId, out var sameTextOption))
+                    return sameTextOption;
+
+                // search same text and check
+                for (int i=0; i<mostProbableFallback.OptionsGroupsCount; ++i)
                 {
-                    // same text, but different check (but still present)
-                    for (int i=0, count=mostProbableFallback.OptionsCount; i<count; i++)
-                    {
-                        var option = mostProbableFallback.GetOption(i);
+                    var optionGroup = mostProbableFallback.GetOptionGroup(i);
 
-                        if (embeddedOption.Text == option.Text && option.HasCheck(out var _, out var _))
-                            return option;
-                    }
-
-                    // TODO: same previous text, same current check
-
-                    // same id and check
-                    if (sameIdOption != null && CheckSameCheck(sameIdOption, embeddedOption)) // Same Id and Check
-                        return sameIdOption;
-
-                    // same id (in options with same check) and check
-                    if (sameCheckNumberOption != null && CheckSameCheck(sameCheckNumberOption, embeddedOption))
-                        return sameCheckNumberOption;
-
-                    // same check
-                    for (int i=0, count=mostProbableFallback.OptionsCount; i<count; i++)
-                    {
-                        var option = mostProbableFallback.GetOption(i);
-
-                        if (CheckSameCheck(embeddedOption, option))
-                            return option;
-                    }
+                    if (FindOptionWithSameTextAndCheck(embeddedOption, optionGroup, out sameTextOption))
+                        return sameTextOption;
                 }
 
-                if (sameIdOption != null && CheckSameCheck(sameIdOption, embeddedOption)) // Same Id and Check
-                    return sameIdOption;
+                // search same previous and next text and check
+                var embeddedPrevious = GetPrevious(embeddedOption, embeddedNode);
+                var embeddedNext = GetNext(embeddedOption, embeddedNode);
+
+                if (FindOptionWithSamePrevAndNextAndCheck(embeddedPrevious, embeddedNext, mostProbableFallback, out var samePrevNextOption))
+                    return samePrevNextOption;
 
                 return null;
+            }
+
+            Option GetPrevious(Option embeddedOption, ChoiceNode embeddedNode)
+            {
+                var embeddedGroup = embeddedOption.OptionGroup;
+                int embeddedGroupId = embeddedGroup.GroupId;
+
+                OptionGroup prevGroup;
+                return embeddedOption.IdWithinGroup > 0 ? embeddedGroup.GetOption(embeddedOption.IdWithinGroup - 1) :
+                    embeddedGroupId == 0 ? null :
+                    (prevGroup = embeddedNode.GetOptionGroup(embeddedGroupId - 1)).GetOption(prevGroup.OptionsCount - 1);
+            }
+
+            Option GetNext(Option embeddedOption, ChoiceNode embeddedNode)
+            {
+                var embeddedGroup = embeddedOption.OptionGroup;
+                int embeddedGroupId = embeddedGroup.GroupId;
+                
+                OptionGroup nextGroup;
+                return embeddedOption.IdWithinGroup < embeddedGroup.OptionsCount - 1 ? 
+                    embeddedGroup.GetOption(embeddedOption.IdWithinGroup + 1) :
+                    embeddedGroupId == embeddedNode.OptionsGroupsCount - 1 ? null :
+                    (nextGroup = embeddedNode.GetOptionGroup(embeddedGroupId + 1)).GetOption(0);
+            }
+
+            bool FindOptionWithSamePrevAndNextAndCheck(Option embeddedPrev, Option embeddedNext, ChoiceNode mostProbableFallback, out Option mostProbableOption)
+            {
+                for (int i=0; i<mostProbableFallback.OptionsGroupsCount; ++i)
+                {
+                    var group = mostProbableFallback.GetOptionGroup(i);
+
+                    for (int ii=0; ii< group.OptionsCount; ++ii)
+                    {
+                        var option = group.GetOption(ii);
+                        var prevOption = GetPrevious(option, mostProbableFallback);
+                        var nextOption = GetNext(option, mostProbableFallback);
+
+                        if (prevOption != null && embeddedPrev != null && prevOption.Text == embeddedPrev.Text && CheckSameCheck(prevOption, embeddedPrev))
+                        {
+                            mostProbableOption = option;
+                            return true;
+                        }    
+
+                        if (nextOption != null && embeddedNext != null && nextOption.Text == embeddedNext.Text && CheckSameCheck(nextOption, embeddedNext))
+                        {
+                            mostProbableOption = option;
+                            return true;
+                        }  
+                    }
+                }
+
+                mostProbableOption = null;
+                return false;
             }
 
             // Fallbacks should not be a reliable method for a release build, apply UIDs to every node instead

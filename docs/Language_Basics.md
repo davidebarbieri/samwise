@@ -199,9 +199,7 @@ Bob:
 
 As you can see, the option "Enough with business" doesn't use the '<' character, so choosing that option results in the completion of the subtree, and therefore a return to the list of topics. the same goes for "Bye" which ends the dialogue
 
-### Alternative Options (To be redone)
-
-!> Warning: this feature was reverted in order to be redone
+### Alternative Options
 
 It is possible to provide multiple alternatives for the same option. This is because it can feel more natural for the text to slightly change when the player, for example, asks a character the same question they had asked before upon returning to a choice node.
 
@@ -238,23 +236,6 @@ bob:
 
 !> No condition is equal to a condition that's always true.
 The option is skipped only if all the alternatives conditions are false.
-
-When written in the following way, the alternative will inherit the "Muted Option" and "Return To Parent" properties from the main option:
-```samwise
-    <- [once] Share more about becoming a sword master
-        | Tell me once more about becoming proficient in swordplay
-```
-
-if you want to override them, you can rewrite the option symbol in the following way:
-```samwise
-        | <-- Tell me once more about becoming proficient in swordplay
-```
-```samwise
-        | -- Tell me once more about becoming proficient in swordplay
-```
-```samwise
-        | - Tell me once more about becoming proficient in swordplay
-```
 
 !> Alternative options won't inherit conditions, time or check attributes. They must be re-added into each alternative attribute list if that is the intented behaviour.
 

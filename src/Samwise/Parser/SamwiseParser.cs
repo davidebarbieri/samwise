@@ -342,7 +342,7 @@ namespace Peevo.Samwise
 
             var attributesLine = line;
             // Try to parse condition
-            ParseAttributesBlock(dialogue, text, ref position, ref line, ref depth, out var condition, out var score, out var multiplier, out var time, out var check, out var precheck, true, out var elseCondition);
+            ParseAttributesBlock(dialogue, text, ref position, ref line, out var condition, out var score, out var multiplier, out var time, out var check, out var precheck, true, out var elseCondition);
 
             if (Errors.Count > 0)
                 return false;
@@ -528,7 +528,7 @@ namespace Peevo.Samwise
 
                                 if (TokenUtils.ParseToken(text, ref position, "-"))
                                 {
-                                    ParseAttributesBlock(dialogue, text, ref position, ref line, ref depth, out var childCondition, out var childScore, out var childMultiplier, out var childTime, out var childCheck, out var childPreCheck, false, out _);
+                                    ParseAttributesBlock(dialogue, text, ref position, ref line, out var childCondition, out var childScore, out var childMultiplier, out var childTime, out var childCheck, out var childPreCheck, false, out _);
 
                                     if (Errors.Count > 0)
                                         return false;
@@ -562,7 +562,7 @@ namespace Peevo.Samwise
                                     return false;
                             }
 
-                            if (selectionNode.CasesCount == 0)
+                            if (selectionNode.ChildrenCount == 0)
                             {
                                 PushError(selectionNode.SourceLineStart, "No cases found in selection node");
                                 return false;
@@ -596,7 +596,7 @@ namespace Peevo.Samwise
 
                                 if (TokenUtils.ParseToken(text, ref position, "-"))
                                 {
-                                    ParseAttributesBlock(dialogue, text, ref position, ref line, ref depth, out var childCondition, out var childScore, out var childMultiplier, out var childTime, out var childCheck, out var childPreCheck, false, out _);
+                                    ParseAttributesBlock(dialogue, text, ref position, ref line, out var childCondition, out var childScore, out var childMultiplier, out var childTime, out var childCheck, out var childPreCheck, false, out _);
 
                                     if (Errors.Count > 0)
                                         return false;
@@ -769,6 +769,7 @@ namespace Peevo.Samwise
                                 return false;
 
                             int optionId = 0;
+                            int optionGroupId = 0;
                             while (newDepth == depth + 1)
                             {
                                 position = newPos;
@@ -781,7 +782,7 @@ namespace Peevo.Samwise
                                 if ((TokenUtils.ParseToken(text, ref position, "--") && (mute = true)) ||
                                     TokenUtils.ParseToken(text, ref position, "-"))
                                 {
-                                    ParseAttributesBlock(dialogue, text, ref position, ref line, ref depth, out var childCondition, out var childScore, out var childMultiplier, out var childTime, out var childCheck, out var childPreCheck, false, out _);
+                                    ParseAttributesBlock(dialogue, text, ref position, ref line,  out var childCondition, out var childScore, out var childMultiplier, out var childTime, out var childCheck, out var childPreCheck, false, out _);
 
                                     if (Errors.Count > 0)
                                         return false;
@@ -800,11 +801,25 @@ namespace Peevo.Samwise
                                         return false;
                                     }
 
-                                    Option option = new Option(optionLineStart, optionLineEnd, optionId++, choiceNode, optionText, mute, returnOption, childCondition, childTagData, childTime, childCheck ?? childPreCheck, childPreCheck != null);
-                                    choiceNode.AddOption(option);
+                                    OptionGroup optionGroup = new OptionGroup(choiceNode, optionGroupId++, mute, returnOption);
+                                    choiceNode.AddOptionGroup(optionGroup);
+
+                                    int idWithinGroup = 0;
+                                    Option option = new Option(optionGroup, optionId++, idWithinGroup++, optionLineStart, optionLineEnd, choiceNode, optionText, childCondition, childTagData, childTime, childCheck ?? childPreCheck, childPreCheck != null);
+                                    optionGroup.AddOption(option);
 
                                     int innerDepth = newDepth + 1;
-                                    bool res = ParseBlock(text, ref position, ref line, ref innerDepth, option, dialogue);
+                                    
+                                    // Try to parse alternatives
+                                    while (ParseOptionAlternative(dialogue, choiceNode, optionGroup, optionId++, idWithinGroup++, text, ref position, ref line, innerDepth, out Option alternative))
+                                    {
+                                        optionGroup.AddOption(alternative);
+                                    }
+                                    
+                                    if (Errors.Count > 0)
+                                        return false;
+
+                                    bool res = ParseBlock(text, ref position, ref line, ref innerDepth, optionGroup, dialogue);
 
                                     if (!res)
                                         return false;
@@ -1033,6 +1048,54 @@ namespace Peevo.Samwise
             return true;
         }
 
+        bool ParseOptionAlternative(Dialogue dialogue, ChoiceNode choiceNode, OptionGroup optionGroup, int optionId, int idWithinGroup, string text, ref int position, ref int line, int innerDepth, out Option alternative)
+        {
+            alternative = null;
+
+            int newPosition = position;
+            int newLine = line;
+            if (!CheckErrors(line, TokenUtils.ParseLineStart(text, ref newPosition, ref newLine, out var newDepth, ref inferredIndentation)))
+                return false;
+
+            if (newDepth != innerDepth)
+            {
+                return false;
+            }
+
+            if (TokenUtils.ParseToken(text, ref newPosition, "|"))
+            {
+                position = newPosition;
+                line = newLine;
+
+                ParseAttributesBlock(dialogue, text, ref position, ref line, out var childCondition, out var childScore, out var childMultiplier, out var childTime, out var childCheck, out var childPreCheck, false, out _);
+
+                if (Errors.Count > 0)
+                    return false;
+                    
+                if (!ExpectAttributes(line, childMultiplier, childTime, childCheck, childPreCheck, childScore, false, true, true, true, false))
+                {
+                    return false;
+                }
+
+                int optionLineStart = line;
+                var optionText = TokenUtils.ReadFreeString(text, ref position, ref line);
+                int optionLineEnd = line;
+
+                TagData childTagData = null;
+                if (!ParseEndNodeLine(text, ref position, ref line, ref childTagData))
+                {
+                    PushError(line, "Expected end line");
+                    return false;
+                }
+
+                alternative = new Option(optionGroup, optionId, idWithinGroup, optionLineStart, optionLineEnd, choiceNode, optionText, childCondition, childTagData, childTime, childCheck ?? childPreCheck, childPreCheck != null);
+                
+                return true;
+            }
+
+            return false;
+        }
+
         bool ExpectAttributes(int line, int? multiplier, double? time, string check, string precheck, IIntegerValue intExpr, bool expectMultiplier, bool expectTime, bool expectCheck, bool expectPreCheck, bool expectIntegerExpression)
         {
             if (!expectMultiplier && multiplier.HasValue)
@@ -1075,7 +1138,7 @@ namespace Peevo.Samwise
         }
 
 
-        bool ParseAttributesBlock(Dialogue dialogue, string text, ref int position, ref int line, ref int depth, 
+        bool ParseAttributesBlock(Dialogue dialogue, string text, ref int position, ref int line,
             out IBoolValue condition, out IIntegerValue score, out int? multiplier, 
             out double? time, out string check, out string precheck, 
             bool supportsElseCondition, out bool elseCondition)

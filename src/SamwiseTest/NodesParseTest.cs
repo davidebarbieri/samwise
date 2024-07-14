@@ -157,6 +157,28 @@ symB =>
         }
 
         [Fact]
+        public void TestOptionAlternatives()
+        {
+            TestParseDialogueLines(
+@"(cc) [10s] david:
+    -- [once(Test.bHello)] Try Something
+        | [once(Test.bHello2)] Try Something alternative
+        | [once(Test.bHello3)] Try Something alternative 2
+        elly> Nooooooo
+        davide:
+            <- [10.5s] Test 1
+            <-- Test 2
+                elly> wooooa
+    - [once(bTTs), 0.5s] You know the answer, Jack # yoyo
+    - [once(Test.bHello)] Hello there
+        elly> Hello!
+    - [check bOne] YOO
+        | [once] YOO 2
+    - [(bValue & once(.bYaa)), precheck bTwo] YOo-ooh!"
+);
+        }
+
+        [Fact]
         public void TestSelection()
         {
             TestParseDialogueLines(
@@ -223,8 +245,10 @@ symB =>
             Assert.Equal("\tchar> what", speechNode.PrintLine("\t"));
 
             ChoiceNode choiceNode = new ChoiceNode(0, "char");
-            var option = new Option(0, 1, 1, choiceNode, "A test", true, false, null, null, null, null, false);
-            choiceNode.AddOption(option);
+            var optionGroup = new OptionGroup(choiceNode, 0, true, false);
+            var option = new Option(optionGroup, 0, 0, 1, 1, choiceNode, "A test", null, null, null, null, false);
+            optionGroup.AddOption(option);
+            choiceNode.AddOptionGroup(optionGroup);
             Assert.Equal("\t-- A test", option.PrintLine("\t"));
         }
 

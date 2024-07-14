@@ -8,23 +8,63 @@ namespace Peevo.Samwise
     {
         public string CharacterId { get; private set; }
 
-        public int OptionsCount => options.Count;
-        public IOption GetOption(int i) => options[i];
-        public int CasesCount => options.Count;
-        public ICase GetCase(int i) => options[i];
+        public int OptionsGroupsCount => optionsGroups.Count;
+        public int OptionsCount 
+        {
+            get
+            {
+                int optionsCount = 0;
+                
+                for (int i=0,count=optionsGroups.Count; i<count; ++i) 
+                    optionsCount += optionsGroups[i].OptionsCount;
+                
+                return optionsCount;
+            }
+        } 
+
+        public int CasesCount => optionsGroups.Count;
+        public ICase GetCase(int index) => GetOption(index);
+
+        public OptionGroup GetOptionGroup(int groupId) => optionsGroups.Count >groupId ? optionsGroups[groupId] : null;
+        public Option GetOption(int optionId) 
+        {
+            for (int i=0,count=optionsGroups.Count; i<count; ++i) 
+            {
+                var group = optionsGroups[i];
+
+                if (group.OptionsCount > optionId)
+                    return group.GetOption(optionId);
+
+                optionId -= group.OptionsCount;
+            }
+
+            return null;
+        }
+
         public double? Time { get; set; }
 
-        public int ChildrenCount => options.Count;
-        public IDialogueBlock GetChild(int i) => options[i];
+        public int ChildrenCount => optionsGroups.Count;
+        public IDialogueBlock GetChild(int i) => optionsGroups[i];
 
-        public void AddOption(Option option)
+        public void AddOptionGroup(OptionGroup optionGroup)
         {
-            options.Add(option);
+            optionsGroups.Add(optionGroup);
         }
 
         public ChoiceNode(int sourceLine, string characterId) : base(sourceLine, sourceLine)
         {
             CharacterId = characterId;
+        }
+        
+        public IEnumerator<IOption> GetAvailableOptions(IDialogueContext context)
+        {
+            foreach (var group in optionsGroups)
+            {
+                var availableGroup = group.GetAvailableOption(context);
+
+                if (availableGroup != null)
+                    yield return availableGroup;
+            }
         }
 
         public IDialogueNode Next(IOption option, IDialogueContext context)
@@ -43,8 +83,8 @@ namespace Peevo.Samwise
         {
             string o = GetPreambleString(indentationPrefix) + PrintPayload() + GetTagsString() + "\n";
 
-            for (int i=0; i<options.Count; ++i)
-                o += options[i].PrintSubtree(indentationUnit + indentationPrefix, indentationUnit) + (i == options.Count - 1 ? "" : "\n");
+            for (int i=0; i<optionsGroups.Count; ++i)
+                o += optionsGroups[i].PrintSubtree(indentationUnit + indentationPrefix, indentationUnit) + (i == optionsGroups.Count - 1 ? "" : "\n");
 
             return o;
         }
@@ -81,6 +121,6 @@ namespace Peevo.Samwise
             return attributes;
         }
 
-        List<Option> options = new List<Option>();
+        List<OptionGroup> optionsGroups = new List<OptionGroup>();
     }
 }

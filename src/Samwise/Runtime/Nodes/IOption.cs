@@ -4,9 +4,8 @@ namespace Peevo.Samwise
 {
     public interface IOption : ICase, ITextContent, ICheckableContent, ITimeable
     {
-        int Id { get; set; }
-        bool MuteOption { get; set; }
-        bool ReturnOption { get; set; }
+        bool MuteOption { get; }
+        bool ReturnOption { get; }
 
         bool IsAvailable(IDialogueContext context);
 

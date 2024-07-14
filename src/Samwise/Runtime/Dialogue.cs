@@ -80,13 +80,18 @@ namespace Peevo.Samwise
 
         public IOption FindOptionFromId(string id)
         {
-            foreach (var node in this.Traverse<IChoosableNode>())
+            foreach (var node in this.Traverse<ChoiceNode>())
             {
-                for (int i=0, count = node.OptionsCount; i<count; ++i)
+                for (int i=0, gcount = node.OptionsGroupsCount; i<gcount; ++i)
                 {
-                    var option = node.GetOption(i);
-                    if (string.Equals(id, option.GetID()))
-                        return option;
+                    var optionGroup = node.GetOptionGroup(i);
+
+                    for (int ii=0, count = optionGroup.OptionsCount; ii<count; ++ii)
+                    {
+                        var option = optionGroup.GetOption(ii);
+                        if (string.Equals(id, option.GetID()))
+                            return option;
+                    }
                 }
             }
 
@@ -95,13 +100,18 @@ namespace Peevo.Samwise
 
         public IOption FindOptionFromLine(int lineId)
         {
-            foreach (var node in this.Traverse<IChoosableNode>())
+            foreach (var node in this.Traverse<ChoiceNode>())
             {
-                for (int i=0, count = node.OptionsCount; i<count; ++i)
+                for (int i=0, gcount = node.OptionsGroupsCount; i<gcount; ++i)
                 {
-                    var option = node.GetOption(i);
-                    if (lineId >= option.SourceLineStart && lineId <= option.SourceLineEnd)
-                        return option;
+                    var optionGroup = node.GetOptionGroup(i);
+
+                    for (int ii=0, count = optionGroup.OptionsCount; ii<count; ++ii)
+                    {
+                        var option = optionGroup.GetOption(ii);
+                        if (lineId >= option.SourceLineStart && lineId <= option.SourceLineEnd)
+                            return option;
+                    }
                 }
             }
 
