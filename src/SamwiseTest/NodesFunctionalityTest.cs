@@ -11,12 +11,12 @@ namespace Peevo.Samwise.Test
             string dialogues = 
 @"character> This is a test!
 other> Yeah, I know!
-* it was really a test
+* it was really a test ## really! # woa
 ";
             TestDialogueLines(dialogues,
                 (a) => Assert.Equal("character said \"This is a test!\"", a),
                 (a) => Assert.Equal("other said \"Yeah, I know!\"", a),
-                (a) => Assert.Equal("[ it was really a test ]", a)
+                (a) => Assert.Equal("[ it was really a test # really! ]", a)
                 );
         }
 

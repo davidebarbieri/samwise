@@ -102,6 +102,38 @@ function onElementSelected(layout, symbol, selected, isNode) {
   selectionDiv.appendChild(label);
 }
 
+function hasAutoAdvance()
+{
+  const option = document.getElementById("selection_options_auto_advance");
+  return option.classList.contains("checked");
+}
+
+function computeReadTime(text, multiplier)
+{
+  const wordsPerSecond = 3.5;
+  const wordCount = text.split(/\s+/).length;
+  let readingTime = wordCount / wordsPerSecond;
+  return 0.5 + readingTime * multiplier;
+}
+
+function createAdvanceButtonOrAutoadvance(id, text, navigation)
+{
+  if (hasAutoAdvance())
+    {
+      setTimeout(() => {
+        onViewCaptionStart(id);
+      }, Math.floor(computeReadTime(text, 1) * 1000));
+    }
+    else
+    {
+      const button = document.createElement("vscode-button");
+      button.innerText = "Advance";
+      button.setAttribute("appearance", "primary");
+      button.setAttribute("onclick", `onViewCaptionStart(${id})`);
+
+      navigation.appendChild(button);
+    }
+}
 
 function initialize(layout) {
   onElementSelected(layout, '', '', false);
@@ -190,16 +222,12 @@ function initialize(layout) {
         {
           let dialogue = document.getElementById("dialogue" + message.id);
 
-          const button = document.createElement("vscode-button");
-          button.innerText = "Advance";
-          button.setAttribute("appearance", "primary");
-          button.setAttribute("onclick", `onViewCaptionStart(${message.id})`);
-
           const content = layout.makeCaption(message.text);
 
           const navigation = document.createElement("div");
           navigation.setAttribute("class", "navigation");
-          navigation.appendChild(button);
+
+          createAdvanceButtonOrAutoadvance(message.id, message.text, navigation);
 
           dialogue.appendChild(content);
           dialogue.appendChild(navigation);
@@ -229,16 +257,12 @@ function initialize(layout) {
 
       case 'onSpeechStart':
         {
-          const button = document.createElement("vscode-button");
-          button.innerText = "Advance";
-          button.setAttribute("appearance", "primary");
-          button.setAttribute("onclick", "onViewAdvance(" + message.id + ")");
-
           let dialogue = document.getElementById("dialogue" + message.id);
 
           const navigation = document.createElement("div");
           navigation.setAttribute("class", "navigation");
-          navigation.appendChild(button);
+
+          createAdvanceButtonOrAutoadvance(message.id, message.text, navigation);
 
           let balloonFrame = layout.makeSpeechBalloon(message.character, message.avatar, message.text);
           dialogue.appendChild(balloonFrame);
@@ -501,10 +525,12 @@ function initialize(layout) {
         {
           const optionClearDialogues = document.getElementById("selection_options_clear_dialogues");
           const optionClearData = document.getElementById("selection_options_clear_data");
+          const optionAutoAdvance = document.getElementById("selection_options_auto_advance");
 
           disableOptionsEvents = true;
           optionClearDialogues.checked = message.clearDialoguesOnPlay;
           optionClearData.checked = message.clearDataOnPlay;
+          optionAutoAdvance.checked = message.autoAdvance;
           disableOptionsEvents = false;
 
           break;
@@ -527,6 +553,7 @@ function initialize(layout) {
 
   const optionClearDialogues = document.getElementById("selection_options_clear_dialogues");
   const optionClearData = document.getElementById("selection_options_clear_data");
+  const optionAutoAdvance = document.getElementById("selection_options_auto_advance");
 
   optionClearDialogues.addEventListener("change", e => {
     if (!disableOptionsEvents) {
@@ -537,6 +564,12 @@ function initialize(layout) {
   optionClearData.addEventListener("change", e => {
     if (!disableOptionsEvents) {
       vscode.postMessage({ updateSetting: "samwise.clearDataOnPlay", value: e.target.checked });
+    }
+  });
+
+  optionAutoAdvance.addEventListener("change", e => {
+    if (!disableOptionsEvents) {
+      vscode.postMessage({ updateSetting: "samwise.autoAdvance", value: e.target.checked });
     }
   });
 

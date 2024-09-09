@@ -102,7 +102,7 @@ namespace Peevo.Samwise
             if (!string.IsNullOrEmpty(attributes))
                 s += "[" + GetAttributesString() + "] ";
 
-            s += Text.Replace("\n", "↵\n");;
+            s += Text.Replace("\n", "↵\n").Replace("#", "##");
 
             return s;
         }

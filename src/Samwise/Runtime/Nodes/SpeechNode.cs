@@ -20,7 +20,7 @@ namespace Peevo.Samwise
 
         public override string PrintPayload()
         {
-            return CharacterId + "> " + Text.Replace("\n", "↵\n");
+            return CharacterId + "> " + Text.Replace("\n", "↵\n").Replace("#", "##");
         }
 
         public override string GenerateUidPreamble(Dialogue dialogue)

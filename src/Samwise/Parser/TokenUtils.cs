@@ -78,7 +78,11 @@ namespace Peevo.Samwise
                             }
 
                             // double ##
-                            position += 2;
+                            position += 1;
+                            sb.Append(text, startPos, position - startPos);
+                            position += 1;
+                            startPos = position;
+
                             break;
                         }
                     case '\r':

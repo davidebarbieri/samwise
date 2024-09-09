@@ -19,23 +19,26 @@ namespace Peevo.Samwise
         public int IntVariablesCount => intVars.Count;
         public int SymbolVariablesCount => symbolVars.Count;
 
-        public bool GetValueBool(string name)
+        public bool GetValueBool(string name, bool defaultValue = false)
         {
-            return boolVars.TryGetValue(name, out var value) && value;
+            if (!boolVars.TryGetValue(name, out var value))
+                return defaultValue;
+            
+            return value;
         }
 
-        public long GetValueInt(string name)
+        public long GetValueInt(string name, long defaultValue = 0)
         {
             if (intVars.TryGetValue(name, out var value))
                 return value;
-            return 0;
+            return defaultValue;
         }
 
-        public string GetValueSymbol(string name)
+        public string GetValueSymbol(string name, string defaultValue = null)
         {
             if (symbolVars.TryGetValue(name, out var value))
                 return value;
-            return null;
+            return defaultValue;
         }
            
         public void SetValueBool(string name, bool value)

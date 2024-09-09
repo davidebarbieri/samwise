@@ -11,6 +11,12 @@ namespace Peevo.Samwise.Test
         }
 
         [Fact]
+        public void TestEscapeCharacter()
+        {
+            TestParseDialogueLines("character> This is a ## test! # woa");
+        }
+
+        [Fact]
         public void TestCaption()
         {
             TestParseDialogueLines("* That was a test!");

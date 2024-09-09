@@ -53,8 +53,8 @@ export class SamwisePlayerViewProvider implements vscode.WebviewViewProvider {
 	private _view?: vscode.WebviewView;
 	private _running: boolean = false;
 
-	public setConfiguration(clearDialoguesOnPlay: boolean, clearDataOnPlay: boolean) {
-		this.postMessage({ command: "setConfiguration", clearDialoguesOnPlay: clearDialoguesOnPlay, clearDataOnPlay: clearDataOnPlay });
+	public setConfiguration(clearDialoguesOnPlay: boolean, clearDataOnPlay: boolean, autoAdvance: boolean) {
+		this.postMessage({ command: "setConfiguration", clearDialoguesOnPlay: clearDialoguesOnPlay, clearDataOnPlay: clearDataOnPlay, autoAdvance: autoAdvance });
 	}
 
 	public onElementSelected(symbol: string, isNode: boolean) {
@@ -206,8 +206,9 @@ export class SamwisePlayerViewProvider implements vscode.WebviewViewProvider {
 							const config = vscode.workspace.getConfiguration();
 							const clearDialoguesOnPlay = config.get<boolean>('samwise.clearDialoguesOnPlay') ?? true;
 							const clearDataOnPlay = config.get<boolean>('samwise.clearDataOnPlay') ?? true;
+							const autoAdvance = config.get<boolean>('samwise.autoAdvance') ?? false;
 
-							this.setConfiguration(clearDialoguesOnPlay, clearDataOnPlay);
+							this.setConfiguration(clearDialoguesOnPlay, clearDataOnPlay, autoAdvance);
 						}
 					case 'advance':
 						{
@@ -304,6 +305,7 @@ export class SamwisePlayerViewProvider implements vscode.WebviewViewProvider {
 						<vscode-checkbox id="selection_options_clear_dialogues">Clear dialogues on start</vscode-checkbox>
 						<vscode-checkbox id="selection_options_clear_data">Clear data on start</vscode-checkbox>
 						<vscode-checkbox checked id="selection_options_skip">Skip pauses</vscode-checkbox>
+						<vscode-checkbox id="selection_options_auto_advance">Auto Advance</vscode-checkbox>
 					</div>
 				</div>
 				<div id="root"><vscode-label class="selectionTextDisabled" id="dialogueplaceholder">No dialogue running</vscode-label></div>

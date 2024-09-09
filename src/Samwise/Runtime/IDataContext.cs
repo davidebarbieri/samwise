@@ -17,13 +17,13 @@ namespace Peevo.Samwise
         int IntVariablesCount { get; }
         int SymbolVariablesCount { get; }
 
-        bool GetValueBool(string name);
+        bool GetValueBool(string name, bool defaultValue = false);
         void SetValueBool(string name, bool value);
         void ClearValueBool(string name);
-        long GetValueInt(string name);
+        long GetValueInt(string name, long defaultValue = 0);
         void SetValueInt(string name, long value);
         void ClearValueInt(string name);
-        string GetValueSymbol(string name);
+        string GetValueSymbol(string name, string defaultValue = null);
         void SetValueSymbol(string name, string value);
         void ClearValueSymbol(string name);
 

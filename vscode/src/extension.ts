@@ -750,7 +750,8 @@ export function activate(context: vscode.ExtensionContext) {
 	//	{language: "samwise"}, new SamwiseDefinitionProvider()));
 
 	vscode.workspace.onDidChangeConfiguration(e => {
-		if (e.affectsConfiguration('samwise.clearDialoguesOnPlay') || e.affectsConfiguration('samwise.clearDataOnPlay')) {
+		if (e.affectsConfiguration('samwise.clearDialoguesOnPlay') || e.affectsConfiguration('samwise.clearDataOnPlay')
+			|| e.affectsConfiguration('samwise.autoAdvance')) {
 			updateConfigurationChecks();
 		}
 	});
@@ -781,8 +782,9 @@ function updateConfigurationChecks() {
 	const config = vscode.workspace.getConfiguration();
 	const clearDialoguesOnPlay = config.get<boolean>('samwise.clearDialoguesOnPlay') ?? true;
 	const clearDataOnPlay = config.get<boolean>('samwise.clearDataOnPlay') ?? true;
+	const autoAdvance = config.get<boolean>('samwise.autoAdvance') ?? false;
 
-	playerView.setConfiguration(clearDialoguesOnPlay, clearDataOnPlay);
+	playerView.setConfiguration(clearDialoguesOnPlay, clearDataOnPlay, autoAdvance);
 }
 
 function refreshEditingStatus() {

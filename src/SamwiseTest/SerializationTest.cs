@@ -148,7 +148,8 @@ character> End!
             var newDialogue =
 @"character> This is a test!
 character:
-    - Oh no
+    - Why not
+        | Oh no
         character> anyway...
         character> bla bla replaced
     - This is terrible
