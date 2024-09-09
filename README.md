@@ -9,6 +9,23 @@ The objective of this tool is to empower any writer or designer to intricately c
 2. A runtime library for parsing such files and supporting the execution of dialogues in a videogame (or any other interactive software);
 3. A Visual Studio Code extension that assists the developer in the task of writing dialogues and testing them quickly.
    
+## Features
+
+These are the main language features:
+- Text lines and captions
+- Branching narrative
+- Variables and Conditional blocks
+- Labels and Gotos
+- Time-based choices
+- Parallel and interruptible dialogues (Fork, Join, Cancel nodes)
+   - (e.g. Oxenfree-like narrative)
+- Asynchronous flow (Await node)
+   - It can be used to design your narrative top-down, reuse text lines, etc. 
+- Challenge Checks
+   - (e.g. Disco Elysium-like skill checks)
+- Metadata (IDs, tags, comments)
+- Custom code
+
 ## A Basic Dialogue in Samwise
 
 ```samwise
