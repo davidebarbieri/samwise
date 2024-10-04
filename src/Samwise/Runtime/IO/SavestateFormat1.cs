@@ -65,7 +65,7 @@ namespace Peevo.Samwise
                 writer.Write((long)context.Uid);
                 writer.Write((bool)isLocked);
                 writer.Write((string)context.BranchName ?? "");
-                writer.Write((string)(externalContextResolver == null || context.ExternalContext != null ? "" : externalContextResolver.GetUIDFromObject(context.ExternalContext)));
+                writer.Write((string)(externalContextResolver == null || context.ExternalContext == null ? "" : externalContextResolver.GetUIDFromObject(context.ExternalContext)));
                 
                 context.GetInternalState(out DialogueStatus status, out IDialogueNode reenterNode, out IDialogueNode forkedFromNode, 
                     out IOption challengedOption, out DialogueContext waitingForJoin);
