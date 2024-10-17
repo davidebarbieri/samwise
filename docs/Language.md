@@ -501,9 +501,9 @@ It is possible to add comments between nodes using the following syntax:
 ```
 The parser will skip such lines for good.
 
-## 7 Tags and Comments
+## 7 Tags
 
-Meaningful metadata can be incorporated into dialogue nodes by utilizing tags and comments.
+Meaningful metadata can be incorporated into dialogue nodes by utilizing tags.
 
 ```
 character> This is a random line # tag1, tag2, "This is comment 1", "Comment 2"
@@ -511,18 +511,20 @@ character> This is a random line # tag1, tag2, "This is comment 1", "Comment 2"
 
  Tags, such as #happy and #skippable, serve as markers that can be leveraged by the game's code to implement tailored behaviors associated with specific nodes. For instance, these tags may trigger unique character reactions or prompt specific in-game events. 
  
- Additionally, comments offer a valuable space for insights related to a dialogue line. Use comments to provide voiceover tips, offer guidance for effective delivery, or even explain the nuances of a particular word to assist translators.
+ Additionally, tags offer a valuable space for insights related to a dialogue line. Use comments to provide voiceover tips, offer guidance for effective delivery, or even explain the nuances of a particular word to assist translators.
 
-Tags and comments can be added to Dialogue Titles block too:
+Tags can be added to Dialogue Titles block too:
 ```
 § Title # tag1, tag2, "Comment"
 ```
 
 # Samwise Grammar
 
-The Samwise parser is not generated from a formal grammar but is hand-written. In this section, just for descriptive purposes, I add a possible grammar definition. However, the recommended way to parse a Samwise file is by using the provided runtime - since rewriting a parser from the grammar reference alone (instead of taking as reference the official parser's code) could lead to minor incompatibilities.
+The Samwise parser is not generated from a formal grammar but is hand-written. In this section, just for descriptive purposes, I add a possible grammar definition. However, the recommended way to parse a Samwise file is by using the provided runtime - since rewriting a parser from the grammar reference alone (instead of taking as reference the official parser's code) could lead to incompatibilities.
 
-!> Warning: the following grammar definition is just for descriptive purposes. It wasn't tested in any parser generator
+!> Warning: the following grammar definition is just for descriptive purposes. It wasn't tested in any parser generator. 
+
+!> Warning: NOT UPDATED TO REFLECT NEW FEATURES
 
 ```
 NAME                : [a-zA-Z0-9_\-];
@@ -649,9 +651,9 @@ wait_node           : "wait " TIME;
 tags                : '#' tags_elements;
 tags_elements       : tag (',' tags_elements)?;
 
-tag                 : NAME | QUOTED_STRING | named_tag | named_comment;
+tag                 : NAME | QUOTED_STRING | named_tag | named_quoted_tag;
 named_tag           : NAME '=' NAME;
-named_comment       : NAME '=' QUOTED_STRING;
+named_quoted_tag    : NAME '=' QUOTED_STRING;
 
 boolean_expression  : "true" 
                     | "false" 

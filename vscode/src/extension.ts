@@ -812,6 +812,13 @@ function processResult(editor: vscode.TextEditor, uri: vscode.Uri, filename: str
 			});
 		}
 
+		if (res.warnings) {
+			(<ErrorInfo[]>res.warnings).forEach(warning => {
+				let range = editor.document.lineAt(warning.line - 1).range;
+				diagnostics.push(new vscode.Diagnostic(range, warning.message, vscode.DiagnosticSeverity.Warning));
+			});
+		}
+
 		diagnosticCollection.set(uri, diagnostics);
 	}
 

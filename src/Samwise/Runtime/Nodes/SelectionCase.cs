@@ -5,7 +5,7 @@ namespace Peevo.Samwise
     public class SelectionCase : SequenceBlock, ICase
     {
         public IBoolValue Condition { get; set; }
-        public TagData TagData { get; set; }
+        public ITagData TagData { get; set; }
 
         public int SourceLine {get; internal set;}
         public int SourceLineStart => SourceLine;

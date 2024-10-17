@@ -6,7 +6,7 @@ namespace Peevo.Samwise
     {
         public IBoolValue Condition { get; set; }
         public IIntegerValue Score { get; set; }
-        public TagData TagData { get; set; }
+        public ITagData TagData { get; set; }
         public int ProbabilityFactor;
 
         public int SourceLine {get; internal set;}

@@ -4,12 +4,12 @@ namespace Peevo.Samwise
 {
     public class CheckResultBlock : SequenceBlock
     {
-        public TagData TagData { get; set; }
+        public ITagData TagData { get; set; }
         public bool Pass { get; private set; }
 
         public new CheckNode Parent => (CheckNode)base.Parent;
 
-        public CheckResultBlock(bool pass, CheckNode parent, TagData tagData) : base(parent)
+        public CheckResultBlock(bool pass, CheckNode parent, ITagData tagData) : base(parent)
         {
             Pass = pass;
             TagData = tagData;

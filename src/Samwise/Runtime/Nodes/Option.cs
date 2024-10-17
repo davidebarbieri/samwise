@@ -9,7 +9,7 @@ namespace Peevo.Samwise
 
         public string Text { get; set; }
         public IBoolValue Condition { get; set; }
-        public TagData TagData { get; set; }
+        public ITagData TagData { get; set; }
         public bool MuteOption => OptionGroup.MuteOption;
         public bool ReturnOption => OptionGroup.ReturnOption;
         public double? Time => OverriddenTime.HasValue ? OverriddenTime : Parent.Time; // this time or parent's time

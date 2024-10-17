@@ -7,7 +7,7 @@ namespace Peevo.Samwise
     {
         public string Label { get; set; }
         public IBoolValue Condition { get; set; }
-        public TagData TagData { get; set; }
+        public ITagData TagData { get; set; }
         public string PreCheck { get; set; }
         public IDialogueBlock Block { get; set; }
         public int BlockId { get; set; }
@@ -73,56 +73,54 @@ namespace Peevo.Samwise
             return GetTagsString(TagData);
         }
 
-        public static string GetTagsString(TagData tagsData)
+        public static string GetTagsString(ITagData tagsData)
         {
-            if (tagsData == null || !tagsData.HasData())
+            if (tagsData == null || !tagsData.HasTags())
                 return "";
 
             string tagsString = " # ";
 
             bool firstTag = true;
-            if (tagsData.Tags != null)
-                foreach (var tag in tagsData.Tags)
-                {
-                    if (!firstTag)
-                        tagsString += ", ";
-
-                    firstTag = false;
-
-                    tagsString += tag;
-                }
                 
-            if (tagsData.Comments != null)
-                foreach (var comment in tagsData.Comments)
-                {
-                    if (!firstTag)
-                        tagsString += ", ";
-
-                    firstTag = false;
-
-                    tagsString += "\"" + comment + "\"";
-                }
-
             // Named tags
-            foreach (var tag in tagsData.GetNamedTags())
+            foreach (var tag in tagsData.GetTags())
             {
                 if (!firstTag)
                     tagsString += ", ";
 
                 firstTag = false;
 
-                tagsString += tag.Item1 + "=" + tag.Item2;
-            }
+                if (tag.Value == null)
+                {
+                    bool hasNonNameCharacters = false;
+                    for (int i=0,count=tag.Key.Length;i<count;i++)
+                    {
+                        if (!TokenUtils.IsNameChar(tag.Key[i]))
+                        {
+                            hasNonNameCharacters = true;
+                            break;
+                        }
+                    }
 
-            // Named comments
-            foreach (var comment in tagsData.GetNamedComments())
-            {
-                if (!firstTag)
-                    tagsString += ", ";
+                    if (hasNonNameCharacters)
+                        tagsString += "\"" + tag.Key + "\"";
+                    else
+                        tagsString += tag.Key;
+                }
+                else
+                {
+                    bool hasNonNameCharacters = false;
+                    for (int i=0,count=tag.Value.Length;i<count;i++)
+                    {
+                        if (!TokenUtils.IsNameChar(tag.Value[i]))
+                        {
+                            hasNonNameCharacters = true;
+                            break;
+                        }
+                    }
 
-                firstTag = false;
-
-                tagsString += comment.Item1 + "=" + "\"" + comment.Item2 + "\"";
+                    tagsString += tag.Key + "=" + (hasNonNameCharacters ? ("\"" + tag.Value + "\"") :  tag.Value);
+                }
             }
 
             return tagsString;

@@ -7,7 +7,7 @@ namespace Peevo.Samwise
     {
         public string Title;
         public string Label;
-        public TagData TagData { get; set; }
+        public ITagData TagData { get; set; }
 
         public NextBlockPolicy NextBlockPolicy => NextBlockPolicy.End;
         public IBlockContainerNode Parent => null;
@@ -161,7 +161,7 @@ namespace Peevo.Samwise
             else
                 o =  "§ (" + Label +") " + Title;
 
-            if (TagData != null && TagData.HasData())
+            if (TagData != null && TagData.HasTags())
             {
                 o += DialogueNode.GetTagsString(TagData);
             }

@@ -173,7 +173,7 @@ namespace Peevo.Samwise
             }
             while (moreAdornment);
 
-            if (tempTagData != null && tempTagData.HasData()) dialogue.TagData = tempTagData;
+            if (tempTagData != null && tempTagData.HasTags()) dialogue.TagData = tempTagData;
 
             if (!res) PushError(line, "Can't parse dialogue title");
 
@@ -1310,7 +1310,7 @@ namespace Peevo.Samwise
                         if (tagData == null)
                             tagData = new TagData();
 
-                        tagData.AddComment(stringValue);
+                        tagData.AddTag(stringValue);
                     }
                     else
                     {
@@ -1327,16 +1327,10 @@ namespace Peevo.Samwise
                             {
                                 if (TokenUtils.ParseDoubleQuotedString(text, ref position, line, out stringValue, out error))
                                 {
-                                    if (tag.Equals("id"))
-                                    {
-                                        PushError(line, "cannot use the name 'id' for comments");
-                                        return false;
-                                    }
-
                                     if (tagData == null)
                                         tagData = new TagData();
 
-                                    tagData.SetNamedComment(tag, stringValue);
+                                    tagData.AddTag(tag, stringValue);
                                 }
                                 else
                                 {
@@ -1348,7 +1342,7 @@ namespace Peevo.Samwise
                                         if (tagData == null)
                                             tagData = new TagData();
                                         
-                                        tagData.SetNamedTag(tag, value);
+                                        tagData.AddTag(tag, value);
                                     }
                                     else
                                     {

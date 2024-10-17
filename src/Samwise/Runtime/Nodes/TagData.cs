@@ -4,126 +4,56 @@ using System.Collections.Generic;
 
 namespace Peevo.Samwise
 {
-    public class TagData
+    public interface ITagData
     {
-        public List<string> Tags { get; private set; }
-        public List<string> Comments { get; private set; }
+        bool HasTags();
 
-        public bool HasData()
+        bool HasTag(string tag);
+        
+        // if value is null, tag is "name", otherwise is "name=value"
+        void AddTag(string name, string value = null);
+
+        bool RemoveTag(string name);
+
+        string GetTagValue(string name);
+
+        IEnumerable<(string Key, string Value)> GetTags();
+
+        void Clear();
+    }
+
+    public class TagData : Dictionary<string, string>, ITagData
+    {
+        public bool HasTags()
         {
-            return (Tags != null && Tags.Count > 0) ||
-                (Comments != null && Comments.Count > 0) ||
-                (namedTags != null && namedTags.Count > 0) ||
-                (namedComments != null && namedComments.Count > 0);
+            return Count > 0;
         }
 
         public bool HasTag(string tag)
         {
-            if (Tags == null)
-                return false;
-            
-            return Tags.Contains(tag);
+            return ContainsKey(tag);
+        }
+        
+        // if value is null, tag is "name", otherwise is "name=value"
+        public void AddTag(string name, string value = null)
+        {
+            this[name] = value;
         }
 
-        public void AddComment(string comment)
+        public bool RemoveTag(string name)
         {
-            if (Comments == null)
-                Comments = new List<string>();
-
-            Comments.Add(comment);
+            return Remove(name);
         }
 
-        public void AddTag(string tag)
+        public string GetTagValue(string name)
         {
-            if (Tags == null)
-                Tags = new List<string>();
-
-            Tags.Add(tag);
+            return TryGetValue(name, out var value) ? value : null;
         }
 
-        public bool RemoveTag(string tag)
+        public IEnumerable<(string, string)> GetTags()
         {
-            if (Tags != null)
-            {
-                return Tags.Remove(tag);
-            }
-            return false;
-        }
-
-        public string GetNamedTag(string name)
-        {
-            if (namedTags == null)
-                return null;
-
-            return namedTags.TryGetValue(name, out var value) ? value : null;
-        }
-
-        // if value is null, then tag is removed
-        public void SetNamedTag(string name, string value)
-        {
-            if (value == null)
-            {
-                RemoveNamedTag(name);
-                return;
-            }
-
-            if (namedTags == null)
-                namedTags = new Dictionary<string, string>();
-
-            namedTags[name] = value;
-        }
-
-        public bool RemoveNamedTag(string name)
-        {
-            if (namedTags != null)
-                return namedTags.Remove(name);
-            return false;
-        }
-
-        public string GetNamedComment(string name)
-        {
-            if (namedComments == null)
-                return null;
-
-            return namedComments.TryGetValue(name, out var value) ? value : null;
-        }
-
-        // if value is null, then tag is removed
-        public void SetNamedComment(string name, string value)
-        {
-            if (namedComments == null)
-                namedComments = new Dictionary<string, string>();
-
-            namedComments[name] = value;
-        }
-
-        public IEnumerable<(string, string)> GetNamedTags()
-        {
-            if (namedTags == null)
-                yield break;
-
-            foreach (var i in namedTags)
+            foreach (var i in this)
                 yield return (i.Key, i.Value);
         }
-
-        public IEnumerable<(string, string)> GetNamedComments()
-        {
-            if (namedComments == null)
-                yield break;
-
-            foreach (var i in namedComments)
-                yield return (i.Key, i.Value);
-        }
-
-        public void Clear()
-        {
-            Tags = null;
-            namedTags = null;
-            Comments = null;
-            namedComments = null;
-        }
-
-        Dictionary<string, string> namedTags;
-        Dictionary<string, string> namedComments;
     }
 }

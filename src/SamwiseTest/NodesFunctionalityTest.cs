@@ -218,15 +218,12 @@ sam> Yeah, I know! # wise, sam=wise, ""woa"", comment=""that's incredible""
                 (a) => Assert.Equal("sam said \"Yeah, I know!\"", a)
                 );
 
-            Assert.NotEmpty(output[0].GetChild(1).TagData.Tags);
-            Assert.NotEmpty(output[0].GetChild(1).TagData.GetNamedTags());
-            Assert.NotEmpty(output[0].GetChild(1).TagData.Comments);
-            Assert.NotEmpty(output[0].GetChild(1).TagData.GetNamedComments());
+            Assert.True(output[0].GetChild(1).TagData.HasTags());
 
-            Assert.Equal("wise", output[0].GetChild(1).TagData.Tags[0]);
-            Assert.Equal("woa", output[0].GetChild(1).TagData.Comments[0]);
-            Assert.Equal("wise", output[0].GetChild(1).TagData.GetNamedTag("sam"));
-            Assert.Equal("that's incredible", output[0].GetChild(1).TagData.GetNamedComment("comment"));
+            Assert.True(output[0].GetChild(1).TagData.HasTag("wise"));
+            Assert.True(output[0].GetChild(1).TagData.HasTag("woa"));
+            Assert.Equal("wise", output[0].GetChild(1).TagData.GetTagValue("sam"));
+            Assert.Equal("that's incredible", output[0].GetChild(1).TagData.GetTagValue("comment"));
         }
 
         [Fact]

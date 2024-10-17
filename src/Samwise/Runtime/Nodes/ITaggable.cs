@@ -4,7 +4,7 @@ namespace Peevo.Samwise
 {
     public interface ITaggable
     {
-        TagData TagData { get; set; }
+        ITagData TagData { get; set; }
     }
 
     public static class ITaggableMethods
@@ -22,7 +22,7 @@ namespace Peevo.Samwise
             if (taggable.TagData == null)
                 return null;
 
-            return taggable.TagData.GetNamedTag("id");
+            return taggable.TagData.GetTagValue("id");
         }
 
         public static void SetID(this ITaggable taggable, string id)
@@ -30,7 +30,7 @@ namespace Peevo.Samwise
             if (taggable.TagData == null)
                 taggable.TagData = new TagData();
 
-           taggable.TagData.SetNamedTag("id", id);
+           taggable.TagData.AddTag("id", id);
         }
     }
 }
