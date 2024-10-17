@@ -90,7 +90,7 @@ namespace Peevo.Samwise
 
                 firstTag = false;
 
-                if (tag.Value == null)
+                if (string.IsNullOrEmpty(tag.Value))
                 {
                     bool hasNonNameCharacters = false;
                     for (int i=0,count=tag.Key.Length;i<count;i++)
