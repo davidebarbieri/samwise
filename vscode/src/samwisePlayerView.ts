@@ -187,7 +187,14 @@ export class SamwisePlayerViewProvider implements vscode.WebviewViewProvider {
 				const settingKey = message.updateSetting;
 				const newValue = message.value;
 
-				vscode.workspace.getConfiguration().update(settingKey, newValue, vscode.ConfigurationTarget.Workspace);
+				if (vscode.workspace.workspaceFolders)
+				{
+					vscode.workspace.getConfiguration().update(settingKey, newValue, vscode.ConfigurationTarget.Workspace);
+				}
+				else
+				{
+					vscode.workspace.getConfiguration().update(settingKey, newValue, vscode.ConfigurationTarget.Global);
+				}
 			}
 			else {
 				switch (message.command) {
