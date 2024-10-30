@@ -32,7 +32,7 @@ i.e.:
 § Dialogue 1
 ```samwise
 player:
-    = Merchant.options
+    {paste Merchant.options}
     - What a wonderful night
         ...
     - How about a drink or two?
@@ -48,6 +48,26 @@ player:
 ```
 
 would duplicate nodes from Merchant.options and paste them in the first dialogue.
+
+### !! Reusable Dialogues
+
+Possibly apply the Reusable Options concept to any dialogue node.
+
+```samwise
+§ Dialogue 1
+player> bla bla
+{paste Dialogue2}
+{paste Dialogue3.label}
+
+§ (Dialogue2)
+...
+
+§ (Dialogue3)
+(label) [bCondition] player> woa!
+```
+
+The difference from using a fork/await is that the nodes are actually pasted in the dialogue,
+and executed like any other dialogue node (e.g. local variables are reachable).
 
 ### !! Code
 
