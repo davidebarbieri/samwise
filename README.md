@@ -1,6 +1,7 @@
-# Samwise Dialogue System
-
-**Samwise™** is a game development tool for writing interactive dialogues.
+<img align="left" src="https://github.com/davidebarbieri/samwise/blob/main/docs/logo/icon.svg?raw=true" alt="FPGA & Socket" width="90"/>
+<h1>Samwise Dialogue System<br><br></h1>
+  
+**Samwise™* Dialogue System* is a game development tool for writing interactive dialogues.
 
 The objective of this tool is to empower any writer or designer to intricately craft branching narratives, offering extensive control over dialogue scripting to create truly natural interactions essential for immersive gaming experiences.
 

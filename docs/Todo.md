@@ -22,7 +22,54 @@ I want to add an additional alternative syntax for symbol-based nodes:
 
 ## Features
 
-## !! Code
+### !! Reusable Options
+
+I need to find a good syntax (and behavior) to reference a list of options from another choice node. This will simplify
+the implementation of multiple dialogues that include the same options, removing the need to copy-paste them over and over.
+
+i.e.:
+
+§ Dialogue 1
+```samwise
+player:
+    {paste Merchant.options}
+    - What a wonderful night
+        ...
+    - How about a drink or two?
+
+§ Merchant
+(options) player:
+    <-- Buy
+        ...
+    <-- Sell
+        ...
+    - I'm selling these fine leather jackets
+        ...
+```
+
+would duplicate nodes from Merchant.options and paste them in the first dialogue.
+
+### !! Reusable Dialogues
+
+Possibly apply the Reusable Options concept to any dialogue node.
+
+```samwise
+§ Dialogue 1
+player> bla bla
+{paste Dialogue2}
+{paste Dialogue3.label}
+
+§ (Dialogue2)
+...
+
+§ (Dialogue3)
+(label) [bCondition] player> woa!
+```
+
+The difference from using a fork/await is that the nodes are actually pasted in the dialogue,
+and executed like any other dialogue node (e.g. local variables are reachable).
+
+### !! Code
 
 - integer expressions
     - module "%" "%%"
@@ -35,14 +82,14 @@ I want to add an additional alternative syntax for symbol-based nodes:
 
 - not sure if I want to introduce fixed/floating point numbers
 
-## Assert
+### Assert
 
 Skipped in release mode
 {assert <boolean expression>}
 
 onAssertFailed
 
-## Breakpoint (?)
+### Breakpoint (?)
 
 Skipped in release mode
 
@@ -58,7 +105,7 @@ RemoveBreakpoint(Node)
 
 onBreakpoint
 
-## Additional Selection Nodes
+### Additional Selection Nodes
 
 ## VS-Code Extension improvements
 
