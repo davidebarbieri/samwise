@@ -56,7 +56,7 @@ namespace Peevo.Samwise
             CharacterId = characterId;
         }
         
-        public IEnumerator<IOption> GetAvailableOptions(IDialogueContext context)
+        public IEnumerable<IOption> GetAvailableOptions(IDialogueContext context)
         {
             foreach (var group in optionsGroups)
             {

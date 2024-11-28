@@ -9,7 +9,7 @@ namespace Peevo.Samwise
         int OptionsCount { get; }
         Option GetOption(int index);
 
-        IEnumerator<IOption> GetAvailableOptions(IDialogueContext context);
+        IEnumerable<IOption> GetAvailableOptions(IDialogueContext context);
         string CharacterId { get; }
         double? Time { get; }
 
