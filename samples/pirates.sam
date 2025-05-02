@@ -1,0 +1,222 @@
+§ Talk_ImportantPirates
+
+[!General.bTalkedAboutTrials]
+    // Never talked about trials
+    [!Quests.bWonAgainstCarla & !Quests.bFoundIdol & !Quests.bFoundTreasure]
+        // Never completed a trial
+        Pirate_B> What be ye wantin', boy?
+        Guybrush:
+            - I mean to kill you all!
+
+            - I want to be a pirate.
+                { General.bTalkedAboutTrials = true }
+                Pirate_A> So what?
+                Pirate_B> Why bother us?
+                Pirate_C> Hey, don't forget we're short on help because of this whole LeChuck thing.
+                Pirate_A> So?
+                Pirate_C> So, no pirates means no swag, and no swag means no grog,↵
+                    and we're getting dangerously low on grog…
+                { wait 1s }
+                Pirate_A> Hmm…
+                Pirate_A> Do you have any special skills?
+                Guybrush> I can hold my breath for ten minutes!
+                Pirate_A> Well…
+                Pirate_A> All right, but you don't become a pirate just by ASKING.
+                Pirate_C> You'll have to go through…
+                =>
+                    Pirate_A> The three trials!
+                =>
+                    Pirate_B> The three trials!
+                =>
+                    Pirate_C> The three trials!
+                <=
+                Guybrush> Er…
+                Guybrush> What three trials are those?
+                { wait 1s }
+                Pirate_B> There are three trials every pirate must pass.
+                Pirate_A> You must master the sword…
+                Pirate_B> …and the art of thievery…
+                Pirate_C> …and the quest.
+                { wait 1s }
+                Pirate_B> The what?
+                { wait 1s }
+                Pirate_C> Treasure huntin', ya sea urchin!
+                { wait 1s }
+                Pirate_B> Right.
+                Pirate_B> You must prove yourself in each of these three areas:
+                Pirate_B> swordplay, thievery, and, er, treasure huntery;
+                Pirate_B> then return with proof that you've done it.
+                { wait 1s }
+                Pirate_A> And then ye must drink grog with us!!
+                =>
+                    Pirate_A> GROG!!!
+                =>
+                    Pirate_B> GROG!!!
+                =>
+                    Pirate_C> GROG!!!
+                <=
+                -> informations
+
+            - I want to be a fireman.
+
+        Pirate_A> Get lost, boy, you bother us.
+        -> end
+    [else]
+        // If I already completed one trial
+        { General.bTalkedAboutTrials = true }
+        Pirate_B> You must have heard about the three pirate trials…
+        -> informations
+
+[else Quests.iReportedTrials == 2]
+    // 2 Trials done
+    Pirate_B> Welcome, young friend.
+    [!Quests.bReportedSwordFight]
+        Pirate_B> Have you beaten the Sword Master yet?
+    [else !Quests.bReportedIdol]
+        Pirate_B> Have you stolen the idol yet?
+    [else !Quests.bReportedTreasure]
+        Pirate_B> Have you found the treasure yet?
+
+[else Quests.bReportedIdol]
+    Pirate_B> How do you fare, thief?
+
+[else Quests.bReportedSwordFight]
+    Pirate_B> How do you fare, swordsman?
+
+[else Quests.bReportedTreasure]
+    Pirate_B> How do you fare, gold finder?
+
+[else]
+    Pirate_B> Well, if it isn't the boy who wants to be a pirate.
+    Pirate_B> How do you fare on your quests?
+
+(informations) Guybrush:
+    <- [once, !Quests.bWonAgainstCarla] Tell me more about mastering the sword.
+        | [!Quests.bWonAgainstCarla] Tell me again about mastering the sword.
+        Pirate_A> First, get ye a sword.
+        Pirate_A> You must seek out and defeat the Sword Master.
+        Pirate_A> Someone in town can probably direct you.
+        [once] { wait 1s }
+            Pirate_A> Oh!
+            Pirate_A> You'll want to find someone to train you first.
+            Pirate_C> Ha ha.
+            Pirate_C> Imagine trying to take on the Sword Master↵
+                without any training!
+            <=> ImportantPirates_Yarr
+        [else]
+            Pirate_C> And get yourself trained first.
+
+    <- [once(Quests.bReportedSwordFight), Quests.bWonAgainstCarla] I'm the deadliest scalawag what ever swung a sword!
+        (report_sword) { Quests.bReportedSwordFight = true }
+        { Quests.iReportedTrials += 1 }
+        Pirate_A> Well, defeated the Sword Master, did ye?
+        Pirate_A> Ye're a strong fellow!
+        Pirate_A> Ye may keep the stylish T-shirt.  We have enough.
+
+    <- [once, !Quests.bFoundIdol] Tell me more about mastering the art of thievery.
+        | [!Quests.bFoundIdol] Tell me again about pilfering the idol.
+        [once] Pirate_B> We want you to procure a small item for us…
+            Pirate_A> The Idol of Many Hands…
+            Pirate_C> …in the Governor's mansion!
+        Pirate_B> The Governor keeps the Idol o' Many Hands in↵
+            a display case in the mansion outside of town.
+        Pirate_A> You'll have to get past the guards, naturally.
+        Pirate_C> The tricky part will be getting past the dogs outside.
+        Pirate_A> They're a particularly vicious breed…
+        Pirate_A> …you might be able to drug them or something.
+
+    <- [once(Quests.bReportedIdol), Quests.bFoundIdol] I'm the sneakiest footpad in these isles!
+        (report_idol) { Quests.bReportedIdol = true }
+        { Quests.iReportedTrials += 1 }
+        Pirate_A> Ah, the Idol of Many Hands!
+        Pirate_A> Ye're a brave lad!
+        Pirate_A> And thank ye for stealing it for us.
+
+    <- [once, !Quests.bFoundTreasure] Tell me more about treasure hunting.
+        | [!Quests.bFoundTreasure] Tell me again about the Lost Treasure.
+        [once] Pirate_C> Legend has it that there's a treasure buried↵
+            here on the island…
+        Pirate_A> All you must do is find the Legendary Lost↵
+            Treasure of Mêlée Island™ and bring it back here.
+        [once] { wait 0.3s }
+            Guybrush> Should I have a map or something?
+            { wait 1s }
+            Pirate_A> Ye can hardly expect to find a treasure without a map!
+        Pirate_B> …and don't forget:
+        Pirate_B> X marks the spot!
+        <=> ImportantPirates_Yarr
+
+    <- [once(Quests.bReportedTreasure), Quests.bFoundTreasure] I found your 'legendary Lost Treasure'.
+        (report_treasure) { Quests.bReportedTreasure = true }
+        { Quests.iReportedTrials += 1 }
+        Pirate_A> Discovered the Lost Treasure, eh?
+        Pirate_A> Ye're a clever boy!
+        Pirate_A> Ye may keep the chic T-shirt. We have plenty.
+
+    <- [once] You're a bunch of foul-smelling, grog-swilling pigs!
+        { wait 1s }
+        Pirate_A> To be a pirate ye must also be a foul-smelling,↵
+            grog-swilling pig.
+
+    <- [once] What's in that grog stuff, anyway?
+        Pirate_B> Grog is a secret mixture which contains one or more of the following:
+        Pirate_A> kerosene
+        Pirate_B> propylene glycol
+        Pirate_C> artificial sweeteners
+        Pirate_A> sulphuric acid
+        Pirate_B> rum
+        Pirate_C> acetone
+        Pirate_A> red dye no.2
+        Pirate_B> scumm
+        Pirate_C> axle grease
+        Pirate_A> battery acid
+        Pirate_B> and/or pepperoni
+        Pirate_B> As you can probably imagine, it's one of the most caustic,↵
+            volatile substances known to man.
+        Pirate_A> The stuff eats right through these mugs and the cook↵
+            is losing a fortune replacing them.
+        <=> ImportantPirates_Yarr
+
+
+    - I'll just be running along now.
+        Pirate_A> Leave us to our grog.
+        Pirate_B> Come back later and tell us how ye're doing.
+
+§ ImportantPirates_Yarr
+=>
+    Pirate_A> Har Har Har
+=>
+    Pirate_B> Har Har Har
+=>
+    Pirate_C> Har Har Har
+<=
+
+§ ImportantPirates_Indirect_Trial_Talk
+Pirate_B> I see you've heard about the three pirate trials…
+
+§ ImportantPirates_Already_Seen
+Pirate_A> Yes, yes, we've seen that.
+
+§ Give_ImportantPirates_Idol
+[Quests.bReportedIdol] 
+    <=> ImportantPirates_Already_Seen
+    -> Talk_ImportantPirates.informations
+[else]
+    [once(General.bTalkedAboutTrials)] <=> ImportantPirates_Indirect_Trial_Talk
+    -> Talk_ImportantPirates.report_idol
+
+§ Give_ImportantPirates_TreasureShirt
+[Quests.bReportedTreasure] 
+    <=> ImportantPirates_Already_Seen
+    -> Talk_ImportantPirates.informations
+[else]
+    [once(General.bTalkedAboutTrials)] <=> ImportantPirates_Indirect_Trial_Talk
+    -> Talk_ImportantPirates.report_treasure
+
+§ Give_ImportantPirates_SwordShirt
+[Quests.bReportedSwordFight] 
+    <=> ImportantPirates_Already_Seen
+    -> Talk_ImportantPirates.informations
+[else]
+    [once(General.bTalkedAboutTrials)] <=> ImportantPirates_Indirect_Trial_Talk
+    -> Talk_ImportantPirates.report_sword
