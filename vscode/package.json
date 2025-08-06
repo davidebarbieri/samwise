@@ -83,18 +83,21 @@
   	  	  	  	  	"when": "samwise.isEditingFile",
   	  	  	  	  	"type": "webview",
   	  	  	  	  	"id": "samwise.tool",
-  	  	  	  	  	"name": "Toolbox"
+  	  	  	  	  	"name": "Toolbox",
+  	  	  	  	  	"icon": "images/icon-toolbox.png"
   	  	  	  	},
   	  	  	  	{
   	  	  	  	  	"when": "samwise.isEditingFile",
   	  	  	  	  	"type": "webview",
   	  	  	  	  	"id": "samwise.player",
-  	  	  	  	  	"name": "Player"
+  	  	  	  	  	"name": "Player",
+  	  	  	  	  	"icon": "images/icon-player.png"
   	  	  	  	},
   	  	  	  	{
   	  	  	  	  	"when": "samwise.isEditingFile",
   	  	  	  	  	"id": "samwise.data",
-  	  	  	  	  	"name": "Data"
+  	  	  	  	  	"name": "Data",
+  	  	  	  	  	"icon": "images/icon-data.png"
   	  	  	  	}
   	  	  	]
   	  	},

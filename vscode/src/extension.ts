@@ -9,6 +9,7 @@ import { SamwiseDataViewProvider } from './samwiseDataView';
 import { SamwiseCompletionItemProvider } from './samwiseCompletion';
 import { SamwiseDefinitionProvider } from './samwiseDefinitions';
 import { SamwiseCodelensProvider } from './samwiseCodelens';
+import { SamwiseFoldingRangeProvider, IndentFoldingRangeProvider } from './samwiseFolding';
 import { SamwiseHoverProvider } from './samwiseHover';
 import { HideMetaState } from './samwiseDecoration';
 import * as decoration from './samwiseDecoration';
@@ -740,6 +741,11 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(vscode.languages.registerCodeLensProvider(
 		{ language: "samwise" }, new SamwiseCodelensProvider()));
+		
+	context.subscriptions.push(vscode.languages.registerFoldingRangeProvider(
+		{ language: "samwise" }, new SamwiseFoldingRangeProvider()));
+	context.subscriptions.push(vscode.languages.registerFoldingRangeProvider(
+		{ language: "samwise" }, new IndentFoldingRangeProvider()));
 
 	context.subscriptions.push(vscode.languages.registerHoverProvider(
 		{ language: "samwise" }, new SamwiseHoverProvider()));

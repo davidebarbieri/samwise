@@ -134,8 +134,6 @@ export function refreshCodeDecoration() {
 		return;
 	}
 
-	let sourceCode = editor.document.getText();
-
 	let topTitlesArray: vscode.DecorationOptions[] = [];
 	let titlesArray: vscode.DecorationOptions[] = [];
 	let endNodesArray: vscode.DecorationOptions[] = [];
@@ -143,11 +141,11 @@ export function refreshCodeDecoration() {
 	let partialHideArray: vscode.DecorationOptions[] = [];
 	let disableArray: vscode.DecorationOptions[] = [];
 
-	const sourceCodeArr = sourceCode.split('\n');
-
 	let prevWasTitle = false;
 	//let prevDialogue = "";
-	for (let line = 0; line < sourceCodeArr.length; line++) {
+
+	const document = editor.document;
+	for (let line = 0; line < document.lineCount; line++) {
 		let filename: string = editor.document.fileName;
 		//let dialogue = samwiseVM.getDialogueSymbolFromLine(filename, line);
 
@@ -164,7 +162,7 @@ export function refreshCodeDecoration() {
 
 		// Check multi-line disablers
 		do {
-			lineString = sourceCodeArr[line];
+			lineString = document.lineAt(line).text;
 
 			let multiStartMatch = lineString.match(multiDisableStartRegex);
 			if (multiStartMatch !== null && multiStartMatch.index !== undefined) {
@@ -172,7 +170,7 @@ export function refreshCodeDecoration() {
 				hasDisabledText = true;
 			}
 
-			if (openedBrackets > 0 && line < sourceCodeArr.length - 1) {
+			if (openedBrackets > 0 && line < document.lineCount - 1) {
 
 				let multiEndMatch = lineString.match(multiDisableEndRegex);
 				if (multiEndMatch !== null && multiEndMatch.index !== undefined) {
@@ -182,7 +180,7 @@ export function refreshCodeDecoration() {
 
 			disableEnd = line;
 
-		} while (openedBrackets > 0 && (++line) < sourceCodeArr.length);
+		} while (openedBrackets > 0 && (++line) < document.lineCount);
 
 		// Check single-line disablers
 		let indentRegex = /^[\t ]*/;
@@ -196,10 +194,10 @@ export function refreshCodeDecoration() {
 				// disable all multi-line nodes
 				let continued = false;
 
-				if (line < sourceCodeArr.length - 1) {
+				if (line < document.lineCount - 1) {
 					do {
 						// Check if ↵ or indent or empty line
-						const nextLine = sourceCodeArr[line + 1];
+						const nextLine = document.lineAt(line + 1).text;
 						let continueIndentedMatch;
 						const isIndentedOrEmpty = !nextLine.trim() || 
 							(continueIndentedMatch = nextLine.match(indentRegex)) !== null && continueIndentedMatch.includes !== undefined &&
@@ -209,7 +207,7 @@ export function refreshCodeDecoration() {
 						if (isIndentedOrEmpty || ((singleContinueMatch = lineString.match(singleDisableContinueRegex)) !== null && singleContinueMatch.index !== undefined)) {
 							++disableEnd;
 							++line;
-							lineString = sourceCodeArr[line];
+							lineString = document.lineAt(line).text;
 							continued = true;
 						}
 						else {
