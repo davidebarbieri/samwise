@@ -2,6 +2,10 @@
 
 All notable changes to the Samwise extension will be documented in this file.
 
+## [0.0.20]
+- Foldable Dialogues
+- Panels Icons
+
 ## [0.0.19]
 - Added Alternative Options feature (check the documentation)
 - Changed "Assign IDs to all nodes" into "Assign IDs to all content", in order to include options too

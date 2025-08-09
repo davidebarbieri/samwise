@@ -56,7 +56,7 @@ type StatsInfo =
 	};
 
 	
-export let titleRegex    = /[\t ]*([¯«»─┬┼│┤├┴┐┘┌└═╦╬║╣╠╩╗╝╔╚░▒▓█▀■▄±‗¶§]+[^\n\r]*)/;
+export let titleRegex    = /^[\t ]*([¯«»─┬┼│┤├┴┐┘┌└═╦╬║╣╠╩╗╝╔╚░▒▓█▀■▄±‗¶§]+[^\n\r]*)$/;
 export let contentRegex  = /([\t ]*)(([\t ]*[^\n\r\t ]+)*)([\t ]*)/;
 
 export let wholeTagRegex = /((?:[^#]|(?:##))*)(#[^\n\r]+)/;
