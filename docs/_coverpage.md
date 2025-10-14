@@ -1,6 +1,6 @@
 ![logo](logo/icon-black.png)
 
-# Samwise Dialogue System<small>1.0</small>
+# Samwise Dialogue System
 
 > Your best ally on the journey to craft captivating narrative realms
 
